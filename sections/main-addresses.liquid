@@ -1,0 +1,218 @@
+<div class="customer-account-section" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+{%- comment -%}
+  Customer addresses (classic Shopify customer accounts).
+{%- endcomment -%}
+
+{%- capture account_content -%}
+  <h1 class="account-shell__page-title">Addresses</h1>
+  <p class="account-shell__page-intro">Add and manage the addresses used for your orders.</p>
+
+  <div class="account-page__address-grid mt-6">
+    {%- for address in customer.addresses -%}
+      <article class="account-page__card">
+        <div class="account-page__card-head">
+          <h2 class="account-page__card-title">
+            {%- if address == customer.default_address -%}
+              Default address
+            {%- else -%}
+              Address {{ forloop.index }}
+            {%- endif -%}
+          </h2>
+        </div>
+        <address class="account-page__address">
+          {{ address | format_address }}
+        </address>
+        <div class="account-page__address-actions">
+          <button
+            type="button"
+            class="account-page__text-link"
+            data-address-edit="{{ address.id }}"
+            aria-expanded="false"
+            aria-controls="EditAddress-{{ address.id }}"
+          >
+            Edit
+          </button>
+          <form method="post" action="/account/addresses/{{ address.id }}" class="inline">
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit" class="account-page__text-link account-page__text-link--danger">Delete</button>
+          </form>
+        </div>
+
+        <div id="EditAddress-{{ address.id }}" class="account-page__edit-address mt-5" hidden>
+          {%- form 'customer_address', address -%}
+            <div class="account-page__form-grid">
+              <div class="account-page__field">
+                <label for="AddressFirstName_{{ form.id }}">First name</label>
+                <input id="AddressFirstName_{{ form.id }}" type="text" name="address[first_name]" value="{{ form.first_name | escape }}" autocomplete="given-name">
+              </div>
+              <div class="account-page__field">
+                <label for="AddressLastName_{{ form.id }}">Last name</label>
+                <input id="AddressLastName_{{ form.id }}" type="text" name="address[last_name]" value="{{ form.last_name | escape }}" autocomplete="family-name">
+              </div>
+              <div class="account-page__field account-page__field--full">
+                <label for="AddressCompany_{{ form.id }}">Company</label>
+                <input id="AddressCompany_{{ form.id }}" type="text" name="address[company]" value="{{ form.company | escape }}" autocomplete="organization">
+              </div>
+              <div class="account-page__field account-page__field--full">
+                <label for="AddressAddress1_{{ form.id }}">Address</label>
+                <input id="AddressAddress1_{{ form.id }}" type="text" name="address[address1]" value="{{ form.address1 | escape }}" autocomplete="address-line1">
+              </div>
+              <div class="account-page__field account-page__field--full">
+                <label for="AddressAddress2_{{ form.id }}">Apartment, suite, etc.</label>
+                <input id="AddressAddress2_{{ form.id }}" type="text" name="address[address2]" value="{{ form.address2 | escape }}" autocomplete="address-line2">
+              </div>
+              <div class="account-page__field">
+                <label for="AddressCity_{{ form.id }}">City</label>
+                <input id="AddressCity_{{ form.id }}" type="text" name="address[city]" value="{{ form.city | escape }}" autocomplete="address-level2">
+              </div>
+              <div class="account-page__field">
+                <label for="AddressCountry_{{ form.id }}">Country/region</label>
+                <select id="AddressCountry_{{ form.id }}" name="address[country]" data-default="{{ form.country }}" autocomplete="country">
+                  {{ all_country_option_tags }}
+                </select>
+              </div>
+              <div class="account-page__field">
+                <label for="AddressProvince_{{ form.id }}">State/province</label>
+                <input id="AddressProvince_{{ form.id }}" type="text" name="address[province]" value="{{ form.province | escape }}" autocomplete="address-level1">
+              </div>
+              <div class="account-page__field">
+                <label for="AddressZip_{{ form.id }}">Postal/ZIP code</label>
+                <input id="AddressZip_{{ form.id }}" type="text" name="address[zip]" value="{{ form.zip | escape }}" autocomplete="postal-code">
+              </div>
+              <div class="account-page__field account-page__field--full">
+                <label for="AddressPhone_{{ form.id }}">Phone</label>
+                <input id="AddressPhone_{{ form.id }}" type="tel" name="address[phone]" value="{{ form.phone | escape }}" autocomplete="tel">
+              </div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <button type="submit" class="account-page__primary-btn">Update address</button>
+              <label class="account-page__checkbox">
+                <input type="checkbox" name="address[default]" value="1"{% if address == customer.default_address %} checked{% endif %}>
+                <span>Set as default address</span>
+              </label>
+            </div>
+          {%- endform -%}
+        </div>
+      </article>
+    {%- else -%}
+      <div class="account-page__card">
+        <p class="account-page__empty">You don’t have any saved addresses yet.</p>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <section class="account-page__card mt-8" aria-labelledby="add-address-heading">
+    <div class="account-page__card-head">
+      <h2 id="add-address-heading" class="account-page__card-title">Add a new address</h2>
+    </div>
+    {%- form 'customer_address', customer.new_address, class: 'account-page__form' -%}
+      <div class="account-page__form-grid">
+        <div class="account-page__field">
+          <label for="AddressFirstNameNew">First name</label>
+          <input id="AddressFirstNameNew" type="text" name="address[first_name]" autocomplete="given-name">
+        </div>
+        <div class="account-page__field">
+          <label for="AddressLastNameNew">Last name</label>
+          <input id="AddressLastNameNew" type="text" name="address[last_name]" autocomplete="family-name">
+        </div>
+        <div class="account-page__field account-page__field--full">
+          <label for="AddressCompanyNew">Company</label>
+          <input id="AddressCompanyNew" type="text" name="address[company]" autocomplete="organization">
+        </div>
+        <div class="account-page__field account-page__field--full">
+          <label for="AddressAddress1New">Address</label>
+          <input id="AddressAddress1New" type="text" name="address[address1]" autocomplete="address-line1">
+        </div>
+        <div class="account-page__field account-page__field--full">
+          <label for="AddressAddress2New">Apartment, suite, etc.</label>
+          <input id="AddressAddress2New" type="text" name="address[address2]" autocomplete="address-line2">
+        </div>
+        <div class="account-page__field">
+          <label for="AddressCityNew">City</label>
+          <input id="AddressCityNew" type="text" name="address[city]" autocomplete="address-level2">
+        </div>
+        <div class="account-page__field">
+          <label for="AddressCountryNew">Country/region</label>
+          <select id="AddressCountryNew" name="address[country]" autocomplete="country">
+            {{ all_country_option_tags }}
+          </select>
+        </div>
+        <div class="account-page__field">
+          <label for="AddressProvinceNew">State/province</label>
+          <input id="AddressProvinceNew" type="text" name="address[province]" autocomplete="address-level1">
+        </div>
+        <div class="account-page__field">
+          <label for="AddressZipNew">Postal/ZIP code</label>
+          <input id="AddressZipNew" type="text" name="address[zip]" autocomplete="postal-code">
+        </div>
+        <div class="account-page__field account-page__field--full">
+          <label for="AddressPhoneNew">Phone</label>
+          <input id="AddressPhoneNew" type="tel" name="address[phone]" autocomplete="tel">
+        </div>
+      </div>
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <button type="submit" class="account-page__primary-btn">Add address</button>
+        <label class="account-page__checkbox">
+          <input type="checkbox" name="address[default]" value="1">
+          <span>Set as default address</span>
+        </label>
+      </div>
+    {%- endform -%}
+  </section>
+{%- endcapture -%}
+
+{% render 'account-shell', active: 'addresses', content: account_content %}
+
+<script>
+  document.querySelectorAll("[data-address-edit]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var id = btn.getAttribute("data-address-edit");
+      var panel = document.getElementById("EditAddress-" + id);
+      if (!panel) return;
+      var open = panel.hidden;
+      panel.hidden = !open;
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      btn.textContent = open ? "Close" : "Edit";
+    });
+  });
+</script>
+
+</div>
+
+{% schema %}
+{
+  "name": "Customer addresses",
+  "tag": "section",
+  "class": "section-main-customer-account",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Legacy customer address book."
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

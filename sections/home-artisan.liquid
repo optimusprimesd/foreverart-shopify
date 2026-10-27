@@ -1,0 +1,324 @@
+{%- liquid
+  assign eyebrow = section.settings.eyebrow | default: 'Before you begin'
+  assign footer_tagline = section.settings.footer_tagline | default: 'OWN YOUR STORY'
+-%}
+
+<section
+  class="home-artisan"
+  data-header-context="light"
+  aria-label="{{ eyebrow | default: 'Before you begin' | escape }}"
+  style="
+    --ha-cream: {{ section.settings.bg_color | default: '#FFFFFF' }};
+    --ha-band: {{ section.settings.band_color | default: '#FFFFFF' }};
+    --ha-ink: {{ section.settings.text_color | default: '#1A1A1A' }};
+    --ha-muted: {{ section.settings.muted_color | default: '#8B6B4F' }};
+    --ha-card: {{ section.settings.card_color | default: '#F7F4EF' }};
+    --ha-card-active: {{ section.settings.card_active_color | default: '#E8D8C8' }};
+  "
+  {{ section.shopify_attributes }}
+>
+  <div class="home-artisan__inner">
+    <div class="home-artisan__intro">
+      <div class="home-artisan__copy">
+        {%- if section.settings.body != blank -%}
+          <div class="home-artisan__body">
+            {{ section.settings.body }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="home-artisan__media">
+        {%- if section.settings.image != blank -%}
+          {%- assign artisan_image_alt = section.settings.image.alt | default: 'Forever Art artisan' -%}
+          {{
+            section.settings.image
+            | image_url: width: 900
+            | image_tag:
+              class: 'home-artisan__image',
+              alt: artisan_image_alt,
+              widths: '400, 600, 900',
+              sizes: '(min-width: 1024px) 28vw, 50vw',
+              loading: 'lazy',
+              decoding: 'async'
+          }}
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="home-artisan__band">
+      <div class="home-artisan__band-texture" aria-hidden="true"></div>
+
+      <div class="home-artisan__cards">
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign icon = block.settings.icon | default: 'about'
+              assign card_mod = ''
+              if block.settings.emphasize
+                assign card_mod = ' home-artisan__card--emphasized'
+              endif
+
+              case icon
+                when 'process'
+                  assign icon_bg = '#EFE3D8'
+                  assign icon_fg = '#121212'
+                when 'heart'
+                  assign icon_bg = '#9C7642'
+                  assign icon_fg = '#FFFFFF'
+                when 'faq'
+                  assign icon_bg = '#F7F5F2'
+                  assign icon_fg = '#121212'
+                else
+                  assign icon_bg = '#121212'
+                  assign icon_fg = '#FFFFFF'
+              endcase
+            -%}
+            <a
+              class="home-artisan__card{{ card_mod }}"
+              href="{{ block.settings.link | default: '#' }}"
+              {{ block.shopify_attributes }}
+            >
+              <span
+                class="home-artisan__card-icon"
+                style="background-color: {{ icon_bg }}; color: {{ icon_fg }};"
+              >
+                {%- case icon -%}
+                  {%- when 'process' -%}
+                    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                      <circle cx="12" cy="12" r="5.25" stroke="currentColor" stroke-width="1.5"/>
+                      <circle cx="20" cy="12" r="5.25" stroke="currentColor" stroke-width="1.5"/>
+                      <circle cx="12" cy="20" r="5.25" stroke="currentColor" stroke-width="1.5"/>
+                      <circle cx="20" cy="20" r="5.25" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                  {%- when 'heart' -%}
+                    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                      <path
+                        d="M16 25.2s-8.4-5.2-10.6-9.2C3.6 12.4 5 8.8 8.4 8.2c2-.4 3.8.6 4.8 2.2 1-1.6 2.8-2.6 4.8-2.2 3.4.6 4.8 4.2 3 7.8-2.2 4-10 9.2-10 9.2Z"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  {%- when 'faq' -%}
+                    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                      <path
+                        d="M7 8.5h18a2.5 2.5 0 0 1 2.5 2.5v8A2.5 2.5 0 0 1 25 21.5H14l-5 4v-4H7A2.5 2.5 0 0 1 4.5 19v-8A2.5 2.5 0 0 1 7 8.5Z"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linejoin="round"
+                      />
+                      <circle cx="12" cy="15" r="1.1" fill="currentColor"/>
+                      <circle cx="16" cy="15" r="1.1" fill="currentColor"/>
+                      <circle cx="20" cy="15" r="1.1" fill="currentColor"/>
+                    </svg>
+                  {%- else -%}
+                    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                      <circle cx="12.5" cy="11" r="3.2" stroke="currentColor" stroke-width="1.5"/>
+                      <circle cx="20.5" cy="11.5" r="2.6" stroke="currentColor" stroke-width="1.5"/>
+                      <path
+                        d="M6.5 22.5c.8-3.2 3.2-5 6-5s5.2 1.8 6 5"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                      <path
+                        d="M17.5 19.2c1-.8 2.2-1.2 3.5-1.2 2.2 0 4 1.2 4.6 3.5"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                {%- endcase -%}
+              </span>
+
+              {%- if block.settings.title != blank -%}
+                <h3 class="home-artisan__card-title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+
+              <span class="home-artisan__card-rule" aria-hidden="true"></span>
+
+              {%- if block.settings.description != blank -%}
+                <p class="home-artisan__card-desc">{{ block.settings.description | escape }}</p>
+              {%- endif -%}
+
+              <span class="home-artisan__card-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 12" fill="none">
+                  <path d="M1 6h20M16 1l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </a>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if footer_tagline != blank -%}
+      <p class="home-artisan__footer">
+        <span class="home-artisan__footer-rule" aria-hidden="true"></span>
+        {{ footer_tagline | escape }}
+        <span class="home-artisan__footer-rule" aria-hidden="true"></span>
+      </p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Home artisan",
+  "tag": "div",
+  "class": "home-artisan-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Before you begin"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body",
+      "default": "<p>Forever Art is a little different. Take a few minutes to understand how we create, so your piece feels intentional from the start.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Side image",
+      "info": "Optional product or detail image."
+    },
+    {
+      "type": "text",
+      "id": "footer_tagline",
+      "label": "Footer tagline",
+      "default": "OWN YOUR STORY"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "band_color",
+      "label": "Band",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Muted text",
+      "default": "#8B6B4F"
+    },
+    {
+      "type": "color",
+      "id": "card_color",
+      "label": "Card background",
+      "default": "#F7F4EF"
+    },
+    {
+      "type": "color",
+      "id": "card_active_color",
+      "label": "Card hover / emphasized",
+      "default": "#E8D8C8"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Info card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "about", "label": "About (people)" },
+            { "value": "process", "label": "Process (circles)" },
+            { "value": "heart", "label": "How we work (heart)" },
+            { "value": "faq", "label": "FAQ (chat)" }
+          ],
+          "default": "about"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "About us"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Who we are, and why we make what we make."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "emphasize",
+          "label": "Emphasize card (tan background)",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Home artisan",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "icon": "about",
+            "title": "About us",
+            "description": "Who we are, and why we make what we make.",
+            "emphasize": false
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "icon": "process",
+            "title": "Our process",
+            "description": "How a Forever Art piece is thoughtfully created.",
+            "emphasize": true
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "icon": "heart",
+            "title": "How we work",
+            "description": "What to expect when you place an order.",
+            "emphasize": false
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "icon": "faq",
+            "title": "FAQ's",
+            "description": "Answers to the questions we're asked most.",
+            "emphasize": false
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

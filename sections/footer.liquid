@@ -1,0 +1,232 @@
+<footer
+  class="site-footer site-header-push-surface relative z-10 mt-auto bg-black text-white"
+  data-header-context="dark"
+  data-site-footer-intro
+  {{ section.shopify_attributes }}
+>
+  <div class="site-footer__main mx-auto max-w-screen-xl py-14  md:py-16 lg:py-20">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <img
+          src="{{ 'monogram-footer.png' | asset_url }}"
+          alt="{{ section.settings.monogram_alt | escape }}"
+          class="site-footer__monogram"
+          data-site-footer-intro-monogram
+          width="250"
+          height="250"
+          loading="lazy"
+          decoding="async"
+        >
+
+        {%- if section.settings.intro != blank -%}
+          <div class="site-footer__intro" data-site-footer-intro-text>
+            {{ section.settings.intro }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="site-footer__column" data-site-footer-intro-links>
+        <h3 class="site-footer__column-title">{{ section.settings.quick_links_title | escape }}</h3>
+        {%- liquid
+          assign footer_about_url = section.settings.link_about | default: '/pages/about-us'
+          assign footer_contact_url = section.settings.link_contact | default: '/pages/contact-us'
+          assign footer_process_url = section.settings.link_process | default: '/pages/how-we-work'
+          assign footer_faq_url = section.settings.link_faq | default: '/pages/faq'
+          assign footer_privacy_url = section.settings.link_privacy | default: '/pages/privacy-policy'
+          assign footer_terms_url = section.settings.link_terms | default: '/pages/terms-conditions'
+          assign footer_refund_url = section.settings.link_refund | default: '/pages/refund-policy'
+        -%}
+        <div class="site-footer__links-grid">
+          <ul class="site-footer__links">
+            <li><a href="{{ footer_about_url }}">About Us</a></li>
+            <li><a href="{{ footer_contact_url }}">Contact Us</a></li>
+            <li><a href="{{ footer_process_url }}">Process</a></li>
+            <li><a href="{{ footer_faq_url }}">FAQ</a></li>
+          </ul>
+          <ul class="site-footer__links">
+         
+              <li><a href="{{ footer_privacy_url }}">Privacy Policy</a></li>
+         
+      
+              <li><a href="{{ footer_terms_url }}">Terms &amp; Conditions</a></li>
+          
+         
+              <li><a href="{{ footer_refund_url }}">Refund Policy</a></li>
+       
+          </ul>
+        </div>
+      </div>
+
+      <div class="site-footer__column" data-site-footer-intro-contact>
+        <h3 class="site-footer__column-title">{{ section.settings.contact_title | escape }}</h3>
+        <ul class="site-footer__contact-list">
+          {%- if section.settings.address != blank -%}
+            <li class="site-footer__contact-item">
+              <i class="hgi hgi-stroke hgi-rounded hgi-location-01 site-footer__icon" aria-hidden="true"></i>
+              <span>{{ section.settings.address | escape }}</span>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.phone != blank -%}
+            <li class="site-footer__contact-item">
+              <i class="hgi hgi-stroke hgi-rounded hgi-call-02 site-footer__icon" aria-hidden="true"></i>
+              <a href="tel:{{ section.settings.phone | replace: ' ', '' }}">{{ section.settings.phone | escape }}</a>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.email != blank -%}
+            <li class="site-footer__contact-item">
+              <i class="hgi hgi-stroke hgi-rounded hgi-mail-01 site-footer__icon" aria-hidden="true"></i>
+              <a href="mailto:{{ section.settings.email | escape }}">{{ section.settings.email | escape }}</a>
+            </li>
+          {%- endif -%}
+        </ul>
+      </div>
+
+      <div class="site-footer__social-col" data-site-footer-intro-social>
+        {%- liquid
+          assign footer_instagram_url = section.settings.instagram_url | default: 'https://www.instagram.com/foreverartau/'
+          assign footer_facebook_url = section.settings.facebook_url | default: 'https://www.facebook.com/foreverartau'
+        -%}
+        <ul class="site-footer__social">
+          <li>
+            <a
+              href="{{ footer_instagram_url }}"
+              class="site-footer__social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <i class="hgi hgi-stroke hgi-rounded hgi-instagram site-footer__social-icon" aria-hidden="true"></i>
+            </a>
+          </li>
+          <li>
+            <a
+              href="{{ footer_facebook_url }}"
+              class="site-footer__social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
+              <i class="hgi hgi-stroke hgi-rounded hgi-facebook-01 site-footer__social-icon" aria-hidden="true"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    {% render 'payment-logos', wrapper_class: 'payment-logos--footer' %}
+  </div>
+
+  <div class="site-footer__wordmark" aria-hidden="true" data-site-footer-intro-wordmark>
+    <img
+      src="{{ 'forever-art-gradiant-footer.png' | asset_url }}"
+      alt=""
+      class="site-footer__wordmark-img"
+      width="1338"
+      height="241"
+      loading="lazy"
+      decoding="async"
+    >
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "div",
+  "class": "site-footer-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "monogram_alt",
+      "label": "Monogram alt text",
+      "default": "Forever Art monogram"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro text",
+      "default": "<p>At Forever Art, we believe that every conversation is a fresh brushstroke on the canvas of our journey.</p><p>Whether you have a query, a story to share, or simply want to connect with the world of art, we're here to listen and respond.</p>"
+    },
+    {
+      "type": "text",
+      "id": "quick_links_title",
+      "label": "Quick links heading",
+      "default": "Quick Links"
+    },
+    {
+      "type": "url",
+      "id": "link_about",
+      "label": "About Us link"
+    },
+    {
+      "type": "url",
+      "id": "link_contact",
+      "label": "Contact Us link"
+    },
+    {
+      "type": "url",
+      "id": "link_process",
+      "label": "Process link"
+    },
+    {
+      "type": "url",
+      "id": "link_faq",
+      "label": "FAQ link"
+    },
+    {
+      "type": "url",
+      "id": "link_privacy",
+      "label": "Privacy Policy link"
+    },
+    {
+      "type": "url",
+      "id": "link_terms",
+      "label": "Terms & Conditions link"
+    },
+    {
+      "type": "url",
+      "id": "link_refund",
+      "label": "Refund Policy link"
+    },
+    {
+      "type": "text",
+      "id": "contact_title",
+      "label": "Contact heading",
+      "default": "Contact Us"
+    },
+    {
+      "type": "text",
+      "id": "address",
+      "label": "Address",
+      "default": "PO Box 421 Aspley QLD 4034"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone",
+      "default": "0407 729 026"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "create@foreverart.com.au"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer"
+    }
+  ]
+}
+{% endschema %}

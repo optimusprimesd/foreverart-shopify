@@ -1,0 +1,107 @@
+{%- comment -%}
+  List collections template — displays all collections.
+  Strict order:
+  Property Collection, Wedding Collection, Kids Collection,
+  Music Collection, Vehicle Collection, Quote Collection.
+{%- endcomment -%}
+
+{%- assign ordered_handles = 'property-collection,wedding-collection,kids-collection,music-collection,vehicle-collection,quote-collection' | split: ',' -%}
+{%- assign ordered_titles = 'property collection,wedding collection,kids collection,music collection,vehicle collection,quote collection' | split: ',' -%}
+{%- assign handles_to_show = ',' -%}
+
+{%- for ordered_handle in ordered_handles -%}
+  {%- assign ordered_title = ordered_titles[forloop.index0] -%}
+  {%- assign matched_collection = collections[ordered_handle] -%}
+  {%- if matched_collection == empty -%}
+    {%- for collection in collections -%}
+      {%- assign handle_lc = collection.handle | downcase -%}
+      {%- assign title_lc = collection.title | downcase -%}
+      {%- if handle_lc == ordered_handle or title_lc == ordered_title -%}
+        {%- assign matched_collection = collection -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+  {%- if matched_collection != empty -%}
+    {%- assign matched_handle = matched_collection.handle | downcase -%}
+    {%- assign matched_token = ',' | append: matched_handle | append: ',' -%}
+    {%- unless handles_to_show contains matched_token -%}
+      {%- assign handles_to_show = handles_to_show | append: matched_handle | append: ',' -%}
+    {%- endunless -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign handles_to_show = handles_to_show | split: ',' -%}
+
+<div class="collections-page" data-page-intro>
+  <div class="collections-page__container">
+    <header class="collections-page__header">
+      <h1 class="collections-page__title" data-page-intro-title>Collections</h1>
+      <p class="collections-page__subtitle" data-page-intro-subtitle>Browse all collections.</p>
+    </header>
+
+    {%- if handles_to_show.size > 0 -%}
+      <ul class="collections-grid" role="list">
+        {%- for handle in handles_to_show -%}
+          {%- if handle == blank -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- assign collection = collections[handle] -%}
+          {%- if collection == empty -%}
+            {%- continue -%}
+          {%- endif -%}
+            <li class="collections-grid__item" data-page-intro-item>
+              <a class="collection-card" href="{{ collection.url }}">
+                <div class="collection-card__media">
+                  {%- if collection.image -%}
+                    {{
+                      collection.image
+                      | image_url: width: 1200
+                      | image_tag:
+                        loading: 'lazy',
+                        class: 'collection-card__image',
+                        sizes: '(min-width: 990px) 33vw, (min-width: 600px) 50vw, 100vw',
+                        widths: '320, 480, 640, 800, 960, 1200',
+                        alt: collection.image.alt | default: collection.title | escape
+                    }}
+                  {%- elsif collection.products.first and collection.products.first.featured_media -%}
+                    {{
+                      collection.products.first.featured_media
+                      | image_url: width: 1200
+                      | image_tag:
+                        loading: 'lazy',
+                        class: 'collection-card__image',
+                        sizes: '(min-width: 990px) 33vw, (min-width: 600px) 50vw, 100vw',
+                        widths: '320, 480, 640, 800, 960, 1200',
+                        alt: collection.title | escape
+                    }}
+                  {%- else -%}
+                    {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg collection-card__image' }}
+                  {%- endif -%}
+
+                  <div class="collection-card__overlay" aria-hidden="true"></div>
+
+                  <h2 class="collection-card__title">{{ collection.title | escape }}</h2>
+
+                  <p class="collection-card__count">
+                    {{ collection.products_count }}
+                    product{% if collection.products_count != 1 %}s{% endif %}
+                  </p>
+                </div>
+
+                {%- if collection.description != blank -%}
+                  <div class="collection-card__description">
+                    {{ collection.description | strip_html }}
+                  </div>
+                {%- endif -%}
+              </a>
+            </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <div class="collection-empty">
+        <p>No collections found.</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>

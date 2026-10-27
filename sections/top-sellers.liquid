@@ -1,0 +1,238 @@
+{%- comment -%}
+  Top Sellers page section — collection-style product grid.
+  Assign this template to a Shopify page (e.g. /pages/top-sellers).
+{%- endcomment -%}
+
+{%- liquid
+  assign heading = section.settings.heading | default: page.title | default: 'Top Sellers'
+  assign intro = section.settings.intro
+  if intro == blank and page.content != blank
+    assign intro = page.content
+  endif
+
+  assign seller_products = ''
+  assign seller_count = 0
+-%}
+
+{%- for block in section.blocks -%}
+  {%- if block.type == 'product' and block.settings.product != blank -%}
+    {%- assign seller_count = seller_count | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<div class="collection-page top-sellers-page" data-page-intro>
+  <section class="collection-hero" aria-label="{{ heading | escape }}">
+    <div class="collection-hero__media" data-page-intro-media>
+      {%- if section.settings.hero_image != blank -%}
+        {{
+          section.settings.hero_image
+          | image_url: width: 2000
+          | image_tag:
+            loading: 'eager',
+            class: 'collection-hero__image',
+            sizes: '100vw',
+            widths: '800, 1200, 1600, 2000',
+            alt: section.settings.hero_image.alt | default: heading | escape
+        }}
+      {%- else -%}
+        <div class="collection-hero__image collection-hero__image--placeholder"></div>
+      {%- endif -%}
+    </div>
+
+    <div class="collection-hero__overlay" aria-hidden="true" data-page-intro-overlay></div>
+
+    <div class="collection-hero__content">
+      <h1 class="collection-hero__title" data-page-intro-title>{{ heading | escape }}</h1>
+      {%- if intro != blank -%}
+        <div class="collection-hero__description" data-page-intro-subtitle>{{ intro }}</div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  <div class="collection-page__container">
+    <header class="collection-page__header" data-page-intro-panel>
+      <p class="collection-page__count">
+        {{ seller_count }}
+        product{% if seller_count != 1 %}s{% endif %}
+      </p>
+
+      <div class="collection-filters" data-collection-filters>
+        <div class="collection-filters__row">
+          <label class="collection-filters__field">
+            <span class="collection-filters__label">Filter by name</span>
+            <input
+              class="collection-filters__input"
+              type="search"
+              placeholder="Search products…"
+              autocomplete="off"
+              data-filter-name
+            >
+          </label>
+
+          <label class="collection-filters__field">
+            <span class="collection-filters__label">Min price</span>
+            <select class="collection-filters__select" data-filter-min-price>
+              <option value="">Any</option>
+              <option value="5000">From {{ 5000 | money }}</option>
+              <option value="10000">From {{ 10000 | money }}</option>
+              <option value="15000">From {{ 15000 | money }}</option>
+              <option value="20000">From {{ 20000 | money }}</option>
+              <option value="30000">From {{ 30000 | money }}</option>
+              <option value="50000">From {{ 50000 | money }}</option>
+              <option value="75000">From {{ 75000 | money }}</option>
+              <option value="100000">From {{ 100000 | money }}</option>
+            </select>
+          </label>
+
+          <label class="collection-filters__field">
+            <span class="collection-filters__label">Max price</span>
+            <select class="collection-filters__select" data-filter-max-price>
+              <option value="">Any</option>
+              <option value="10000">Up to {{ 10000 | money }}</option>
+              <option value="20000">Up to {{ 20000 | money }}</option>
+              <option value="30000">Up to {{ 30000 | money }}</option>
+              <option value="50000">Up to {{ 50000 | money }}</option>
+              <option value="75000">Up to {{ 75000 | money }}</option>
+              <option value="100000">Up to {{ 100000 | money }}</option>
+              <option value="150000">Up to {{ 150000 | money }}</option>
+              <option value="200000">Up to {{ 200000 | money }}</option>
+            </select>
+          </label>
+
+          <label class="collection-filters__field">
+            <span class="collection-filters__label">Sort by</span>
+            <select class="collection-filters__select" data-filter-sort>
+              <option value="featured">Featured</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="name-asc">Name: A–Z</option>
+              <option value="name-desc">Name: Z–A</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="collection-filters__status">
+          <span class="collection-filters__results" data-filter-results-count></span>
+          <button class="collection-filters__clear" type="button" data-filter-clear>Clear</button>
+        </div>
+      </div>
+    </header>
+
+    {%- if seller_count > 0 -%}
+      <ul class="collection-grid" role="list">
+        {%- for block in section.blocks -%}
+          {%- if block.type != 'product' -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- assign product = block.settings.product -%}
+          {%- if product == blank -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- assign card_variant = product.selected_or_first_available_variant -%}
+          <li
+            class="collection-grid__item"
+            data-page-intro-item
+            data-product-item
+            data-product-title="{{ product.title | escape }}"
+            data-product-price="{{ card_variant.price }}"
+            {{ block.shopify_attributes }}
+          >
+            <article class="product-card">
+              <a class="product-card__media" href="{{ product.url }}">
+                {%- if product.featured_media -%}
+                  {{
+                    product.featured_media
+                    | image_url: width: 900
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'product-card__image',
+                      sizes: '(min-width: 990px) 25vw, (min-width: 740px) 33vw, 50vw',
+                      widths: '240, 360, 480, 600, 720, 900',
+                      alt: product.title | escape
+                  }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product-card__image' }}
+                {%- endif -%}
+              </a>
+
+              <div class="product-card__meta">
+                <h2 class="product-card__title">
+                  <a href="{{ product.url }}">{{ product.title | escape }}</a>
+                </h2>
+
+                <div class="product-card__price">
+                  <span class="product-card__price-current">{{ card_variant.price | money }}</span>
+                  {%- if card_variant.compare_at_price > card_variant.price -%}
+                    <span class="product-card__price-compare"><s>{{ card_variant.compare_at_price | money }}</s></span>
+                  {%- endif -%}
+                </div>
+              </div>
+            </article>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <div class="collection-empty">
+        <p>No top sellers selected yet.</p>
+        <a class="collection-empty__link" href="{{ routes.all_products_collection_url }}">Browse all products</a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Top Sellers",
+  "tag": "section",
+  "class": "top-sellers-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Top Sellers",
+      "info": "Defaults to the page title when empty."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Description",
+      "info": "Defaults to the page content when empty."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Top Sellers",
+      "blocks": [
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}

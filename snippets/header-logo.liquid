@@ -1,0 +1,30 @@
+{%- comment -%}
+  Forever Art wordmark — black on light header, white on dark.
+  Sizing: assets/custom.css (.site-header__logo-img)
+  @param logo_wrap_class {string} extra classes on the home link
+  @param home_url {string} optional override (defaults to routes.root_url)
+{%- endcomment -%}
+
+{%- liquid
+  assign logo_wrap_class = logo_wrap_class | default: 'flex shrink-0 items-center'
+  assign home_href = home_url | default: routes.root_url
+-%}
+
+<a href="{{ home_href }}" class="site-header__logo {{ logo_wrap_class }}" aria-label="Forever Art home">
+  <img
+    src="{{ 'ForeverArt_Wordmark_Black.png' | asset_url }}"
+    alt="Forever Art"
+    class="site-header__logo-img site-header__logo-img--light"
+    width="1324"
+    height="176"
+    decoding="async"
+  >
+  <img
+    src="{{ 'ForeverArt_Wordmark_White.png' | asset_url }}"
+    alt="Forever Art"
+    class="site-header__logo-img site-header__logo-img--dark"
+    width="1340"
+    height="196"
+    decoding="async"
+  >
+</a>

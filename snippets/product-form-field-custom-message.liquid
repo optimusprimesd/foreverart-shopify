@@ -1,0 +1,180 @@
+{%- assign field = field | default: nil -%}
+{%- assign product = product | default: nil -%}
+{%- if field != nil -%}
+
+{%- assign field_key = field.key | default: 'custom_message' -%}
+{%- assign field_label = field.label | default: 'Custom Message' -%}
+{%- assign property_name = field.property_name | default: 'Custom Message' -%}
+{%- assign heading_id = field_key | append: '-heading' -%}
+{%- assign selector_label = field.selector_label | default: 'Message type' -%}
+{%- assign selector_property_name = field.selector_property_name | default: 'Custom Message Type' -%}
+{%- assign selector_id = field_key | append: '-selector' -%}
+{%- assign use_selector = false -%}
+{%- if field.use_selector == true or field.use_selector == 'true' -%}
+  {%- assign use_selector = true -%}
+{%- endif -%}
+{%- if use_selector == false and field.option_groups != blank and field.option_groups.size > 0 -%}
+  {%- assign use_selector = true -%}
+{%- endif -%}
+
+{%- assign field_charge_cents = 0 -%}
+{%- if field.additional_charge != blank -%}
+  {%- assign field_charge_cents = field.additional_charge | times: 100 | round -%}
+{%- endif -%}
+
+{%- assign show_help = field.show_help | default: false -%}
+{%- assign show_voice = field.show_voice | default: false -%}
+{%- assign show_video = field.show_video | default: false -%}
+{%- if show_help == true or show_help == 'true' -%}
+  {%- assign show_help_enabled = true -%}
+{%- else -%}
+  {%- assign show_help_enabled = false -%}
+{%- endif -%}
+{%- if show_voice == true or show_voice == 'true' -%}
+  {%- assign show_voice_enabled = true -%}
+{%- else -%}
+  {%- assign show_voice_enabled = false -%}
+{%- endif -%}
+{%- assign help_title = field.help_title | default: field_label -%}
+{%- assign help_body = field.help_body | default: '' -%}
+{%- assign tooltip_id = 'help-tooltip-' | append: field_key -%}
+{%- assign has_actions = false -%}
+{%- if show_help_enabled or show_voice_enabled or show_video == true or show_video == 'true' -%}
+  {%- assign has_actions = true -%}
+{%- endif -%}
+
+<div
+  class="wizard__custom-message {{ field.wrap_class }}"
+  data-custom-message="{{ field_key }}"
+  {% if use_selector %}data-custom-message-grouped="true"{% endif %}
+>
+  <div class="wizard__select-field-box">
+    <div class="wizard__select-field-header flex w-full flex-wrap items-center justify-between gap-2">
+      <p class="product-page__label mb-0 min-w-0 flex-1 text-base font-bold text-[#141414]" id="{{ heading_id }}">{{ field_label }}</p>
+      {%- if has_actions -%}
+        {% render 'product-field-header-actions',
+          product: product,
+          field_key: field_key,
+          tooltip_id: tooltip_id,
+          tooltip_aria_label: help_title,
+          show_help: show_help_enabled,
+          tooltip_title: help_title,
+          tooltip_body: help_body,
+          show_voice: show_voice_enabled,
+          show_video: show_video,
+          voice_src: field.voice_src,
+          media_url: field.media_url
+        %}
+      {%- endif -%}
+    </div>
+
+    {%- if use_selector -%}
+      <div class="wizard__custom-message-selector">
+        <select
+          id="{{ selector_id }}"
+          name="properties[{{ selector_property_name }}]"
+          class="product-page__input product-page__input--select w-full"
+          data-custom-message-selector
+          aria-label="{{ selector_label | default: field_label | escape }}"
+          {% if field.required %}aria-required="true"{% endif %}
+        >
+          <option value="" disabled selected>Select an option</option>
+          {%- for group in field.option_groups -%}
+            {%- assign group_label = group.label | default: group.value -%}
+            {%- assign group_value = group.value | default: group.label -%}
+            {%- if group_label != blank -%}
+              <option value="{{ group_value | escape }}">{{ group_label | escape }}</option>
+            {%- endif -%}
+          {%- endfor -%}
+        </select>
+      </div>
+
+      <div
+        class="wizard__custom-message-list"
+        role="radiogroup"
+        aria-labelledby="{{ heading_id }}"
+        data-custom-message-radiogroup
+        {% if field_charge_cents > 0 %}data-additional-charge-cents="{{ field_charge_cents }}" data-additional-charge-type="radio"{% endif %}
+      >
+        {%- for group in field.option_groups -%}
+          {%- assign group_index = forloop.index -%}
+          {%- assign group_label = group.label | default: group.value -%}
+          {%- assign group_value = group.value | default: group.label -%}
+          {%- if group_value != blank -%}
+            <div
+              class="wizard__custom-message-group"
+              data-custom-message-group="{{ group_value | escape }}"
+              hidden
+            >
+              {%- for option in group.messages -%}
+                {%- if option.label != blank -%}
+                  {%- assign option_label = option.label -%}
+                {%- elsif option != blank -%}
+                  {%- assign option_label = option -%}
+                {%- else -%}
+                  {%- assign option_label = '' -%}
+                {%- endif -%}
+                {%- if option_label != blank -%}
+                  {%- assign option_id = field_key | append: '-g' | append: group_index | append: '-m' | append: forloop.index -%}
+                  <label class="wizard__custom-message-option" for="{{ option_id }}">
+                    <input
+                      type="radio"
+                      name="properties[{{ property_name }}]"
+                      id="{{ option_id }}"
+                      value="{{ option_label | escape }}"
+                      class="peer sr-only"
+                      data-custom-message-radio
+                      disabled
+                      aria-hidden="true"
+                    >
+                    <span class="wizard__custom-message-radio" aria-hidden="true">
+                      <span class="wizard__custom-message-radio-dot"></span>
+                    </span>
+                    <span class="wizard__custom-message-text">{{ option_label | escape }}</span>
+                  </label>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div
+        class="wizard__custom-message-list"
+        role="radiogroup"
+        aria-labelledby="{{ heading_id }}"
+        data-custom-message-radiogroup
+        {% if field_charge_cents > 0 %}data-additional-charge-cents="{{ field_charge_cents }}" data-additional-charge-type="radio"{% endif %}
+      >
+        {%- for option in field.options -%}
+          {%- if option.label != blank -%}
+            {%- assign option_label = option.label -%}
+          {%- elsif option != blank -%}
+            {%- assign option_label = option -%}
+          {%- else -%}
+            {%- assign option_label = '' -%}
+          {%- endif -%}
+          {%- if option_label != blank -%}
+            {%- assign option_id = field_key | append: '-option-' | append: forloop.index -%}
+            <label class="wizard__custom-message-option" for="{{ option_id }}">
+              <input
+                type="radio"
+                name="properties[{{ property_name }}]"
+                id="{{ option_id }}"
+                value="{{ option_label | escape }}"
+                class="peer sr-only"
+                data-custom-message-radio
+              >
+              <span class="wizard__custom-message-radio" aria-hidden="true">
+                <span class="wizard__custom-message-radio-dot"></span>
+              </span>
+              <span class="wizard__custom-message-text">{{ option_label | escape }}</span>
+            </label>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+  {% render 'product-form-field-info', info_label: field.info_label, additional_charge: field.additional_charge %}
+</div>
+{%- endif -%}

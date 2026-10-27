@@ -1,0 +1,217 @@
+{%- comment -%} Desktop, large desktop & iPad landscape header (>= 1024px) {%- endcomment -%}
+<div class="site-header__template site-header__template--desktop" data-site-header-template="desktop">
+  <nav class="site-header__nav h-full border-0 bg-transparent" aria-label="Primary">
+    <div class="site-header__inner site-header__inner--desktop mx-auto flex h-full max-w-screen-xl items-stretch justify-between gap-3 px-4">
+      {% render 'header-logo', logo_wrap_class: 'flex shrink-0 items-center lg:h-full' %}
+
+      <div id="navbar-main-menu" class="site-header-primary-nav flex min-w-0 flex-1 items-stretch justify-center">
+        <ul class="flex h-full w-full flex-row items-stretch">
+          <li class="relative flex h-full items-stretch">
+            <button
+              id="shop-mega-button"
+              type="button"
+              class="site-header__nav-link flex h-full items-center justify-center gap-1 px-3{% if nav_shop_active %} is-active{% endif %}"
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-controls="shop-mega-dropdown"
+              {% if nav_shop_active %}aria-current="page"{% endif %}
+            >
+              Shop
+              <svg class="ms-1.5 h-4 w-4 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              id="shop-mega-dropdown"
+              class="shop-mega-dropdown z-[60] hidden w-full border-0 bg-[#EFEFEF] text-sm shadow-none"
+            >
+              <div class="shop-mega__inner relative mx-auto w-full max-w-screen-xl overflow-hidden px-4 py-8 md:px-6 md:py-10">
+                <div class="shop-mega__layout">
+                  <div class="shop-mega__nav">
+                    <div class="shop-mega__col">
+                      <div class="shop-mega__section">
+                        <p class="shop-mega__category">Collections</p>
+                        <ul class="shop-mega__list">
+                          {%- assign menu_ordered_handles = 'property-collection,wedding-collection,kids-collection,music-collection,vehicle-collection,quote-collection' | split: ',' -%}
+                          {%- assign menu_ordered_titles = 'property collection,wedding collection,kids collection,music collection,vehicle collection,quote collection' | split: ',' -%}
+                          {%- assign menu_handles_shown = ',' -%}
+                          {%- for ordered_handle in menu_ordered_handles -%}
+                            {%- assign ordered_title = menu_ordered_titles[forloop.index0] -%}
+                            {%- assign matched_collection = collections[ordered_handle] -%}
+                            {%- if matched_collection == empty -%}
+                              {%- for collection in collections -%}
+                                {%- assign handle_lc = collection.handle | downcase -%}
+                                {%- assign title_lc = collection.title | downcase -%}
+                                {%- if handle_lc == ordered_handle or title_lc == ordered_title -%}
+                                  {%- assign matched_collection = collection -%}
+                                  {%- break -%}
+                                {%- endif -%}
+                              {%- endfor -%}
+                            {%- endif -%}
+                            {%- if matched_collection != empty -%}
+                              {%- assign matched_handle = matched_collection.handle | downcase -%}
+                              {%- assign matched_token = ',' | append: matched_handle | append: ',' -%}
+                              {%- unless menu_handles_shown contains matched_token -%}
+                                <li>
+                                  <a
+                                    href="{{ matched_collection.url }}"
+                                    class="shop-mega__link{% if active_collection_handle == matched_handle %} is-active{% endif %}"
+                                    {% if active_collection_handle == matched_handle %}aria-current="page"{% endif %}
+                                  >{{ matched_collection.title | escape }}</a>
+                                </li>
+                                {%- assign menu_handles_shown = menu_handles_shown | append: matched_handle | append: ',' -%}
+                              {%- endunless -%}
+                            {%- endif -%}
+                          {%- endfor -%}
+                          {%- for collection in collections -%}
+                            {%- assign handle_lc = collection.handle | downcase -%}
+                            {%- assign title_lc = collection.title | downcase -%}
+                            {%- if handle_lc == 'gift-card' or handle_lc == 'gift-cards' or handle_lc == 'gift-card-collection' or title_lc contains 'gift card' -%}
+                              <li>
+                                <a
+                                  href="{{ collection.url }}"
+                                  class="shop-mega__link{% if active_collection_handle == handle_lc %} is-active{% endif %}"
+                                  {% if active_collection_handle == handle_lc %}aria-current="page"{% endif %}
+                                >{{ collection.title | escape }}</a>
+                              </li>
+                            {%- endif -%}
+                          {%- endfor -%}
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="shop-mega__col">
+                      <div class="shop-mega__section">
+                        <p class="shop-mega__category">Gift &amp; Moments</p>
+                        <ul class="shop-mega__list">
+                          <li>
+                            <a
+                              href="/collections/shop-weddings"
+                              class="shop-mega__link{% if active_collection_handle == 'shop-weddings' %} is-active{% endif %}"
+                              {% if active_collection_handle == 'shop-weddings' %}aria-current="page"{% endif %}
+                            >Wedding</a>
+                          </li>
+                          <li>
+                            <a
+                              href="/collections/shop-anniversaries"
+                              class="shop-mega__link{% if active_collection_handle == 'shop-anniversaries' %} is-active{% endif %}"
+                              {% if active_collection_handle == 'shop-anniversaries' %}aria-current="page"{% endif %}
+                            >Anniversaries</a>
+                          </li>
+                          <li>
+                            <a
+                              href="/collections/shop-births"
+                              class="shop-mega__link{% if active_collection_handle == 'shop-births' %} is-active{% endif %}"
+                              {% if active_collection_handle == 'shop-births' %}aria-current="page"{% endif %}
+                            >Births</a>
+                          </li>
+                          <li>
+                            <a
+                              href="/collections/shop-birthdays"
+                              class="shop-mega__link{% if active_collection_handle == 'shop-birthdays' %} is-active{% endif %}"
+                              {% if active_collection_handle == 'shop-birthdays' %}aria-current="page"{% endif %}
+                            >Birthdays</a>
+                          </li>
+                          <li>
+                            <a
+                              href="/collections/shop-house-warming"
+                              class="shop-mega__link{% if active_collection_handle == 'shop-house-warming' %} is-active{% endif %}"
+                              {% if active_collection_handle == 'shop-house-warming' %}aria-current="page"{% endif %}
+                            >House Warming</a>
+                          </li>
+                          <li><a href="/pages/gift-cards" class="shop-mega__link{% if nav_gift_cards_active %} is-active{% endif %}"{% if nav_gift_cards_active %} aria-current="page"{% endif %}>Gift Cards</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="shop-mega__col">
+                      <div class="shop-mega__section">
+                        <p class="shop-mega__category">Places &amp; Property</p>
+                        <ul class="shop-mega__list">
+                          <li>
+                            <a
+                              href="/collections/shop-settlement-gifts"
+                              class="shop-mega__link{% if active_collection_handle == 'shop-settlement-gifts' %} is-active{% endif %}"
+                              {% if active_collection_handle == 'shop-settlement-gifts' %}aria-current="page"{% endif %}
+                            >Settlement Gifts</a>
+                          </li>
+                          <li>
+                            <a
+                              href="/collections/shop-street-signs"
+                              class="shop-mega__link{% if active_collection_handle == 'shop-street-signs' %} is-active{% endif %}"
+                              {% if active_collection_handle == 'shop-street-signs' %}aria-current="page"{% endif %}
+                            >Street Signs</a>
+                          </li>
+                          <li>
+                            <a
+                              href="/collections/shop-places-weve-lived"
+                              class="shop-mega__link{% if active_collection_handle == 'shop-places-weve-lived' %} is-active{% endif %}"
+                              {% if active_collection_handle == 'shop-places-weve-lived' %}aria-current="page"{% endif %}
+                            >Places We've Lived</a>
+                          </li>
+                          <li>
+                            <a
+                              href="/collections/shop-quote"
+                              class="shop-mega__link{% if active_collection_handle == 'shop-quote' %} is-active{% endif %}"
+                              {% if active_collection_handle == 'shop-quote' %}aria-current="page"{% endif %}
+                            >Quote</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="shop-mega__divider" aria-hidden="true"></div>
+                  <div data-menu-top-sellers-mount></div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="flex h-full items-stretch">
+            <a
+              href="{{ routes.collections_url }}"
+              class="site-header__nav-link flex h-full items-center px-3{% if nav_collections_active %} is-active{% endif %}"
+              {% if nav_collections_active %}aria-current="page"{% endif %}
+            >Collections</a>
+          </li>
+          <li class="flex h-full items-stretch">
+            <a
+              href="/collections/property-collection"
+              class="site-header__nav-link flex h-full items-center px-3{% if nav_corporate_active %} is-active{% endif %}"
+              {% if nav_corporate_active %}aria-current="page"{% endif %}
+            >Corporate</a>
+          </li>
+          <li class="flex h-full items-stretch">
+            <a
+              href="/pages/new-arrivals"
+              class="site-header__nav-link flex h-full shrink-0 items-center whitespace-nowrap px-3{% if nav_new_arrivals_active %} is-active{% endif %}"
+              {% if nav_new_arrivals_active %}aria-current="page"{% endif %}
+            >New Arrivals</a>
+          </li>
+          <li class="flex h-full items-stretch">
+            <a
+              href="/pages/top-sellers"
+              class="site-header__nav-link flex h-full shrink-0 items-center whitespace-nowrap px-3{% if nav_top_sellers_active %} is-active{% endif %}"
+              {% if nav_top_sellers_active %}aria-current="page"{% endif %}
+            >Top Sellers</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="site-header__actions site-header__actions--desktop flex shrink-0 items-center gap-2 lg:h-full">
+        <div class="site-header__utilities flex items-center gap-2">
+          {%- if show_account_icon != false -%}
+            {%- assign header_account_menu = customer_account_menu | default: 'customer-account-main-menu' -%}
+            {% render 'header-account',
+              variant: 'icon',
+              account_menu: header_account_menu
+            %}
+          {%- endif -%}
+          <a href="{{ routes.search_url }}" class="site-header__utility-link flex h-10 w-10 items-center justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-default" aria-label="Search">
+            <img src="{{ 'search.svg' | asset_url }}" alt="" class="h-6 w-6 object-contain" width="24" height="24" decoding="async" />
+          </a>
+          <a href="{{ routes.cart_url }}" class="site-header__utility-link flex h-10 w-10 items-center justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-default" aria-label="Cart">
+            <img src="{{ 'cart.svg' | asset_url }}" alt="" class="h-6 w-6 object-contain" width="24" height="24" decoding="async" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>

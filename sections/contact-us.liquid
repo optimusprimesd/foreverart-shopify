@@ -1,0 +1,286 @@
+{%- liquid
+  assign hero_eyebrow = section.settings.hero_eyebrow | default: 'Contact'
+  assign hero_heading = section.settings.hero_heading | default: 'Connect with Our Canvas'
+  assign hero_lede = section.settings.hero_lede
+  assign map_query = section.settings.map_query | default: 'PO Box 421, Aspley QLD 4034, Australia'
+  assign map_src = section.settings.map_embed_url
+  if map_src == blank
+    assign map_query_encoded = map_query | url_encode
+    assign map_src = 'https://maps.google.com/maps?q=' | append: map_query_encoded | append: '&z=14&output=embed'
+  endif
+-%}
+
+<div class="about-us contact-us" data-header-context="dark">
+  <header class="about-us__hero">
+    <div class="about-us__hero-inner">
+      {%- if hero_eyebrow != blank -%}
+        <p class="about-us__eyebrow">{{ hero_eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if hero_heading != blank -%}
+        <h1 class="about-us__hero-heading">{{ hero_heading | escape }}</h1>
+      {%- endif -%}
+      {%- if hero_lede != blank -%}
+        <p class="about-us__hero-lede">{{ hero_lede | escape }}</p>
+      {%- endif -%}
+    </div>
+  </header>
+
+  <div class="about-us__body">
+    <section class="contact-us__main">
+      <div class="contact-us__grid">
+        <aside class="contact-us__details">
+          {%- if section.settings.details_heading != blank -%}
+            <h2 class="contact-us__heading">{{ section.settings.details_heading | escape }}</h2>
+          {%- endif -%}
+
+          <ul class="contact-us__list" role="list">
+            {%- if section.settings.address != blank -%}
+              <li class="contact-us__item">
+                <span class="contact-us__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                    <path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                </span>
+                <span>{{ section.settings.address | escape }}</span>
+              </li>
+            {%- endif -%}
+
+            {%- if section.settings.phone != blank -%}
+              <li class="contact-us__item">
+                <span class="contact-us__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                    <path d="M7.5 4.5h3l1.5 4-2 1.5a12 12 0 0 0 5 5l1.5-2 4 1.5v3a2 2 0 0 1-2 2A15 15 0 0 1 5.5 6.5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <a href="tel:{{ section.settings.phone | replace: ' ', '' }}">Phone {{ section.settings.phone | escape }}</a>
+              </li>
+            {%- endif -%}
+
+            {%- if section.settings.email != blank -%}
+              <li class="contact-us__item">
+                <span class="contact-us__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                    <rect x="3.5" y="6" width="17" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="m4.5 7.5 7.5 6 7.5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <a href="mailto:{{ section.settings.email }}">{{ section.settings.email | escape }}</a>
+              </li>
+            {%- endif -%}
+
+            {%- if section.settings.facebook_url != blank -%}
+              <li class="contact-us__item">
+                <span class="contact-us__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                    <path d="M14 9h2.5V6H14a4 4 0 0 0-4 4v2H8v3h2v7h3v-7h2.2l.8-3H13v-1.5A1.5 1.5 0 0 1 14.5 9H14Z" fill="currentColor"/>
+                  </svg>
+                </span>
+                <a href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener noreferrer">
+                  {{ section.settings.facebook_handle | default: 'foreverartau' | escape }}
+                </a>
+              </li>
+            {%- endif -%}
+
+            {%- if section.settings.instagram_url != blank -%}
+              <li class="contact-us__item">
+                <span class="contact-us__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                    <rect x="4" y="4" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="16.5" cy="7.5" r="1" fill="currentColor"/>
+                  </svg>
+                </span>
+                <a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener noreferrer">
+                  {{ section.settings.instagram_handle | default: 'foreverartau' | escape }}
+                </a>
+              </li>
+            {%- endif -%}
+          </ul>
+        </aside>
+
+        <div class="contact-us__form-wrap">
+          {%- if section.settings.form_heading != blank -%}
+            <h2 class="contact-us__heading">{{ section.settings.form_heading | escape }}</h2>
+          {%- endif -%}
+          {%- if section.settings.form_intro != blank -%}
+            <div class="contact-us__form-intro about-us__prose">
+              {{ section.settings.form_intro }}
+            </div>
+          {%- endif -%}
+
+          {% render 'contact-send-email',
+            send_to_email: section.settings.send_to_email,
+            submit_label: section.settings.submit_label,
+            success_message: section.settings.success_message,
+            privacy_note: section.settings.privacy_note,
+            form_id: 'ContactForm'
+          %}
+        </div>
+      </div>
+    </section>
+
+    {%- if section.settings.show_map -%}
+      <section class="contact-us__map" aria-label="Map for {{ section.settings.address | default: map_query | escape }}">
+        <iframe
+          class="contact-us__map-frame"
+          src="{{ map_src }}"
+          width="100%"
+          height="500"
+          style="border:0;"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Forever Art location map"
+        ></iframe>
+      </section>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact us",
+  "tag": "section",
+  "class": "contact-us-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Hero eyebrow",
+      "default": "Contact"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero heading",
+      "default": "Connect with Our Canvas"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_lede",
+      "label": "Hero lede",
+      "default": "At Forever Art, we believe that every conversation is a fresh brushstroke on the canvas of our journey. Whether you have a query, a story to share, or simply want to connect with the world of art, we’re here to listen and respond."
+    },
+    {
+      "type": "header",
+      "content": "Contact details"
+    },
+    {
+      "type": "text",
+      "id": "details_heading",
+      "label": "Details heading",
+      "default": "Contact Details"
+    },
+    {
+      "type": "text",
+      "id": "address",
+      "label": "Address",
+      "default": "PO Box 421 Aspley QLD 4034"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone",
+      "default": "0407 729 026"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "create@foreverart.com.au"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "text",
+      "id": "facebook_handle",
+      "label": "Facebook handle",
+      "default": "foreverartau"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "text",
+      "id": "instagram_handle",
+      "label": "Instagram handle",
+      "default": "foreverartau"
+    },
+    {
+      "type": "header",
+      "content": "Contact form"
+    },
+    {
+      "type": "text",
+      "id": "send_to_email",
+      "label": "Send submissions to",
+      "default": "andrew@foreverart.com.au",
+      "info": "Included in the email body. Shopify still delivers contact forms to your store customer email — set Admin → Settings → Store details customer email to andrew@foreverart.com.au (or forward that inbox)."
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form heading",
+      "default": "Send Us A Message"
+    },
+    {
+      "type": "richtext",
+      "id": "form_intro",
+      "label": "Form intro",
+      "default": "<p>Your thoughts and feedback enrich our artistic landscape. Use the form below to send us a message, and we’ll get back to you at the earliest.</p>"
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Submit button label",
+      "default": "Send Us A Message"
+    },
+    {
+      "type": "textarea",
+      "id": "privacy_note",
+      "label": "Privacy note",
+      "default": "Your privacy matters to us. Rest assured, any personal information shared will be kept confidential and used solely for correspondence purposes."
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thanks for your message. We’ll get back to you soon."
+    },
+    {
+      "type": "header",
+      "content": "Map"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_map",
+      "label": "Show Google Map",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "map_query",
+      "label": "Map search query",
+      "default": "PO Box 421, Aspley QLD 4034, Australia",
+      "info": "Used when Map embed URL is empty."
+    },
+    {
+      "type": "text",
+      "id": "map_embed_url",
+      "label": "Map embed URL",
+      "info": "Optional. Paste a full Google Maps embed src URL to override the search query."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact us"
+    }
+  ]
+}
+{% endschema %}

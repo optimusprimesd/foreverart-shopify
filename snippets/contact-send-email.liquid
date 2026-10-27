@@ -1,0 +1,96 @@
+{%- comment -%}
+  Contact send-email form (Shopify native contact form).
+
+  Shopify delivers submissions to the store customer/notification email
+  (Admin → Settings → Store details / Notifications). Set that address to
+  the recipient below so messages reach andrew@foreverart.com.au.
+{%- endcomment -%}
+
+{%- assign send_to_email = send_to_email | default: 'andrew@foreverart.com.au' -%}
+{%- assign submit_label = submit_label | default: 'Send Us A Message' -%}
+{%- assign success_message = success_message | default: 'Thanks for your message. We’ll get back to you soon.' -%}
+{%- assign privacy_note = privacy_note | default: '' -%}
+{%- assign form_id = form_id | default: 'ContactForm' -%}
+
+{%- form 'contact', id: form_id, class: 'contact-us__form js-contact-send-email' -%}
+  <input type="hidden" name="contact[recipient]" value="{{ send_to_email | escape }}" data-contact-recipient>
+  <input type="hidden" name="contact[form_source]" value="Contact page">
+
+  {%- if form.posted_successfully? -%}
+    <p class="contact-us__success" role="status">
+      {{ success_message | escape }}
+    </p>
+  {%- endif -%}
+
+  {%- if form.errors -%}
+    <div class="contact-us__errors" role="alert">
+      {{ form.errors | default_errors }}
+    </div>
+  {%- endif -%}
+
+  <div class="contact-us__row">
+    <label class="contact-us__field">
+      <span class="visually-hidden">First Name</span>
+      <input
+        type="text"
+        name="contact[first_name]"
+        id="{{ form_id }}-first_name"
+        placeholder="First Name*"
+        required
+        autocomplete="given-name"
+        data-contact-first-name
+        value="{% if form.first_name %}{{ form.first_name }}{% endif %}"
+      >
+    </label>
+    <label class="contact-us__field">
+      <span class="visually-hidden">Last Name</span>
+      <input
+        type="text"
+        name="contact[last_name]"
+        id="{{ form_id }}-last_name"
+        placeholder="Last Name*"
+        required
+        autocomplete="family-name"
+        data-contact-last-name
+        value="{% if form.last_name %}{{ form.last_name }}{% endif %}"
+      >
+    </label>
+  </div>
+
+  <label class="contact-us__field">
+    <span class="visually-hidden">Email</span>
+    <input
+      type="email"
+      name="contact[email]"
+      id="{{ form_id }}-email"
+      placeholder="Email*"
+      required
+      autocomplete="email"
+      spellcheck="false"
+      data-contact-email
+      value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+    >
+  </label>
+
+  <label class="contact-us__field">
+    <span class="visually-hidden">Your Message</span>
+    <textarea
+      name="contact[body]"
+      id="{{ form_id }}-body"
+      rows="7"
+      placeholder="Your Message*"
+      required
+      data-contact-body
+    >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+  </label>
+
+  <input type="hidden" name="contact[name]" value="" data-contact-full-name>
+
+  <button type="submit" class="contact-us__submit" data-contact-submit>
+    {{ submit_label | escape }}
+  </button>
+
+  {%- if privacy_note != blank -%}
+    <p class="contact-us__privacy">{{ privacy_note | escape }}</p>
+  {%- endif -%}
+{%- endform -%}

@@ -1,0 +1,119 @@
+{%- assign input_info_name = input_info_name | default: '' -%}
+{%- assign input_info_type = input_info_type | default: 'text' -%}
+{%- assign input_info_placeholder = input_info_placeholder | default: '' -%}
+{%- assign input_info_id = input_info_id | default: '' -%}
+{%- assign input_info_class = input_info_class | default: '' -%}
+{%- assign input_info_autocomplete = input_info_autocomplete | default: '' -%}
+{%- assign input_info_required = input_info_required | default: false -%}
+{%- assign input_info_aria_label = input_info_aria_label | default: 'More information' -%}
+{%- assign input_info_rows = input_info_rows | default: '' -%}
+{%- assign input_info_wrap_class = input_info_wrap_class | default: '' -%}
+{%- assign input_info_inputmode = input_info_inputmode | default: '' -%}
+{%- assign input_info_options = input_info_options | default: '' -%}
+{%- assign field_description_key = input_info_name -%}
+{%- if description_key != blank -%}
+  {%- assign field_description_key = description_key -%}
+{%- endif -%}
+{%- assign field_tooltip_id = '' -%}
+{%- if input_info_name != blank -%}
+  {%- assign field_tooltip_id = 'help-tooltip-' | append: input_info_name -%}
+{%- endif -%}
+
+{%- assign field_desc = nil -%}
+{%- if product.description and field_description_key != blank -%}
+  {%- assign field_desc = product.description[field_description_key] -%}
+{%- endif -%}
+
+{%- assign show_field_help = false -%}
+{%- assign show_field_voice = false -%}
+{%- if field_desc -%}
+  {%- if field_desc.title != blank or field_desc.description != blank -%}
+    {%- assign show_field_help = true -%}
+  {%- endif -%}
+  {%- if field_desc.voice -%}
+    {%- assign show_field_voice = true -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- assign field_tooltip_title = field_desc.title | default: input_info_tooltip_title | default: input_info_placeholder -%}
+{%- assign field_tooltip_body = field_desc.description | default: input_info_tooltip_body | default: '' -%}
+{%- assign field_voice_audio_id = 'voice-audio-' | append: field_description_key -%}
+{%- assign field_voice_src = field_desc.voice_src | default: '/assets/wedding-poster.m4a' -%}
+
+<div class="wizard__input-info-wrap{% if input_info_rows != blank %} wizard__input-info-wrap--textarea{% endif %}{% if show_field_help or show_field_voice %} wizard__input-info-wrap--has-actions{% endif %}{% if show_field_help and show_field_voice %} wizard__input-info-wrap--has-help-voice{% elsif show_field_help or show_field_voice %} wizard__input-info-wrap--has-help{% endif %} {{ input_info_wrap_class }}">
+  {% if input_info_rows != blank %}
+    <textarea
+      name="{{ input_info_name }}"
+      {% if input_info_id != blank %}id="{{ input_info_id }}"{% endif %}
+      rows="{{ input_info_rows }}"
+      placeholder="{{ input_info_placeholder }}"
+      class="product-page__input product-page__input--textarea w-full {{ input_info_class }}"
+      {% if input_info_required %}aria-required="true"{% endif %}
+    ></textarea>
+  {% elsif input_info_type == 'select' %}
+    <select
+      name="{{ input_info_name }}"
+      {% if input_info_id != blank %}id="{{ input_info_id }}"{% endif %}
+      class="product-page__input product-page__input--select w-full {{ input_info_class }}"
+      aria-label="{{ input_info_placeholder }}"
+      {% if input_info_required %}aria-required="true"{% endif %}
+    >
+      <option value="" disabled selected>{{ input_info_placeholder }}</option>
+      {% assign input_info_option_list = input_info_options | split: ',' %}
+      {% for option in input_info_option_list %}
+        {% assign option_label = option | strip %}
+        {% if option_label != blank %}
+          <option value="{{ option_label }}">{{ option_label }}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+  {% else %}
+    <input
+      type="{{ input_info_type }}"
+      name="{{ input_info_name }}"
+      {% if input_info_id != blank %}id="{{ input_info_id }}"{% endif %}
+      placeholder="{{ input_info_placeholder }}"
+      class="product-page__input w-full {{ input_info_class }}"
+      {% if input_info_autocomplete != blank %}autocomplete="{{ input_info_autocomplete }}"{% endif %}
+      {% if input_info_inputmode != blank %}inputmode="{{ input_info_inputmode }}"{% endif %}
+      {% if input_info_required %}aria-required="true"{% endif %}
+    />
+  {% endif %}
+
+  {% if show_field_help or show_field_voice %}
+    <div class="wizard__input-trailing">
+      {% if show_field_help %}
+        <div class="product-page__help-tooltip">
+          <button
+            type="button"
+            class="wizard__input-info-btn product-page__help-tooltip-trigger focus:outline-none focus-visible:ring-2 focus-visible:ring-[#141414] focus-visible:ring-offset-2"
+            aria-expanded="false"
+            {% if field_tooltip_id != blank %}aria-controls="{{ field_tooltip_id }}"{% endif %}
+            aria-label="{{ input_info_aria_label }}"
+          >
+            <i class="hgi hgi-stroke hgi-rounded hgi-help-circle leading-none" aria-hidden="true"></i>
+          </button>
+          {% include 'partials/product-help-tooltip-panel',
+            tooltip_id: field_tooltip_id,
+            tooltip_title: field_tooltip_title,
+            tooltip_body: field_tooltip_body
+          %}
+        </div>
+      {% endif %}
+      {% if show_field_voice %}
+        {% include 'partials/product-voice-button',
+          voice_audio_id: field_voice_audio_id,
+          voice_aria_label: field_tooltip_title
+        %}
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+
+{% if show_field_voice %}
+  {% include 'partials/product-field-description-audio',
+    field_audio_id: field_voice_audio_id,
+    field_audio_src: field_voice_src,
+    field_audio_label: field_tooltip_title
+  %}
+{% endif %}

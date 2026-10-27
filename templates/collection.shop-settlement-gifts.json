@@ -1,0 +1,37 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "shop_category": {
+      "type": "shop-category",
+      "blocks": {
+        "src_0_property_collection": {
+          "type": "collection_source",
+          "settings": {
+            "collection": "property-collection"
+          }
+        }
+      },
+      "block_order": [
+        "src_0_property_collection"
+      ],
+      "settings": {
+        "eyebrow": "Places & Property",
+        "heading": "Settlement Gifts",
+        "intro": "<p>All Property Collection products \u2014 perfect for settlement and new beginnings.</p>",
+        "include_current_collection": true,
+        "max_products": 48
+      }
+    }
+  },
+  "order": [
+    "shop_category"
+  ]
+}

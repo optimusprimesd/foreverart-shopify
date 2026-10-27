@@ -1,0 +1,130 @@
+{%- assign field = field | default: nil -%}
+{%- assign product = product | default: nil -%}
+{%- if field != nil -%}
+
+{%- assign field_key = field.key | default: 'input_group' -%}
+{%- assign group_label = field.label | default: '' -%}
+{%- assign min_filled = field.min_filled | default: 0 -%}
+{%- assign max_filled = field.max_filled | default: '' -%}
+{%- assign group_inputs = field.inputs | default: nil -%}
+
+{%- assign show_field_help = false -%}
+{%- assign show_group_voice = false -%}
+{%- assign show_group_video = false -%}
+{%- if field.show_help == true or field.show_help == 'true' -%}
+  {%- assign show_field_help = true -%}
+{%- elsif field.help_title != blank or field.help_body != blank -%}
+  {%- assign show_field_help = true -%}
+{%- endif -%}
+{%- if field.show_voice == true or field.show_voice == 'true' -%}
+  {%- assign show_group_voice = true -%}
+{%- endif -%}
+{%- if field.show_video == true or field.show_video == 'true' -%}
+  {%- assign show_group_video = true -%}
+{%- endif -%}
+{%- assign group_has_actions = false -%}
+{%- if show_field_help or show_group_voice or show_group_video -%}
+  {%- assign group_has_actions = true -%}
+{%- endif -%}
+{%- assign group_tooltip_id = 'help-tooltip-' | append: field_key -%}
+{%- assign group_help_title = field.help_title | default: group_label -%}
+
+<div
+  class="wizard__input-group {{ field.wrap_class }}"
+  data-input-group="{{ field_key }}"
+  data-min-filled="{{ min_filled }}"
+  {% if max_filled != blank %}data-max-filled="{{ max_filled }}"{% endif %}
+>
+  <div class="wizard__input-group-box">
+    {%- if group_label != blank or group_has_actions -%}
+      <div class="wizard__input-group-head wizard__select-field-header flex w-full flex-wrap items-center justify-between gap-2">
+        {%- if group_label != blank -%}
+          <p class="product-page__label mb-0 min-w-0 flex-1 text-base font-bold text-[#141414]">{{ group_label }}</p>
+        {%- endif -%}
+        {%- if group_has_actions -%}
+          {%- assign group_tooltip_body = field.help_body | default: '' -%}
+          {% render 'product-field-header-actions',
+            product: product,
+            field_key: field_key,
+            tooltip_id: group_tooltip_id,
+            tooltip_aria_label: group_help_title,
+            show_help: show_field_help,
+            tooltip_title: group_help_title,
+            tooltip_body: group_tooltip_body,
+            show_voice: show_group_voice,
+            show_video: show_group_video,
+            voice_src: field.voice_src,
+            media_url: field.media_url
+          %}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if group_inputs != nil and group_inputs.size > 0 -%}
+      <div class="wizard__step-fields">
+      {%- for input in group_inputs -%}
+        {%- assign input_key = input.key | default: forloop.index -%}
+        {%- assign input_property = input.property_name | default: input_key -%}
+        {%- assign input_type = input.type | default: 'text' -%}
+        {%- assign input_max_length = '' -%}
+        {%- assign input_alphanumeric_only = false -%}
+        {%- if input.validation -%}
+          {%- if input.validation.max_length != blank -%}
+            {%- assign input_max_length = input.validation.max_length -%}
+          {%- endif -%}
+          {%- if input.validation.alphanumeric_only == true -%}
+            {%- assign input_alphanumeric_only = true -%}
+          {%- endif -%}
+        {%- endif -%}
+        {%- if input_type == 'select' -%}
+          {%- assign input_info_id = field_key | append: '-' | append: input_key -%}
+          {% render 'product-input-info',
+            product: product,
+            input_info_name: input_property,
+            input_info_id: input_info_id,
+            input_info_type: 'select',
+            input_info_placeholder: input.placeholder,
+            input_info_options: input.options,
+            input_info_options_source: input.options_source,
+            input_info_wrap_class: 'wizard__input-group-item',
+            input_info_required: input.required,
+            input_info_aria_label: input.placeholder,
+            input_info_label: input.info_label,
+            input_info_additional_charge: input.additional_charge,
+            input_info_show_help: input.show_help,
+            input_info_tooltip_title: input.help_title,
+            input_info_tooltip_body: input.help_body,
+            description_key: input_key
+          %}
+        {%- elsif input_type == 'year' -%}
+          {% render 'product-form-field-year',
+            field: input,
+            product: product
+          %}
+        {%- else -%}
+        {%- assign input_info_id = field_key | append: '-' | append: input_key -%}
+        {% render 'product-input-info',
+          product: product,
+          input_info_name: input_property,
+          input_info_id: input_info_id,
+          input_info_placeholder: input.placeholder,
+          input_info_wrap_class: 'wizard__input-group-item',
+          input_info_required: input.required,
+          input_info_aria_label: input.placeholder,
+          input_info_max_length: input_max_length,
+          input_info_alphanumeric_only: input_alphanumeric_only,
+          input_info_label: input.info_label,
+          input_info_additional_charge: input.additional_charge,
+          input_info_show_help: input.show_help,
+          input_info_tooltip_title: input.help_title,
+          input_info_tooltip_body: input.help_body,
+          description_key: input_key
+        %}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+  </div>
+  {% render 'product-form-field-info', info_label: field.info_label, additional_charge: field.additional_charge %}
+</div>
+{%- endif -%}

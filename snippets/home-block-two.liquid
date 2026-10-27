@@ -1,0 +1,94 @@
+<section
+  class="home-process home-tale relative z-10 overflow-hidden bg-black text-white"
+  data-header-context="dark"
+  aria-labelledby="home-process-heading"
+>
+  <div class="home-process__layout">
+    <div class="home-process__media-col">
+      <div class="home-process__media-frame">
+        <div class="swiper home-process__swiper" data-home-process-swiper>
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="home-process__slide">
+                <video
+                  class="home-process__video"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  aria-label="Forever Art artisan at work"
+                >
+                  <source src="{{ 'forever-art-landing-video.mp4' | asset_url }}" type="video/mp4">
+                </video>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="home-process__slide">
+                <video
+                  class="home-process__video"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  aria-label="Forever Art artisan at work"
+                >
+                  <source src="{{ 'forever-art-landing-video.mp4' | asset_url }}" type="video/mp4">
+                </video>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="home-process__slide">
+                <video
+                  class="home-process__video"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  aria-label="Forever Art artisan at work"
+                >
+                  <source src="{{ 'forever-art-landing-video.mp4' | asset_url }}" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="home-process__play-overlay" data-home-process-play-overlay>
+            <button
+              type="button"
+              class="home-process__play"
+              data-home-process-play
+              aria-label="Play video"
+            >
+              <svg class="home-process__play-icon" width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+                <circle cx="28" cy="28" r="27" stroke="currentColor" stroke-width="1.5" />
+                <path d="M23 18.5v19l16-9.5-16-9.5z" fill="currentColor" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="swiper-pagination home-process__pagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-process__content-col">
+      <div class="home-process__content">
+        <h2 id="home-process-heading" class="home-process__title">The Process</h2>
+
+        <div class="home-process__body">
+          <p>
+            All of these things are in my DNA and it was my love of music that got the first spark of FOREVER ART going when I created my very first DREAM CONCERT poster using leftover scrap wood, random items from my shed and a domestic vinyl cutting machine I'd picked up along the way. And as they say...the rest is history.
+          </p>
+          <p>
+            We all have stories to tell about good times and people from the past and present. Those special memories that lingers in our thoughts. Those good vibes we want to pass on to the people around us. Laugh, remember, motivate and inspire. And most of all, we want to connect with people.
+          </p>
+        </div>
+
+        <a href="/pages/how-we-work" class="home-process__cta">
+          How we work
+          <span class="home-process__cta-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

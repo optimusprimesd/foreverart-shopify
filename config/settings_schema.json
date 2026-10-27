@@ -1,0 +1,281 @@
+[
+  {
+    "name": "Forever Art Custom Theme Settings",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Brand"
+      },
+      {
+        "type": "text",
+        "id": "brand_name",
+        "label": "Brand name",
+        "default": "Forever Art"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "header",
+        "content": "Admin tools"
+      },
+      {
+        "type": "text",
+        "id": "admin_customer_tag",
+        "label": "Admin customer tag",
+        "default": "admin",
+        "info": "Logged-in customers with this tag see admin links on the product page. Theme editor preview always shows admin tools."
+      },
+      {
+        "type": "header",
+        "content": "Product — Forever Art difference banner"
+      },
+      {
+        "type": "paragraph",
+        "content": "Fallback copy when the Product difference section is not on the template. Prefer editing the section on the product template."
+      },
+      {
+        "type": "text",
+        "id": "product_difference_heading",
+        "label": "Heading",
+        "default": "THE FOREVER ART DIFFERENCE"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_footer_bold_metafield_namespace",
+        "label": "Footer bold custom field namespace",
+        "default": "custom"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_footer_bold_metafield_key",
+        "label": "Footer bold custom field key",
+        "default": "footer_bold"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_footer_bold",
+        "label": "Footer bold text fallback",
+        "default": "Made to order:"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_footer_text_metafield_namespace",
+        "label": "Footer text custom field namespace",
+        "default": "custom"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_footer_text_metafield_key",
+        "label": "Footer text custom field key",
+        "default": "footer_text"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_footer_text",
+        "label": "Footer text fallback",
+        "default": "Each poster is handmade and ready for dispatch in 5–7 business days."
+      },
+      {
+        "type": "header",
+        "content": "Product dimensions (fallback)"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_difference_show_specs",
+        "label": "Show dimensions bar",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "product_difference_spec_finished_size_metafield_namespace",
+        "label": "Finished size custom field namespace",
+        "default": "custom"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_spec_finished_size_metafield_key",
+        "label": "Finished size custom field key",
+        "default": "finished_size"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_spec_finished_size",
+        "label": "Finished size fallback",
+        "default": "101 × 63 cm"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_spec_depth_metafield_namespace",
+        "label": "Depth custom field namespace",
+        "default": "custom"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_spec_depth_metafield_key",
+        "label": "Depth custom field key",
+        "default": "depth"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_spec_depth",
+        "label": "Depth fallback",
+        "default": "3.5 cm"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_spec_weight_metafield_namespace",
+        "label": "Weight custom field namespace",
+        "default": "custom"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_spec_weight_metafield_key",
+        "label": "Weight custom field key",
+        "default": "weight"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_spec_weight",
+        "label": "Weight fallback",
+        "default": "3.9 kg"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_feature_1_icon",
+        "label": "Feature 1 icon",
+        "default": "hgi-border-full"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_feature_1_caption",
+        "label": "Feature 1 caption",
+        "default": "Signature vintage leather border"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_feature_2_icon",
+        "label": "Feature 2 icon",
+        "default": "hgi-material-and-texture"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_feature_2_caption",
+        "label": "Feature 2 caption",
+        "default": "Premium textured vinyl finish"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_feature_3_icon",
+        "label": "Feature 3 icon",
+        "default": "hgi-tree-01"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_feature_3_caption",
+        "label": "Feature 3 caption",
+        "default": "Handmade timber frame"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_feature_4_icon",
+        "label": "Feature 4 icon",
+        "default": "hgi-image-01"
+      },
+      {
+        "type": "text",
+        "id": "product_difference_feature_4_caption",
+        "label": "Feature 4 caption",
+        "default": "Ready to display on arrival"
+      },
+      {
+        "type": "header",
+        "content": "Product — shipping highlights bar"
+      },
+      {
+        "type": "paragraph",
+        "content": "Fallback copy when the Shipping highlights section is not on the template. Prefer editing the section on the product template."
+      },
+      {
+        "type": "text",
+        "id": "product_shipping_highlight_1_icon",
+        "label": "Highlight 1 icon",
+        "default": "hgi-delivery-truck-01"
+      },
+      {
+        "type": "text",
+        "id": "product_shipping_highlight_1_text",
+        "label": "Highlight 1 text",
+        "default": "Free standard shipping Australia-wide"
+      },
+      {
+        "type": "text",
+        "id": "product_shipping_highlight_2_icon",
+        "label": "Highlight 2 icon",
+        "default": "hgi-flash"
+      },
+      {
+        "type": "text",
+        "id": "product_shipping_highlight_2_text",
+        "label": "Highlight 2 text",
+        "default": "Express shipping available at checkout"
+      },
+      {
+        "type": "text",
+        "id": "product_shipping_highlight_3_icon",
+        "label": "Highlight 3 icon",
+        "default": "hgi-image-01"
+      },
+      {
+        "type": "text",
+        "id": "product_shipping_highlight_3_text",
+        "label": "Highlight 3 text",
+        "default": "Ready to display on arrival"
+      },
+      {
+        "type": "header",
+        "content": "Customization charges"
+      },
+      {
+        "type": "paragraph",
+        "content": "Checkout only charges money that exists as real cart line items. Use the store product handle customization-charge priced at $20.00 (recommended) with a single Default Title variant. One customized product → quantity 1 ($20); two → quantity 2 ($40). A $1.00 product still works but checkout will show a high quantity (e.g. 20)."
+      },
+      {
+        "type": "product",
+        "id": "customization_fee_product",
+        "label": "Customization fee product",
+        "info": "Optional if handle customization-charge exists. Prefer $20.00 + Default Title variant so checkout shows title only with quantity 1 per customized product."
+      },
+      {
+        "type": "header",
+        "content": "File upload → Dropbox"
+      },
+      {
+        "type": "paragraph",
+        "content": "Dropbox access tokens must stay on a server. From the repo root run npm run dropbox-upload (or node dropbox-upload/dropbox-upload-proxy-server.mjs), deploy it publicly, then paste that URL below. With sync enabled and no per-field upload endpoint, the storefront posts files to the proxy and they land in the Dropbox folder. If a field uses Cloudinary (or similar), the proxy also supports Dropbox save_url after that public URL is returned."
+      },
+      {
+        "type": "checkbox",
+        "id": "dropbox_sync_enabled",
+        "label": "Enable Dropbox upload / sync",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "dropbox_proxy_url",
+        "label": "Dropbox proxy URL",
+        "info": "Base URL of your proxy (no trailing path). Example: https://dropbox-proxy.example.com — local: http://127.0.0.1:8787"
+      },
+      {
+        "type": "text",
+        "id": "dropbox_folder",
+        "label": "Dropbox folder path",
+        "default": "/custom_wedding_posters",
+        "info": "Files are saved as /custom_wedding_posters/{fileName}."
+      }
+    ],
+    
+  }
+]

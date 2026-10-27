@@ -1,0 +1,125 @@
+<section
+  class="home-story-2 home-tagline origin-center relative z-10 flex w-full flex-col items-center justify-center px-6 py-24 text-center"
+  data-header-context="{{ section.settings.header_context }}"
+  data-home-tagline-intro
+  aria-labelledby="home-tagline-heading-{{ section.id }}"
+  style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};"
+  {{ section.shopify_attributes }}
+>
+  {%- if section.settings.heading != blank -%}
+    <h2
+      id="home-tagline-heading-{{ section.id }}"
+      class="home-story__headline home-tagline__headline mb-8 text-2xl uppercase md:mb-10 md:text-3xl lg:text-4xl"
+      data-home-tagline-intro-heading
+    >
+      {{ section.settings.heading | escape }}
+    </h2>
+  {%- endif -%}
+
+  {%- if section.settings.quote != blank -%}
+    <blockquote class="home-story__quote home-tagline__quote mx-auto mb-10 max-w-xl md:mb-12" data-home-tagline-intro-quote>
+      <p class="leading-relaxed">{{ section.settings.quote | escape }}</p>
+    </blockquote>
+  {%- endif -%}
+
+  {%- if section.settings.attribution_name != blank or section.settings.attribution_role != blank -%}
+    <footer class="home-story__attribution home-tagline__attribution flex flex-col items-center gap-1" data-home-tagline-intro-attribution>
+      {%- if section.settings.attribution_name != blank -%}
+        <p class="home-story__name home-tagline__name text-sm md:text-base">{{ section.settings.attribution_name | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.attribution_role != blank -%}
+        <p class="home-story__role home-tagline__role text-[0.65rem] uppercase tracking-[0.18em] md:text-xs" style="color: {{ section.settings.text_color | color_modify: 'alpha', 0.75 }};">
+          {{ section.settings.attribution_role | escape }}
+        </p>
+      {%- endif -%}
+    </footer>
+  {%- endif -%}
+
+  {%- if section.settings.show_scroll_indicator -%}
+    <button
+      type="button"
+      class="home-tagline__scroll mt-8 flex cursor-pointer justify-center border-0 p-0 text-inherit md:mt-10"
+      data-scroll-indicator
+      data-home-tagline-intro-scroll
+      aria-label="Scroll to next section"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 object-contain" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+      </svg>
+    </button>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Home tagline",
+  "tag": "section",
+  "class": "home-tagline-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Font color",
+      "default": "#141414"
+    },
+    {
+      "type": "select",
+      "id": "header_context",
+      "label": "Header style",
+      "info": "Controls navigation appearance over this section.",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light header (dark text nav)"
+        },
+        {
+          "value": "dark",
+          "label": "Dark header (light text nav)"
+        }
+      ],
+      "default": "light"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Rebellion"
+    },
+    {
+      "type": "textarea",
+      "id": "quote",
+      "label": "Quote",
+      "default": "As the noise increases, we choose authenticity over approval. Always"
+    },
+    {
+      "type": "text",
+      "id": "attribution_name",
+      "label": "Attribution name",
+      "default": "Andrew Scott"
+    },
+    {
+      "type": "text",
+      "id": "attribution_role",
+      "label": "Attribution role",
+      "default": "Founder | Artisan | Maker"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_indicator",
+      "label": "Show scroll indicator",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Home tagline"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,213 @@
+{%- if section.settings.show_banner -%}
+  {% render 'product-forever-art-difference',
+    section: section,
+    product: product,
+    heading: section.settings.heading,
+    footer_bold: section.settings.footer_bold,
+    footer_text: section.settings.footer_text,
+    show_specs: section.settings.show_specs
+  %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Forever Art difference",
+  "tag": "div",
+  "class": "product-difference-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_banner",
+      "label": "Show banner",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "THE FOREVER ART DIFFERENCE",
+      "info": "Shown above the feature list."
+    },
+    {
+      "type": "header",
+      "content": "Footer copy"
+    },
+    {
+      "type": "paragraph",
+      "content": "Footer bold text and footer text are read from each product’s custom fields first. Theme editor values below are used only when a product field is empty."
+    },
+    {
+      "type": "text",
+      "id": "footer_bold_metafield_namespace",
+      "label": "Footer bold custom field namespace",
+      "default": "custom"
+    },
+    {
+      "type": "text",
+      "id": "footer_bold_metafield_key",
+      "label": "Footer bold custom field key",
+      "default": "footer_bold",
+      "info": "Single-line text metafield on each product, e.g. Made to order:"
+    },
+    {
+      "type": "text",
+      "id": "footer_bold",
+      "label": "Footer bold text fallback",
+      "default": "Made to order:",
+      "info": "Used when the product custom field is empty."
+    },
+    {
+      "type": "text",
+      "id": "footer_text_metafield_namespace",
+      "label": "Footer text custom field namespace",
+      "default": "custom"
+    },
+    {
+      "type": "text",
+      "id": "footer_text_metafield_key",
+      "label": "Footer text custom field key",
+      "default": "footer_text",
+      "info": "Single-line text metafield on each product."
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Footer text fallback",
+      "default": "Each poster is handmade and ready for dispatch in 5–7 business days.",
+      "info": "Used when the product custom field is empty."
+    },
+    {
+      "type": "header",
+      "content": "Product dimensions"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_specs",
+      "label": "Show dimensions bar",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "Values are read from each product's custom fields first. Theme editor values below are used only when a product field is empty."
+    },
+    {
+      "type": "text",
+      "id": "spec_finished_size_metafield_namespace",
+      "label": "Finished size custom field namespace",
+      "default": "custom"
+    },
+    {
+      "type": "text",
+      "id": "spec_finished_size_metafield_key",
+      "label": "Finished size custom field key",
+      "default": "finished_size",
+      "info": "Single-line text metafield on each product, e.g. 101 × 63 cm."
+    },
+    {
+      "type": "text",
+      "id": "spec_finished_size",
+      "label": "Finished size fallback",
+      "default": "101 × 63 cm",
+      "info": "Used when the product custom field is empty."
+    },
+    {
+      "type": "text",
+      "id": "spec_depth_metafield_namespace",
+      "label": "Depth custom field namespace",
+      "default": "custom"
+    },
+    {
+      "type": "text",
+      "id": "spec_depth_metafield_key",
+      "label": "Depth custom field key",
+      "default": "depth",
+      "info": "Single-line text metafield on each product, e.g. 3.5 cm."
+    },
+    {
+      "type": "text",
+      "id": "spec_depth",
+      "label": "Depth fallback",
+      "default": "3.5 cm",
+      "info": "Used when the product custom field is empty."
+    },
+    {
+      "type": "text",
+      "id": "spec_weight_metafield_namespace",
+      "label": "Weight custom field namespace",
+      "default": "custom"
+    },
+    {
+      "type": "text",
+      "id": "spec_weight_metafield_key",
+      "label": "Weight custom field key",
+      "default": "weight",
+      "info": "Single-line text metafield on each product, e.g. 3.9 kg."
+    },
+    {
+      "type": "text",
+      "id": "spec_weight",
+      "label": "Weight fallback",
+      "default": "3.9 kg",
+      "info": "Used when the product custom field is empty."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Hugeicons class",
+          "default": "hgi-checkmark-circle-02",
+          "info": "Icon name only, e.g. hgi-tree-01. Theme adds hgi hgi-stroke hgi-rounded automatically."
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption",
+          "default": "Feature caption",
+          "info": "Short label shown beside the icon."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Forever Art difference",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "hgi-border-full",
+            "caption": "Signature vintage leather border"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "hgi-material-and-texture",
+            "caption": "Premium textured vinyl finish"
+          }
+        },
+       
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "hgi-tree-01",
+            "caption": "Handmade timber frame"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "hgi-image-01",
+            "caption": "Ready to display on arrival"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

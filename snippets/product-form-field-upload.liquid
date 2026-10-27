@@ -1,0 +1,129 @@
+{%- assign field = field | default: nil -%}
+{%- assign product = product | default: nil -%}
+{%- if field != nil -%}
+
+{%- assign field_key = field.key | default: 'file_upload' -%}
+{%- assign property_name = field.property_name | default: field_key -%}
+{%- assign field_label = field.label | default: 'Upload file' -%}
+{%- assign select_label = field.select_label | default: 'Select files' -%}
+{%- assign upload_label = field.upload_label | default: 'Upload' -%}
+{%- assign accept = field.accept | default: 'image/*,.pdf' -%}
+{%- assign max_files = field.max_files | default: 5 -%}
+{%- assign max_size_mb = field.max_size_mb | default: 10 -%}
+{%- assign allow_multiple = true -%}
+{%- if field.multiple == false or field.multiple == 'false' -%}
+  {%- assign allow_multiple = false -%}
+{%- endif -%}
+
+{%- assign show_help = field.show_help | default: false -%}
+{%- assign show_voice = field.show_voice | default: false -%}
+{%- assign show_video = field.show_video | default: false -%}
+{%- if show_help == true or show_help == 'true' -%}
+  {%- assign show_help_enabled = true -%}
+{%- else -%}
+  {%- assign show_help_enabled = false -%}
+{%- endif -%}
+{%- if show_voice == true or show_voice == 'true' -%}
+  {%- assign show_voice_enabled = true -%}
+{%- else -%}
+  {%- assign show_voice_enabled = false -%}
+{%- endif -%}
+{%- assign help_title = field.help_title | default: field_label -%}
+{%- assign help_body = field.help_body | default: '' -%}
+{%- assign tooltip_id = 'help-tooltip-' | append: field_key -%}
+{%- assign voice_audio_id = 'voice-audio-' | append: field_key -%}
+{%- assign has_actions = false -%}
+{%- if show_help_enabled or show_voice_enabled or show_video == true or show_video == 'true' -%}
+  {%- assign has_actions = true -%}
+{%- endif -%}
+
+{%- assign field_charge_cents = 0 -%}
+{%- if field.additional_charge != blank -%}
+  {%- assign field_charge_cents = field.additional_charge | times: 100 | round -%}
+{%- endif -%}
+
+<div
+  class="wizard__upload {{ field.wrap_class }}"
+  data-product-upload
+  data-upload-key="{{ field_key | escape }}"
+  data-upload-max-files="{{ max_files }}"
+  data-upload-max-size-mb="{{ max_size_mb }}"
+  {% if field.upload_endpoint != blank %}data-upload-endpoint="{{ field.upload_endpoint | escape }}"{% endif %}
+  {% if field.upload_preset != blank %}data-upload-preset="{{ field.upload_preset | escape }}"{% endif %}
+  {% if field.dropbox_sync == false or field.dropbox_sync == 'false' %}
+    data-dropbox-sync="false"
+  {% else %}
+    data-dropbox-sync="true"
+  {% endif %}
+  {% if field.dropbox_folder != blank %}data-dropbox-folder="{{ field.dropbox_folder | escape }}"{% endif %}
+  {% if field.required %}data-upload-required="true"{% endif %}
+>
+  <div class="wizard__upload-head wizard__select-field-header flex w-full flex-wrap items-center justify-between gap-2">
+    {%- if field_label != blank -%}
+      <p class="product-page__label mb-0 min-w-0 flex-1 text-base font-bold text-[#141414]">{{ field_label | escape }}</p>
+    {%- endif -%}
+    {%- if has_actions -%}
+      {% render 'product-field-header-actions',
+        product: product,
+        field_key: field_key,
+        tooltip_id: tooltip_id,
+        tooltip_aria_label: help_title,
+        show_help: show_help_enabled,
+        tooltip_title: help_title,
+        tooltip_body: help_body,
+        show_voice: show_voice_enabled,
+        show_video: show_video,
+        voice_src: field.voice_src,
+        media_url: field.media_url
+      %}
+    {%- endif -%}
+  </div>
+
+  <div class="wizard__upload-box">
+    <input
+      type="file"
+      id="{{ field_key }}-file"
+      class="wizard__upload-input"
+      data-upload-input
+      accept="{{ accept | escape }}"
+      {% if allow_multiple %}multiple{% endif %}
+      tabindex="-1"
+      aria-hidden="true"
+    >
+
+    <div class="wizard__upload-actions">
+      <button type="button" class="wizard__upload-select-btn" data-upload-select>
+        {{ select_label | escape }}
+      </button>
+      <button type="button" class="wizard__upload-submit-btn" data-upload-submit disabled>
+        {{ upload_label | escape }}
+      </button>
+    </div>
+
+    <p class="wizard__upload-status" data-upload-status aria-live="polite">No files selected</p>
+    <ul class="wizard__upload-file-list" data-upload-file-list hidden></ul>
+
+    <input
+      type="hidden"
+      name="properties[{{ property_name }}]"
+      id="{{ field_key }}"
+      value=""
+      data-upload-value
+      {% if field.required %}aria-required="true"{% endif %}
+      {% if field_charge_cents > 0 %}data-additional-charge-cents="{{ field_charge_cents }}"{% endif %}
+    >
+  </div>
+
+  {% render 'product-form-field-info', info_label: field.info_label, additional_charge: field.additional_charge %}
+</div>
+
+{%- if show_voice_enabled -%}
+  {%- assign field_voice_src = field.voice_src | default: 'wedding-poster.m4a' | asset_url -%}
+  {% render 'product-field-description-audio',
+    field_audio_id: voice_audio_id,
+    field_audio_src: field_voice_src,
+    field_audio_label: help_title
+  %}
+{%- endif -%}
+
+{%- endif -%}

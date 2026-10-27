@@ -1,0 +1,121 @@
+{%- comment -%}
+  Shared customer-account layout (classic Shopify customer accounts).
+  Accepts:
+  - active: dashboard | orders | downloads | addresses | payment | details
+  - content: main panel HTML (capture)
+  - title: optional page heading override
+{%- endcomment -%}
+
+{%- liquid
+  assign active = active | default: 'dashboard'
+  assign customer_display_name = customer.name | default: customer.first_name | default: 'there'
+-%}
+
+<div class="account-shell mx-auto w-full min-w-0 max-w-[1280px] px-4 py-8 md:py-10" data-header-context="light" data-account-shell>
+  <div class="account-shell__layout">
+    <aside class="account-shell__sidebar" aria-label="Account menu">
+      <div class="account-shell__profile">
+        <span class="account-shell__avatar" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="8" r="3.5"></circle>
+            <path d="M5.5 19.5c1.6-3.2 4-4.8 6.5-4.8s4.9 1.6 6.5 4.8" stroke-linecap="round"></path>
+          </svg>
+        </span>
+        <p class="account-shell__hello">Hello <strong>{{ customer_display_name | escape }}</strong></p>
+      </div>
+
+      <nav class="account-shell__nav">
+        <ul class="account-shell__menu">
+          <li>
+            <a
+              class="account-shell__link{% if active == 'dashboard' %} is-active{% endif %}"
+              href="{{ routes.account_url }}"
+              {% if active == 'dashboard' %}aria-current="page"{% endif %}
+            >
+              <span class="account-shell__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 14a8 8 0 0 1 16 0" stroke-linecap="round"/><path d="M12 14v-3" stroke-linecap="round"/><circle cx="12" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg>
+              </span>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="account-shell__link{% if active == 'orders' %} is-active{% endif %}"
+              href="{{ routes.account_url }}#orders"
+              data-account-tab-link="orders"
+              {% if active == 'orders' %}aria-current="page"{% endif %}
+            >
+              <span class="account-shell__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M3 4h2l2.4 11.2a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.5-1.2L20.5 8H7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span>Orders</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="account-shell__link{% if active == 'downloads' %} is-active{% endif %}"
+              href="{{ routes.account_url }}#downloads"
+              data-account-tab-link="downloads"
+              {% if active == 'downloads' %}aria-current="page"{% endif %}
+            >
+              <span class="account-shell__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 4v10m0 0 3.5-3.5M12 14 8.5 10.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18h14" stroke-linecap="round"/></svg>
+              </span>
+              <span>Downloads</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="account-shell__link{% if active == 'addresses' %} is-active{% endif %}"
+              href="{{ routes.account_addresses_url }}"
+              {% if active == 'addresses' %}aria-current="page"{% endif %}
+            >
+              <span class="account-shell__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11z"/><circle cx="12" cy="10" r="2.2"/></svg>
+              </span>
+              <span>Addresses</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="account-shell__link{% if active == 'payment' %} is-active{% endif %}"
+              href="{{ routes.account_url }}#payment"
+              data-account-tab-link="payment"
+              {% if active == 'payment' %}aria-current="page"{% endif %}
+            >
+              <span class="account-shell__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="6" width="18" height="12" rx="1.5"/><path d="M3 10h18" stroke-linecap="round"/></svg>
+              </span>
+              <span>Payment methods</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="account-shell__link{% if active == 'details' %} is-active{% endif %}"
+              href="{{ routes.account_url }}#details"
+              data-account-tab-link="details"
+              {% if active == 'details' %}aria-current="page"{% endif %}
+            >
+              <span class="account-shell__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 19c1.5-3 4-4.5 6.5-4.5s5 1.5 6.5 4.5" stroke-linecap="round"/></svg>
+              </span>
+              <span>Account details</span>
+            </a>
+          </li>
+          <li>
+            <a class="account-shell__link" href="{{ routes.account_logout_url }}">
+              <span class="account-shell__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 7V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1v-2" stroke-linecap="round"/><path d="M3 12h11m0 0-3-3m3 3-3 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span>Log out</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="account-shell__main account-page">
+      {{ content }}
+    </div>
+  </div>
+</div>

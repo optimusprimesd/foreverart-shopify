@@ -1,0 +1,72 @@
+{
+  "heading": "Customize Your Vehicle Sign",
+  "steps": [
+    {
+      "number": 1,
+      "title": "1. The Vehicle",
+      "nav_label": "Vehicle",
+      "fields": [
+        {
+          "key": "vehicle",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Vehicle",
+          "placeholder": "Vehicle",
+          "required": true,
+          "wrap_class": "mb-4",
+          "show_help": true,
+          "help_title": "Vehicle",
+          "help_body": "Suggested vehicle make / model"
+        },
+        {
+          "key": "street_type",
+          "type": "select",
+          "enabled": true,
+          "property_name": "Street Type",
+          "placeholder": "Street Type",
+          "required": true,
+          "wrap_class": "mb-4",
+          "options": "Alley (AL),Avenue (AV),Boulevard (BVD),Circuit (CCT),Close (CL),Corner (CNR),Court (CT),Crescent (CR),Drive (DR),Esplanade (ESP),Grove (GV),Highway (HWY),Junction (JCT),Lane (LA),Parade (PDE),Pocket (PKT),Place (PL),Plaza (PLZ),Promenade (PRM),Passage (PSG),Quay (QU),Road (RD),Square (SQ),Street (ST),Terrace (TCE),Way (WAY)"
+        },
+        {
+          "key": "the_record",
+          "type": "text",
+          "enabled": true,
+          "property_name": "The Record",
+          "placeholder": "The Record",
+          "required": false,
+          "wrap_class": "mb-4",
+          "show_help": true,
+          "help_title": "The Record",
+          "help_body": "The vehicle record (suggested rego plate, model, manufacture year, years owned etc...)"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "2. The Signature",
+      "nav_label": "Signature",
+      "fields": [
+        {
+          "key": "signature",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Story Inscription",
+          "placeholder": "Story Inscription",
+          "required": true,
+          "wrap_class": "mb-4",
+          "additional_charge": 20,
+          "info_label": "Optional extra.Additional charge applies ($20.00)",
+          "validation": {
+            "max_length": 12
+          },
+          "show_help": true,
+          "help_title": "Story Inscription",
+          "help_body": "Maximum of 12 characters including spaces. Alphanumeric only (no special characters). Uppercase only.",
+          "show_voice": true,
+          "voice_src": "vehicle-signature-voiceover.m4a"
+        }
+      ]
+    }
+  ]
+}

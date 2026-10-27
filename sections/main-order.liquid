@@ -1,0 +1,162 @@
+<div class="customer-account-section" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+{%- comment -%}
+  Customer order detail (classic Shopify customer accounts).
+{%- endcomment -%}
+
+{%- capture account_content -%}
+  <div class="mb-2">
+    <a class="account-page__text-link" href="{{ routes.account_url }}#orders">← Back to orders</a>
+  </div>
+  <h1 class="account-shell__page-title">Order {{ order.name }}</h1>
+  <p class="account-shell__page-intro">
+    Placed on {{ order.created_at | date: '%B %d, %Y at %I:%M %p' }}
+  </p>
+
+  <div class="account-page__grid mt-6">
+    <section class="account-page__card">
+      <div class="account-page__card-head">
+        <h2 class="account-page__card-title">Order summary</h2>
+      </div>
+      <dl class="account-page__details">
+        <div class="account-page__detail">
+          <dt>Payment status</dt>
+          <dd>{{ order.financial_status_label }}</dd>
+        </div>
+        <div class="account-page__detail">
+          <dt>Fulfillment</dt>
+          <dd>{{ order.fulfillment_status_label | default: 'Unfulfilled' }}</dd>
+        </div>
+        <div class="account-page__detail">
+          <dt>Subtotal</dt>
+          <dd>{{ order.line_items_subtotal_price | money }}</dd>
+        </div>
+        {%- for discount in order.discount_applications -%}
+          <div class="account-page__detail">
+            <dt>Discount ({{ discount.title | escape }})</dt>
+            <dd>−{{ discount.total_allocated_amount | money }}</dd>
+          </div>
+        {%- endfor -%}
+        <div class="account-page__detail">
+          <dt>Shipping</dt>
+          <dd>{{ order.shipping_price | money }}</dd>
+        </div>
+        <div class="account-page__detail">
+          <dt>Tax</dt>
+          <dd>{{ order.tax_price | money }}</dd>
+        </div>
+        <div class="account-page__detail">
+          <dt>Total</dt>
+          <dd><strong>{{ order.total_price | money }}</strong></dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="account-page__card">
+      <div class="account-page__card-head">
+        <h2 class="account-page__card-title">Shipping address</h2>
+      </div>
+      {%- if order.shipping_address -%}
+        <address class="account-page__address">
+          {{ order.shipping_address | format_address }}
+        </address>
+      {%- else -%}
+        <p class="account-page__empty">No shipping address for this order.</p>
+      {%- endif -%}
+
+      {%- if order.billing_address -%}
+        <div class="account-page__card-head mt-6">
+          <h3 class="account-page__card-title">Billing address</h3>
+        </div>
+        <address class="account-page__address">
+          {{ order.billing_address | format_address }}
+        </address>
+      {%- endif -%}
+    </section>
+  </div>
+
+  <section class="account-page__card account-page__card--orders mt-8">
+    <div class="account-page__card-head">
+      <h2 class="account-page__card-title">Items</h2>
+    </div>
+    <div class="account-page__orders-wrap">
+      <table class="account-page__orders">
+        <thead>
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">SKU</th>
+            <th scope="col">Qty</th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for line_item in order.line_items -%}
+            <tr>
+              <td>
+                {%- if line_item.url != blank -%}
+                  <a class="account-page__text-link" href="{{ line_item.url }}">{{ line_item.title | escape }}</a>
+                {%- else -%}
+                  {{ line_item.title | escape }}
+                {%- endif -%}
+                {%- if line_item.properties != blank -%}
+                  <ul class="account-page__line-properties">
+                    {%- for property in line_item.properties -%}
+                      {%- assign property_first_char = property.first | slice: 0 -%}
+                      {%- if property.last != blank and property_first_char != '_' -%}
+                        <li>{{ property.first | escape }}: {{ property.last | escape }}</li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </td>
+              <td>{{ line_item.sku | default: '—' | escape }}</td>
+              <td>{{ line_item.quantity }}</td>
+              <td>{{ line_item.final_line_price | money }}</td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{%- endcapture -%}
+
+{% render 'account-shell', active: 'orders', content: account_content %}
+
+</div>
+
+{% schema %}
+{
+  "name": "Customer order",
+  "tag": "section",
+  "class": "section-main-customer-account",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Legacy customer order detail page."
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

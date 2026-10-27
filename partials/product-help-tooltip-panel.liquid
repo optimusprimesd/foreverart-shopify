@@ -1,0 +1,20 @@
+{%- assign tooltip_id = tooltip_id | default: '' -%}
+{%- assign tooltip_title = tooltip_title | default: '' -%}
+{%- assign tooltip_body = tooltip_body | default: '' -%}
+
+<div
+  {% if tooltip_id != blank %}id="{{ tooltip_id }}"{% endif %}
+  class="product-page__help-tooltip-panel"
+  role="tooltip"
+  hidden
+>
+  <button type="button" class="product-page__help-tooltip-close" aria-label="Close tooltip">
+    <i class="hgi hgi-stroke hgi-rounded hgi-cancel-01" aria-hidden="true"></i>
+  </button>
+  {% if tooltip_title != blank %}
+    <p class="product-page__help-tooltip-title">{{ tooltip_title }}</p>
+  {% endif %}
+  {% if tooltip_body != blank %}
+    <div class="product-page__help-tooltip-body">{{ tooltip_body | raw }}</div>
+  {% endif %}
+</div>

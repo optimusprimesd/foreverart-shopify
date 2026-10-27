@@ -1,0 +1,63 @@
+{%- assign field = field | default: nil -%}
+{%- if field != nil -%}
+
+{%- assign field_key = field.key | default: 'size' -%}
+{%- assign field_label = field.label | default: 'Select Size (inches)' -%}
+{%- assign property_name = field.property_name | default: 'Size' -%}
+{%- assign show_help = field.show_help | default: false -%}
+{%- assign show_voice = field.show_voice | default: false -%}
+{%- assign show_video = field.show_video | default: false -%}
+{%- if show_voice == true or show_voice == 'true' -%}
+  {%- assign show_voice_enabled = true -%}
+{%- else -%}
+  {%- assign show_voice_enabled = false -%}
+{%- endif -%}
+{%- assign help_title = field.help_title | default: field_label -%}
+{%- assign help_body = field.help_body | default: '' -%}
+{%- assign tooltip_id = 'help-tooltip-' | append: field_key -%}
+{%- assign options_raw = field.options | default: '18x24,24x36,30x40' -%}
+{%- assign option_list = options_raw | split: ',' -%}
+{%- assign voice_audio_id = 'voice-audio-' | append: field_key -%}
+{%- assign has_actions = false -%}
+{%- if show_help == true or show_help == 'true' or show_voice == true or show_voice == 'true' or show_video == true or show_video == 'true' -%}
+  {%- assign has_actions = true -%}
+{%- endif -%}
+{%- assign field_charge_cents = 0 -%}
+{%- if field.additional_charge != blank -%}
+  {%- assign field_charge_cents = field.additional_charge | times: 100 | round -%}
+{%- endif -%}
+
+<div class="wizard__select-field mt-6 w-full">
+  <div class="wizard__select-field-box">
+    <div class="wizard__select-field-header flex w-full flex-wrap items-center justify-between gap-2">
+      <label for="product-size" class="product-page__label mb-0 min-w-0 flex-1 text-lg font-bold text-[#141414]">{{ field_label }}</label>
+      {% if has_actions %}
+        {% render 'product-field-header-actions',
+          field_key: field_key,
+          tooltip_id: tooltip_id,
+          tooltip_aria_label: 'Information about print size',
+          show_help: show_help,
+          tooltip_title: help_title,
+          tooltip_body: help_body,
+          show_voice: show_voice_enabled,
+          show_video: show_video,
+          media_url: field.media_url,
+          voice_src: field.voice_src
+        %}
+      {% endif %}
+    </div>
+    <div class="wizard__input-info-wrap wizard__input-info-wrap--select-only">
+      <select id="product-size" name="properties[{{ property_name }}]" class="product-page__input product-page__input--select w-full" aria-label="{{ field_label }}"{% if field.required %} aria-required="true"{% endif %}{% if field_charge_cents > 0 %} data-additional-charge-cents="{{ field_charge_cents }}"{% endif %}>
+        <option value="" disabled selected>Select a size</option>
+        {%- for option in option_list -%}
+          {%- assign option_value = option | strip -%}
+          {%- if option_value != blank -%}
+            <option value="{{ option_value }}">{{ option_value | replace: 'x', ' × ' }}</option>
+          {%- endif -%}
+        {%- endfor -%}
+      </select>
+    </div>
+  </div>
+  {% render 'product-form-field-info', info_label: field.info_label, additional_charge: field.additional_charge %}
+</div>
+{%- endif -%}

@@ -1,0 +1,194 @@
+{%- liquid
+  assign hero_eyebrow = section.settings.hero_eyebrow | default: "FAQ's"
+  assign hero_heading = section.settings.hero_heading | default: 'Questions, answered.'
+  assign hero_lede = section.settings.hero_lede | default: 'Everything you need to know about ordering, making and receiving your Forever Art piece.'
+  assign closing_heading = section.settings.closing_heading | default: 'Still have a question?'
+  assign closing_body = section.settings.closing_body
+-%}
+
+<div class="about-us faq-page" data-header-context="dark" data-page-intro>
+  <header class="about-us__hero">
+    <div class="about-us__hero-inner">
+      {%- if hero_eyebrow != blank -%}
+        <p class="about-us__eyebrow" data-page-intro-subtitle>{{ hero_eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if hero_heading != blank -%}
+        <h1 class="about-us__hero-heading" data-page-intro-title>{{ hero_heading | escape }}</h1>
+      {%- endif -%}
+      {%- if hero_lede != blank -%}
+        <p class="about-us__hero-lede" data-page-intro-panel>{{ hero_lede | escape }}</p>
+      {%- endif -%}
+    </div>
+  </header>
+
+  <div class="about-us__body">
+    {%- if section.settings.intro_heading != blank or section.settings.intro_body != blank -%}
+      <section class="about-us__chapter" data-page-intro-item>
+        <div class="about-us__chapter-inner">
+          {%- if section.settings.intro_kicker != blank -%}
+            <p class="about-us__kicker">{{ section.settings.intro_kicker | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.intro_heading != blank -%}
+            <h2 class="about-us__heading">{{ section.settings.intro_heading | escape }}</h2>
+          {%- endif -%}
+          {%- if section.settings.intro_body != blank -%}
+            <div class="about-us__prose">
+              {{ section.settings.intro_body }}
+            </div>
+          {%- endif -%}
+        </div>
+      </section>
+    {%- endif -%}
+
+    <section class="faq-page__list-wrap" aria-label="Frequently asked questions" data-page-intro-item>
+      <div class="faq-page__list-inner">
+        {%- if section.blocks.size > 0 -%}
+          <div class="faq-page__list">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'faq_item' and block.settings.question != blank -%}
+                <details
+                  class="faq-page__item"
+                  {{ block.shopify_attributes }}
+                  {% if forloop.first and section.settings.open_first %}open{% endif %}
+                >
+                  <summary class="faq-page__question">
+                    <span class="faq-page__question-text">{{ block.settings.question | escape }}</span>
+                    <span class="faq-page__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </summary>
+                  {%- if block.settings.answer != blank -%}
+                    <div class="faq-page__answer about-us__prose">
+                      {{ block.settings.answer }}
+                    </div>
+                  {%- endif -%}
+                </details>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  </div>
+
+  <section class="about-us__closing" data-page-intro-item>
+    <div class="about-us__closing-inner">
+      {%- if closing_heading != blank -%}
+        <h2 class="about-us__closing-heading">{{ closing_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if closing_body != blank -%}
+        <div class="about-us__prose about-us__prose--on-dark">
+          {{ closing_body }}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+        <a class="about-us__cta" href="{{ section.settings.cta_url }}">
+          {{ section.settings.cta_label | escape }}
+          <span aria-hidden="true">→</span>
+        </a>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "class": "faq-page-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Hero eyebrow",
+      "default": "FAQ's"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero heading",
+      "default": "Questions, answered."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_lede",
+      "label": "Hero lede",
+      "default": "Everything you need to know about ordering, making and receiving your Forever Art piece."
+    },
+    {
+      "type": "text",
+      "id": "intro_kicker",
+      "label": "Intro kicker",
+      "default": "Help"
+    },
+    {
+      "type": "text",
+      "id": "intro_heading",
+      "label": "Intro heading",
+      "default": "Common questions"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_body",
+      "label": "Intro body",
+      "default": "<p>Browse the questions below. Select any question to expand the answer.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first",
+      "label": "Open first question by default",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "closing_heading",
+      "label": "Closing heading",
+      "default": "Still have a question?"
+    },
+    {
+      "type": "richtext",
+      "id": "closing_body",
+      "label": "Closing body",
+      "default": "<p>We’re happy to help. Reach out and we’ll get back to you as soon as we can.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "Contact us"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Is freight included?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Yes. Standard freight Australia-wide is included in the price of your Forever Art piece.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ"
+    }
+  ]
+}
+{% endschema %}

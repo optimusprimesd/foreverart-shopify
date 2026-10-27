@@ -1,0 +1,309 @@
+{%- if section.blocks.size > 0 -%}
+  {%- liquid
+    assign first_active_panel_index = 0
+    for block in section.blocks
+      if block.settings.tab_label != blank
+        assign first_active_panel_index = forloop.index0
+        break
+      endif
+    endfor
+  -%}
+  <section
+    class="home-collections relative z-10 px-4 py-16 text-center md:px-6 md:py-20 lg:py-24"
+    data-header-context="{{ section.settings.header_context }}"
+    data-home-collections
+    data-home-collections-intro
+    aria-labelledby="home-collections-heading-{{ section.id }}"
+    style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }}; --home-collections-text: {{ section.settings.text_color }}; --home-collections-bg: {{ section.settings.background_color }};"
+    {{ section.shopify_attributes }}
+  >
+    <div class="mx-auto max-w-4xl">
+      <h2
+        id="home-collections-heading-{{ section.id }}"
+        class="home-collections__title mb-6 text-4xl md:mb-6 md:text-5xl lg:text-6xl{% if section.settings.use_text_color_for_heading %} home-collections__title--solid{% endif %}"
+        data-home-collections-intro-heading
+      >
+        {{ section.settings.heading | escape }}
+      </h2>
+
+      <div
+        class="home-collections__filters flex flex-wrap items-center justify-center gap-3 md:mb-6 md:gap-4"
+        role="tablist"
+        aria-label="{{ section.settings.tablist_label | escape }}"
+        data-home-collections-intro-filters
+      >
+        {%- for block in section.blocks -%}
+          {%- if block.settings.tab_label != blank -%}
+            {%- assign tab_index = forloop.index0 -%}
+            {%- assign is_active_tab = false -%}
+            {%- if tab_index == first_active_panel_index -%}
+              {%- assign is_active_tab = true -%}
+            {%- endif -%}
+            <button
+              type="button"
+              class="home-collections__pill{% if is_active_tab %} home-collections__pill--active{% endif %}"
+              role="tab"
+              aria-selected="{% if is_active_tab %}true{% else %}false{% endif %}"
+              {% unless is_active_tab %}tabindex="-1"{% endunless %}
+              aria-controls="home-collections-panel-{{ section.id }}-{{ tab_index }}"
+              id="home-collections-tab-{{ section.id }}-{{ tab_index }}"
+              data-home-collection-tab="{{ tab_index }}"
+            >
+              {{ block.settings.tab_label | escape }}
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="home-collections__panels mx-auto w-full">
+      {%- for block in section.blocks -%}
+        {%- assign tab_index = forloop.index0 -%}
+        {%- assign is_active_panel = false -%}
+        {%- if tab_index == first_active_panel_index -%}
+          {%- assign is_active_panel = true -%}
+        {%- endif -%}
+        <section
+          id="home-collections-panel-{{ section.id }}-{{ tab_index }}"
+          class="home-collections__panel my-10 w-full{% unless is_active_panel %} hidden{% endunless %}"
+          role="tabpanel"
+          {% if is_active_panel %}data-home-collections-intro-panel{% endif %}
+          {% if block.settings.tab_label != blank %}
+            aria-labelledby="home-collections-tab-{{ section.id }}-{{ tab_index }}"
+          {% endif %}
+          data-home-collection-panel="{{ tab_index }}"
+          {% unless is_active_panel %}hidden{% endunless %}
+          {{ block.shopify_attributes }}
+        >
+          {%- if block.settings.description != blank -%}
+            <div
+              class="home-collections__description mx-auto max-w-2xl text-pretty mb-10"
+              {% if is_active_panel %}data-home-collections-intro-description{% endif %}
+            >
+              <p>{{ block.settings.description | escape | newline_to_br }}</p>
+            </div>
+          {%- endif -%}
+
+          {%- liquid
+            assign has_collection_image = false
+            if block.settings.image != blank
+              assign has_collection_image = true
+            endif
+          -%}
+
+          <div class="home-collections__panel-layout{% if has_collection_image %} home-collections__panel-layout--with-image{% else %} home-collections__panel-layout--products-only{% endif %}">
+            {%- if has_collection_image -%}
+              {%- assign collection_image_alt = block.settings.image_alt | default: block.settings.tab_label | escape -%}
+              <div class="home-collections__image-wrap"{% if is_active_panel %} data-home-collections-intro-media{% endif %}>
+                {{
+                  block.settings.image
+                  | image_url: width: 800
+                  | image_tag:
+                    class: 'home-collections__image',
+                    alt: collection_image_alt,
+                    loading: 'lazy',
+                    decoding: 'async'
+                }}
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.product_1 != blank -%}
+              {%- assign panel_product = block.settings.product_1 -%}
+              {%- assign panel_product_image = panel_product.featured_image | image_url: width: 600 -%}
+              {%- assign panel_product_price = panel_product.price | money -%}
+              {%- assign panel_product_alt = panel_product.title -%}
+              {% render 'product-item',
+                product_item_image: panel_product_image,
+                product_item_title: panel_product.title,
+                product_item_price_amount: panel_product_price,
+                product_item_price_suffix: 'inc. GST',
+                product_item_href: panel_product.url,
+                product_item_alt: panel_product_alt
+              %}
+            {%- endif -%}
+            {%- if block.settings.product_2 != blank -%}
+              {%- assign panel_product = block.settings.product_2 -%}
+              {%- assign panel_product_image = panel_product.featured_image | image_url: width: 600 -%}
+              {%- assign panel_product_price = panel_product.price | money -%}
+              {%- assign panel_product_alt = panel_product.title -%}
+              {% render 'product-item',
+                product_item_image: panel_product_image,
+                product_item_title: panel_product.title,
+                product_item_price_amount: panel_product_price,
+                product_item_price_suffix: 'inc. GST',
+                product_item_href: panel_product.url,
+                product_item_alt: panel_product_alt
+              %}
+            {%- endif -%}
+            {%- if block.settings.product_3 != blank -%}
+              {%- assign panel_product = block.settings.product_3 -%}
+              {%- assign panel_product_image = panel_product.featured_image | image_url: width: 600 -%}
+              {%- assign panel_product_price = panel_product.price | money -%}
+              {%- assign panel_product_alt = panel_product.title -%}
+              {% render 'product-item',
+                product_item_image: panel_product_image,
+                product_item_title: panel_product.title,
+                product_item_price_amount: panel_product_price,
+                product_item_price_suffix: 'inc. GST',
+                product_item_href: panel_product.url,
+                product_item_alt: panel_product_alt
+              %}
+            {%- endif -%}
+            {%- unless has_collection_image -%}
+              {%- if block.settings.product_4 != blank -%}
+                {%- assign panel_product = block.settings.product_4 -%}
+                {%- assign panel_product_image = panel_product.featured_image | image_url: width: 600 -%}
+                {%- assign panel_product_price = panel_product.price | money -%}
+                {%- assign panel_product_alt = panel_product.title -%}
+                {% render 'product-item',
+                  product_item_image: panel_product_image,
+                  product_item_title: panel_product.title,
+                  product_item_price_amount: panel_product_price,
+                  product_item_price_suffix: 'inc. GST',
+                  product_item_href: panel_product.url,
+                  product_item_alt: panel_product_alt
+                %}
+              {%- endif -%}
+            {%- endunless -%}
+          </div>
+        </section>
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Home collections",
+  "tag": "section",
+  "class": "home-collections-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#141414"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_text_color_for_heading",
+      "label": "Use text color for heading",
+      "info": "When off, the heading keeps the gold gradient style.",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "header_context",
+      "label": "Header style",
+      "info": "Controls navigation appearance over this section.",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light header (dark text nav)"
+        },
+        {
+          "value": "dark",
+          "label": "Dark header (light text nav)"
+        }
+      ],
+      "default": "light"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Collections"
+    },
+    {
+      "type": "text",
+      "id": "tablist_label",
+      "label": "Tab list accessibility label",
+      "default": "Collection categories"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_tab",
+      "name": "Collection tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_label",
+          "label": "Tab label",
+          "default": "Collection"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Collection image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Collection image alt text"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Product 1"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Product 2"
+        },
+        {
+          "type": "product",
+          "id": "product_3",
+          "label": "Product 3"
+        },
+        {
+          "type": "product",
+          "id": "product_4",
+          "label": "Product 4",
+          "info": "Shown only when collection image is empty."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Home collections",
+      "blocks": [
+        {
+          "type": "collection_tab",
+          "settings": {
+            "tab_label": "Wedding Collection",
+            "description": "Celebrate your wedding day with handcrafted welcome signs and keepsakes designed to make a grand entrance and live on in your home."
+          }
+        },
+        {
+          "type": "collection_tab",
+          "settings": {
+            "tab_label": "Kids Collections",
+            "description": "Mark every milestone with personalised anniversary pieces—timeless art that honours your story year after year."
+          }
+        },
+        {
+          "type": "collection_tab",
+          "settings": {
+            "tab_label": "Music Collection",
+            "description": "Elevate your property with bespoke statement pieces—crafted signage and art that welcome guests and define your space."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

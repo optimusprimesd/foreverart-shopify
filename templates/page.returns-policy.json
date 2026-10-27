@@ -1,0 +1,62 @@
+{
+  "sections": {
+    "policy_page": {
+      "type": "policy-page",
+      "blocks": {
+        "chapter_overview": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Overview",
+            "heading": "Made specifically for you",
+            "body": "<p>Every Forever Art piece is made to order using the information you provide specifically for your piece. For this reason, we’re unable to accept returns or exchanges for change of mind once your order has been confirmed.</p>",
+            "tone": "light"
+          }
+        },
+        "quote_check": {
+          "type": "pullquote",
+          "settings": {
+            "quote": "Please take a moment to check all personalised information carefully before placing your order.",
+            "attribution": "Your details appear at checkout and in your order confirmation"
+          }
+        },
+        "chapter_changes": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Changes",
+            "heading": "If something isn’t right",
+            "body": "<p>If you notice something that isn’t right, contact us using the link in your order confirmation within 24 hours and we’ll happily make the necessary changes.</p>",
+            "tone": "light"
+          }
+        },
+        "callout_damage": {
+          "type": "callout",
+          "settings": {
+            "kicker": "Damaged or faulty",
+            "heading": "We’ll make it right",
+            "body": "<p>If your Forever Art piece arrives damaged, faulty or isn’t what you ordered, please contact us and we’ll make it right.</p>",
+            "card_label": "Support",
+            "card_title": "Contact us",
+            "card_note": "We’ll make it right."
+          }
+        }
+      },
+      "block_order": [
+        "chapter_overview",
+        "quote_check",
+        "chapter_changes",
+        "callout_damage"
+      ],
+      "settings": {
+        "hero_eyebrow": "Returns policy",
+        "hero_heading": "Returns Policy",
+        "hero_lede": "Every Forever Art piece is made to order. Here’s what that means for returns, exchanges and making things right.",
+        "show_page_content": false,
+        "closing_heading": "Need help?",
+        "closing_body": "<p>If you have a question about your order or this policy, we’re happy to help.</p>",
+        "cta_label": "Contact us",
+        "cta_url": "/pages/contact-us"
+      }
+    }
+  },
+  "order": ["policy_page"]
+}

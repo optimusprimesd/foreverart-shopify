@@ -1,0 +1,119 @@
+{%- comment -%}
+  Dependent inputs for select fields with selection_input_type: property_date.
+  Modes: year_range, year, date
+{%- endcomment -%}
+{%- assign date_field_key = date_field_key | default: 'property_date' -%}
+{%- assign date_input_required = date_input_required | default: false -%}
+{%- assign year_min = year_min | default: 1900 -%}
+{%- assign year_max = year_max | default: '' -%}
+{%- if year_max == blank -%}
+  {%- assign year_max = 'now' | date: '%Y' | plus: 0 -%}
+{%- endif -%}
+{%- assign entry_year_property = entry_year_property | default: 'Entry Year' -%}
+{%- assign exit_year_property = exit_year_property | default: 'Exit Year' -%}
+{%- assign single_year_property = single_year_property | default: 'Property Year' -%}
+{%- assign circa_year_property = circa_year_property | default: single_year_property -%}
+{%- assign specific_date_property = specific_date_property | default: 'Property Date' -%}
+
+<div class="wizard__property-date-inputs" data-property-date-inputs>
+  <div class="wizard__property-date-mode" data-selection-mode="year_range" hidden>
+    <div class="wizard__property-date-range">
+      <div class="wizard__property-date-range-field">
+        <label class="product-page__label mb-1 text-sm font-semibold text-[#141414]" for="{{ date_field_key }}-entry-year">Entry year</label>
+        <select
+          id="{{ date_field_key }}-entry-year"
+          name="properties[{{ entry_year_property }}]"
+          class="product-page__input product-page__input--select w-full"
+          data-property-date-year-start
+          disabled
+          aria-hidden="true"
+        >
+          <option value="" disabled selected>Select entry year</option>
+          {%- for year in (year_min..year_max) reversed -%}
+            <option value="{{ year }}">{{ year }}</option>
+          {%- endfor -%}
+        </select>
+      </div>
+      <div class="wizard__property-date-range-field">
+        <label class="product-page__label mb-1 text-sm font-semibold text-[#141414]" for="{{ date_field_key }}-exit-year">Exit year</label>
+        <select
+          id="{{ date_field_key }}-exit-year"
+          name="properties[{{ exit_year_property }}]"
+          class="product-page__input product-page__input--select w-full"
+          data-property-date-year-end
+          disabled
+          aria-hidden="true"
+        >
+          <option value="" disabled selected>Select exit year</option>
+          {%- for year in (year_min..year_max) reversed -%}
+            <option value="{{ year }}">{{ year }}</option>
+          {%- endfor -%}
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="wizard__property-date-mode" data-selection-mode="year" hidden>
+    <label class="product-page__label mb-1 text-sm font-semibold text-[#141414]" for="{{ date_field_key }}-single-year">Year</label>
+    <select
+      id="{{ date_field_key }}-single-year"
+      name="properties[{{ single_year_property }}]"
+      class="product-page__input product-page__input--select w-full"
+      data-property-date-year
+      disabled
+      aria-hidden="true"
+    >
+      <option value="" disabled selected>Select year</option>
+      {%- for year in (year_min..year_max) reversed -%}
+        <option value="{{ year }}">{{ year }}</option>
+      {%- endfor -%}
+    </select>
+  </div>
+
+  <div class="wizard__property-date-mode" data-selection-mode="circa_year" hidden>
+    <label class="product-page__label mb-1 text-sm font-semibold text-[#141414]" for="{{ date_field_key }}-circa-year">Circa year</label>
+    <select
+      id="{{ date_field_key }}-circa-year"
+      name="properties[{{ circa_year_property }}]"
+      class="product-page__input product-page__input--select w-full"
+      data-property-date-year
+      disabled
+      aria-hidden="true"
+    >
+      <option value="" disabled selected>Select circa year</option>
+      {%- for year in (year_min..year_max) reversed -%}
+        <option value="{{ year }}">{{ year }}</option>
+      {%- endfor -%}
+    </select>
+  </div>
+
+  <div class="wizard__property-date-mode" data-selection-mode="date" hidden>
+    <label class="product-page__label mb-1 text-sm font-semibold text-[#141414]" for="{{ date_field_key }}-specific-date">Date</label>
+    <div class="wizard__input-info-wrap wizard__event-date-wrap wizard__input-info-wrap--dual-icon">
+      <input
+        type="text"
+        id="{{ date_field_key }}-specific-date"
+        name="properties[{{ specific_date_property }}]"
+        placeholder="Select date"
+        class="product-page__input w-full"
+        autocomplete="off"
+        inputmode="none"
+        data-flatpickr-date
+        data-property-date-specific
+        disabled
+        aria-hidden="true"
+        aria-label="Select date"
+      >
+      <div class="wizard__input-trailing">
+        <button
+          type="button"
+          class="wizard__event-date-icon"
+          aria-label="Open calendar"
+          tabindex="-1"
+        >
+          <i class="hgi hgi-stroke hgi-rounded hgi-calendar-01 text-[1.25rem] leading-none" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

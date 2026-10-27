@@ -1,0 +1,396 @@
+{%- liquid
+  assign hero_eyebrow = section.settings.hero_eyebrow | default: 'About Forever Art'
+  assign hero_heading = section.settings.hero_heading | default: 'Forever Art wasn’t the plan.'
+  assign hero_lede = section.settings.hero_lede | default: 'There was no moment when I decided to start an art business. The path here has been far less direct — and somewhere amongst all of that, Forever Art emerged.'
+  assign closing_heading = section.settings.closing_heading | default: 'Own your story.'
+  assign closing_body = section.settings.closing_body
+-%}
+
+<div class="about-us" data-header-context="dark" data-page-intro>
+  <header class="about-us__hero">
+    <div class="about-us__hero-inner">
+      {%- if hero_eyebrow != blank -%}
+        <p class="about-us__eyebrow" data-page-intro-subtitle>{{ hero_eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if hero_heading != blank -%}
+        <h1 class="about-us__hero-heading" data-page-intro-title>{{ hero_heading | escape }}</h1>
+      {%- endif -%}
+      {%- if hero_lede != blank -%}
+        <p class="about-us__hero-lede" data-page-intro-panel>{{ hero_lede | escape }}</p>
+      {%- endif -%}
+    </div>
+  </header>
+
+  <div class="about-us__body">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'chapter' -%}
+          <section
+            class="about-us__chapter{% if block.settings.tone == 'dark' %} about-us__chapter--dark{% endif %}"
+            data-page-intro-item
+            {{ block.shopify_attributes }}
+          >
+            <div class="about-us__chapter-inner">
+              {%- if block.settings.kicker != blank -%}
+                <p class="about-us__kicker">{{ block.settings.kicker | escape }}</p>
+              {%- endif -%}
+              {%- if block.settings.heading != blank -%}
+                <h2 class="about-us__heading">{{ block.settings.heading | escape }}</h2>
+              {%- endif -%}
+              {%- if block.settings.body != blank -%}
+                <div class="about-us__prose">
+                  {{ block.settings.body }}
+                </div>
+              {%- endif -%}
+            </div>
+          </section>
+
+        {%- when 'pullquote' -%}
+          <figure class="about-us__pullquote" data-page-intro-item {{ block.shopify_attributes }}>
+            <blockquote class="about-us__quote">
+              <p>{{ block.settings.quote | escape }}</p>
+            </blockquote>
+            {%- if block.settings.attribution != blank -%}
+              <figcaption class="about-us__quote-attr">{{ block.settings.attribution | escape }}</figcaption>
+            {%- endif -%}
+          </figure>
+
+        {%- when 'id_plate' -%}
+          <section class="about-us__plate" data-page-intro-item {{ block.shopify_attributes }}>
+            <div class="about-us__plate-inner">
+              <div class="about-us__plate-copy">
+                {%- if block.settings.kicker != blank -%}
+                  <p class="about-us__kicker">{{ block.settings.kicker | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="about-us__heading">{{ block.settings.heading | escape }}</h2>
+                {%- endif -%}
+                {%- if block.settings.body != blank -%}
+                  <div class="about-us__prose">
+                    {{ block.settings.body }}
+                  </div>
+                {%- endif -%}
+              </div>
+              <div class="about-us__plate-card" aria-hidden="true">
+                <p class="about-us__plate-label">Poster ID</p>
+                <p class="about-us__plate-number">{{ block.settings.plate_number | default: '203 2428' | escape }}</p>
+                <p class="about-us__plate-note">{{ block.settings.plate_note | default: 'Hand-punched. Perfectly imperfect.' | escape }}</p>
+              </div>
+            </div>
+          </section>
+
+        {%- when 'questions' -%}
+          <section class="about-us__questions" data-page-intro-item {{ block.shopify_attributes }}>
+            <div class="about-us__chapter-inner">
+              {%- if block.settings.heading != blank -%}
+                <h2 class="about-us__heading">{{ block.settings.heading | escape }}</h2>
+              {%- endif -%}
+              {%- if block.settings.intro != blank -%}
+                <div class="about-us__prose about-us__prose--lead">
+                  {{ block.settings.intro }}
+                </div>
+              {%- endif -%}
+              <ul class="about-us__question-list" role="list">
+                {%- if block.settings.q1 != blank -%}<li>{{ block.settings.q1 | escape }}</li>{%- endif -%}
+                {%- if block.settings.q2 != blank -%}<li>{{ block.settings.q2 | escape }}</li>{%- endif -%}
+                {%- if block.settings.q3 != blank -%}<li>{{ block.settings.q3 | escape }}</li>{%- endif -%}
+                {%- if block.settings.q4 != blank -%}<li>{{ block.settings.q4 | escape }}</li>{%- endif -%}
+              </ul>
+              {%- if block.settings.closing != blank -%}
+                <div class="about-us__prose">
+                  {{ block.settings.closing }}
+                </div>
+              {%- endif -%}
+            </div>
+          </section>
+
+        {%- when 'collections' -%}
+          <section class="about-us__collections" data-page-intro-item {{ block.shopify_attributes }}>
+            <div class="about-us__chapter-inner">
+              {%- if block.settings.heading != blank -%}
+                <h2 class="about-us__heading">{{ block.settings.heading | escape }}</h2>
+              {%- endif -%}
+              {%- if block.settings.body != blank -%}
+                <div class="about-us__prose">
+                  {{ block.settings.body }}
+                </div>
+              {%- endif -%}
+              <ul class="about-us__collection-list" role="list">
+                {%- for i in (1..6) -%}
+                  {%- liquid
+                    case i
+                      when 1
+                        assign item_collection = block.settings.collection_1
+                        assign item_label = block.settings.label_1 | default: 'Property'
+                      when 2
+                        assign item_collection = block.settings.collection_2
+                        assign item_label = block.settings.label_2 | default: 'Wedding'
+                      when 3
+                        assign item_collection = block.settings.collection_3
+                        assign item_label = block.settings.label_3 | default: 'Kids'
+                      when 4
+                        assign item_collection = block.settings.collection_4
+                        assign item_label = block.settings.label_4 | default: 'Music'
+                      when 5
+                        assign item_collection = block.settings.collection_5
+                        assign item_label = block.settings.label_5 | default: 'Vehicle'
+                      when 6
+                        assign item_collection = block.settings.collection_6
+                        assign item_label = block.settings.label_6 | default: 'Quote'
+                    endcase
+
+                    if item_collection != blank
+                      assign item_title = item_collection.title
+                      assign item_url = item_collection.url
+                    else
+                      assign item_title = item_label
+                      assign item_url = routes.collections_url | append: '/' | append: item_label | handleize
+                    endif
+                  -%}
+                  {%- if item_title != blank -%}
+                    <li>
+                      <a class="about-us__collection-link" href="{{ item_url }}">
+                        {{ item_title | escape }}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          </section>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+
+  <section class="about-us__closing" data-page-intro-item>
+    <div class="about-us__closing-inner">
+      {%- if closing_heading != blank -%}
+        <h2 class="about-us__closing-heading">{{ closing_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if closing_body != blank -%}
+        <div class="about-us__prose about-us__prose--on-dark">
+          {{ closing_body }}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+        <a class="about-us__cta" href="{{ section.settings.cta_url }}">
+          {{ section.settings.cta_label | escape }}
+          <span aria-hidden="true">→</span>
+        </a>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "About us",
+  "tag": "section",
+  "class": "about-us-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Hero eyebrow",
+      "default": "About Forever Art"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero heading",
+      "default": "Forever Art wasn’t the plan."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_lede",
+      "label": "Hero lede",
+      "default": "There was no moment when I decided to start an art business. The path here has been far less direct — electrician, family business, property renovations, stay-at-home dad, and eventually a collection of experiments in a shed. Somewhere amongst all of that, Forever Art emerged."
+    },
+    {
+      "type": "text",
+      "id": "closing_heading",
+      "label": "Closing heading",
+      "default": "Own your story."
+    },
+    {
+      "type": "richtext",
+      "id": "closing_body",
+      "label": "Closing body",
+      "default": "<p>Forever Art started with a concert that never happened and a home that held 28 years of someone’s life.</p><p>Today, the stories are yours. They might mark one of life’s biggest moments or something almost nobody else would understand. There are no rules about which stories matter enough. That’s yours to decide.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "Explore the collections"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Chapter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Kicker"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "A story that took time to find"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Body"
+        },
+        {
+          "type": "select",
+          "id": "tone",
+          "label": "Tone",
+          "options": [
+            { "value": "light", "label": "Light" },
+            { "value": "dark", "label": "Dark" }
+          ],
+          "default": "light"
+        }
+      ]
+    },
+    {
+      "type": "pullquote",
+      "name": "Pull quote",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "A familiar format could become personal."
+        },
+        {
+          "type": "text",
+          "id": "attribution",
+          "label": "Attribution"
+        }
+      ]
+    },
+    {
+      "type": "id_plate",
+      "name": "ID plate feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Kicker",
+          "default": "A story within the story"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "The Poster ID Plate"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Body"
+        },
+        {
+          "type": "text",
+          "id": "plate_number",
+          "label": "Plate number",
+          "default": "203 2428"
+        },
+        {
+          "type": "text",
+          "id": "plate_note",
+          "label": "Plate note",
+          "default": "The phone number of a childhood home."
+        }
+      ]
+    },
+    {
+      "type": "questions",
+      "name": "Questions",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Question the way it’s always been done."
+        },
+        {
+          "type": "richtext",
+          "id": "intro",
+          "label": "Intro"
+        },
+        {
+          "type": "textarea",
+          "id": "q1",
+          "label": "Question 1"
+        },
+        {
+          "type": "textarea",
+          "id": "q2",
+          "label": "Question 2"
+        },
+        {
+          "type": "textarea",
+          "id": "q3",
+          "label": "Question 3"
+        },
+        {
+          "type": "textarea",
+          "id": "q4",
+          "label": "Question 4"
+        },
+        {
+          "type": "richtext",
+          "id": "closing",
+          "label": "Closing"
+        }
+      ]
+    },
+    {
+      "type": "collections",
+      "name": "Collections",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "One idea. Many stories."
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Body"
+        },
+        { "type": "collection", "id": "collection_1", "label": "Property collection" },
+        { "type": "text", "id": "label_1", "label": "Property label", "default": "Property" },
+        { "type": "collection", "id": "collection_2", "label": "Wedding collection" },
+        { "type": "text", "id": "label_2", "label": "Wedding label", "default": "Wedding" },
+        { "type": "collection", "id": "collection_3", "label": "Kids collection" },
+        { "type": "text", "id": "label_3", "label": "Kids label", "default": "Kids" },
+        { "type": "collection", "id": "collection_4", "label": "Music collection" },
+        { "type": "text", "id": "label_4", "label": "Music label", "default": "Music" },
+        { "type": "collection", "id": "collection_5", "label": "Vehicle collection" },
+        { "type": "text", "id": "label_5", "label": "Vehicle label", "default": "Vehicle" },
+        { "type": "collection", "id": "collection_6", "label": "Quote collection" },
+        { "type": "text", "id": "label_6", "label": "Quote label", "default": "Quote" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About us"
+    }
+  ]
+}
+{% endschema %}

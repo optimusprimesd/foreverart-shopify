@@ -1,0 +1,65 @@
+{%- comment -%}
+  Product shipping / fulfilment highlights bar.
+  @param section {section} optional — uses section.settings + section.blocks when set
+{%- endcomment -%}
+
+{%- liquid
+  assign highlight_blocks = nil
+
+  if section != blank
+    assign highlight_blocks = section.blocks
+  endif
+-%}
+
+{%- if highlight_blocks != blank and highlight_blocks.size > 0 -%}
+  {%- assign has_visible_highlight = false -%}
+  {%- for block in highlight_blocks -%}
+    {%- if block.type == 'highlight' and block.settings.text != blank -%}
+      {%- assign has_visible_highlight = true -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- else -%}
+  {%- assign has_visible_highlight = false -%}
+  {%- for i in (1..3) -%}
+    {%- capture text_setting -%}product_shipping_highlight_{{ i }}_text{%- endcapture -%}
+    {%- if settings[text_setting] != blank -%}
+      {%- assign has_visible_highlight = true -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- if has_visible_highlight -%}
+  <div class="product-shipping-highlights" aria-label="Shipping and delivery information">
+    <ul class="product-shipping-highlights__list" role="list">
+      {%- if highlight_blocks != blank and highlight_blocks.size > 0 -%}
+        {%- for block in highlight_blocks -%}
+          {%- if block.type == 'highlight' and block.settings.text != blank -%}
+            <li class="product-shipping-highlights__item" {{ block.shopify_attributes }}>
+              <span class="product-shipping-highlights__icon-wrap" aria-hidden="true">
+                <i class="product-shipping-highlights__icon hgi hgi-stroke hgi-rounded {{ block.settings.icon | default: 'hgi-delivery-truck-01' }}"></i>
+              </span>
+              <p class="product-shipping-highlights__text">{{ block.settings.text | escape }}</p>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..3) -%}
+          {%- capture icon_setting -%}product_shipping_highlight_{{ i }}_icon{%- endcapture -%}
+          {%- capture text_setting -%}product_shipping_highlight_{{ i }}_text{%- endcapture -%}
+          {%- assign highlight_icon = settings[icon_setting] -%}
+          {%- assign highlight_text = settings[text_setting] -%}
+          {%- if highlight_text != blank -%}
+            <li class="product-shipping-highlights__item">
+              <span class="product-shipping-highlights__icon-wrap" aria-hidden="true">
+                <i class="product-shipping-highlights__icon hgi hgi-stroke hgi-rounded {{ highlight_icon | default: 'hgi-delivery-truck-01' }}"></i>
+              </span>
+              <p class="product-shipping-highlights__text">{{ highlight_text | escape }}</p>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+  </div>
+{%- endif -%}

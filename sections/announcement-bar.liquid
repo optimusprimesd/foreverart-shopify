@@ -1,0 +1,46 @@
+<div class="announcement-bar" style="width: 100%; background: {{ section.settings.background_color }}; color: {{ section.settings.text_color }}; text-align: center; padding: 0.5em 0;">
+  {% if section.settings.link_url != blank %}
+    <a href="{{ section.settings.link_url }}" style="color: {{ section.settings.text_color }}; text-decoration: underline;">
+      {{ section.settings.announcement_text }}
+    </a>
+  {% else %}
+    <span>{{ section.settings.announcement_text }}</span>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Welcome to our store! Free shipping on orders over $50."
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Optional link URL",
+      "default": "/collections/all"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#222"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar"
+    }
+  ]
+}
+{% endschema %}

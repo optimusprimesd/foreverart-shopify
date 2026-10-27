@@ -1,0 +1,166 @@
+{%- comment -%}
+  Product template — You may also like.
+  Defaults to 4 products from the active collection (product’s first collection,
+  or the collection setting). Optional product blocks override order/selection,
+  but only products in that collection are used; remaining slots auto-fill.
+{%- endcomment -%}
+
+{%- liquid
+  assign section_title = section.settings.title | default: 'You may also like'
+  assign products_limit = section.settings.products_to_show | default: 4 | plus: 0
+  if products_limit < 4
+    assign products_limit = 4
+  endif
+
+  assign source_collection = section.settings.collection
+  if source_collection == blank
+    assign source_collection = product.collections.first
+  endif
+
+  assign products_shown = 0
+  assign shown_ids = '|'
+-%}
+
+{%- if source_collection != blank or request.design_mode -%}
+  <section
+    class="product-you-may-also-like"
+    aria-labelledby="product-ymal-heading-{{ section.id }}"
+    {{ section.shopify_attributes }}
+  >
+    <div class="product-you-may-also-like__inner collection-page__container">
+      {%- if section_title != blank -%}
+        <h2 id="product-ymal-heading-{{ section.id }}" class="product-you-may-also-like__title">
+          {{ section_title | escape }}
+        </h2>
+      {%- endif -%}
+
+      {%- if source_collection != blank -%}
+        {%- assign available_count = 0 -%}
+        {%- for related_product in source_collection.products -%}
+          {%- if related_product.id != product.id -%}
+            {%- assign available_count = available_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if available_count > 0 -%}
+          <ul class="collection-grid product-you-may-also-like__grid" role="list">
+            {%- comment -%} 1) Optional manual picks — must be in the active collection {%- endcomment -%}
+            {%- for block in section.blocks -%}
+              {%- if products_shown >= products_limit -%}{%- break -%}{%- endif -%}
+              {%- assign related_product = block.settings.product -%}
+              {%- if related_product == blank or related_product.id == product.id -%}
+                {%- continue -%}
+              {%- endif -%}
+
+              {%- assign in_active_collection = false -%}
+              {%- for coll in related_product.collections -%}
+                {%- if coll.id == source_collection.id -%}
+                  {%- assign in_active_collection = true -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- unless in_active_collection -%}
+                {%- continue -%}
+              {%- endunless -%}
+
+              {%- assign id_token = '|' | append: related_product.id | append: '|' -%}
+              {%- if shown_ids contains id_token -%}
+                {%- continue -%}
+              {%- endif -%}
+
+              {%- assign card_variant = related_product.selected_or_first_available_variant -%}
+              <li class="collection-grid__item" {{ block.shopify_attributes }}>
+                {% render 'product-you-may-also-like-card', related_product: related_product, card_variant: card_variant %}
+              </li>
+              {%- assign shown_ids = shown_ids | append: related_product.id | append: '|' -%}
+              {%- assign products_shown = products_shown | plus: 1 -%}
+            {%- endfor -%}
+
+            {%- comment -%} 2) Auto-fill from active collection up to the limit (default 4) {%- endcomment -%}
+            {%- for related_product in source_collection.products -%}
+              {%- if products_shown >= products_limit -%}{%- break -%}{%- endif -%}
+              {%- if related_product.id == product.id -%}{%- continue -%}{%- endif -%}
+
+              {%- assign id_token = '|' | append: related_product.id | append: '|' -%}
+              {%- if shown_ids contains id_token -%}
+                {%- continue -%}
+              {%- endif -%}
+
+              {%- assign card_variant = related_product.selected_or_first_available_variant -%}
+              <li class="collection-grid__item">
+                {% render 'product-you-may-also-like-card', related_product: related_product, card_variant: card_variant %}
+              </li>
+              {%- assign shown_ids = shown_ids | append: related_product.id | append: '|' -%}
+              {%- assign products_shown = products_shown | plus: 1 -%}
+            {%- endfor -%}
+          </ul>
+        {%- elsif request.design_mode -%}
+          <p class="product-you-may-also-like__empty">
+            No other products in “{{ source_collection.title | escape }}” yet.
+          </p>
+        {%- endif -%}
+      {%- elsif request.design_mode -%}
+        <p class="product-you-may-also-like__empty">
+          Assign this product to a collection, or choose an active collection in the section settings.
+        </p>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "You may also like",
+  "tag": "section",
+  "class": "product-you-may-also-like-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Active collection",
+      "info": "Leave blank to use the current product’s first collection. All related products come from this collection."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Number of products",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Optional. Must be in the active collection. Leave empty to auto-pick from the collection."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "You may also like",
+      "blocks": [
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}

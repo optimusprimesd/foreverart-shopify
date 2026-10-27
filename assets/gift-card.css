@@ -1,0 +1,181 @@
+.gift-card-page {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at top, rgba(255, 255, 255, 0.08), transparent 55%),
+    #0a0a0a;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+}
+
+.gift-card {
+  box-sizing: border-box;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 48px 20px 64px;
+  text-align: center;
+}
+
+.gift-card__shop {
+  display: inline-block;
+  margin-bottom: 28px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.gift-card__shop:hover {
+  color: #fff;
+}
+
+.gift-card__title {
+  margin: 0 0 32px;
+  font-family: "Forum", serif;
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.gift-card__card {
+  padding: 28px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    #141414;
+  text-align: left;
+}
+
+.gift-card__balance-label,
+.gift-card__code-label {
+  margin: 0 0 6px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.gift-card__balance {
+  margin: 0;
+  font-family: "Forum", serif;
+  font-size: 42px;
+  line-height: 1;
+}
+
+.gift-card__initial {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.gift-card__code-wrap {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.gift-card__code {
+  margin: 0 0 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  word-break: break-all;
+}
+
+.gift-card__copy {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: transparent;
+  color: #fff;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.gift-card__copy:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.gift-card__apple-wallet,
+.gift-card__qr {
+  margin-top: 20px;
+}
+
+.gift-card__expires {
+  margin: 20px 0 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.gift-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.gift-card__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.gift-card__btn--primary {
+  background: #fff;
+  border-color: #fff;
+  color: #141414;
+}
+
+.gift-card__btn:hover {
+  opacity: 0.9;
+}
+
+.gift-card__print-hint {
+  margin: 24px 0 0;
+}
+
+.gift-card__print {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  font: inherit;
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@media print {
+  .gift-card-page {
+    background: #fff;
+    color: #141414;
+  }
+
+  .gift-card__shop,
+  .gift-card__actions,
+  .gift-card__print-hint,
+  .gift-card__copy {
+    display: none !important;
+  }
+
+  .gift-card__card {
+    border-color: #ddd;
+    background: #fff;
+    color: #141414;
+  }
+
+  .gift-card__balance-label,
+  .gift-card__code-label,
+  .gift-card__initial,
+  .gift-card__expires {
+    color: #666;
+  }
+}

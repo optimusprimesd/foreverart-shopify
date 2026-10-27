@@ -1,0 +1,71 @@
+{%- assign field = field | default: nil -%}
+{%- if field != nil -%}
+
+{%- assign field_key = field.key | default: 'event_date' -%}
+{%- assign property_name = field.property_name | default: field_key -%}
+{%- assign placeholder = field.placeholder | default: 'Wedding date' -%}
+{%- assign show_help = field.show_help | default: false -%}
+{%- assign show_voice = field.show_voice | default: false -%}
+{%- assign show_video = field.show_video | default: false -%}
+{%- if show_voice == true or show_voice == 'true' -%}
+  {%- assign show_voice_enabled = true -%}
+{%- else -%}
+  {%- assign show_voice_enabled = false -%}
+{%- endif -%}
+{%- if show_help == true or show_help == 'true' -%}
+  {%- assign show_help_enabled = true -%}
+{%- else -%}
+  {%- assign show_help_enabled = false -%}
+{%- endif -%}
+{%- assign help_title = field.help_title | default: placeholder -%}
+{%- assign help_body = field.help_body | default: '' -%}
+{%- assign tooltip_id = 'help-tooltip-' | append: field_key -%}
+{%- assign voice_audio_id = 'voice-audio-' | append: field_key -%}
+{%- assign has_actions = false -%}
+{%- if show_help == true or show_help == 'true' or show_voice_enabled or show_video == true or show_video == 'true' -%}
+  {%- assign has_actions = true -%}
+{%- endif -%}
+
+{%- assign field_charge_cents = 0 -%}
+{%- if field.additional_charge != blank -%}
+  {%- assign field_charge_cents = field.additional_charge | times: 100 | round -%}
+{%- endif -%}
+
+<div class="wizard__input-info-wrap wizard__event-date-wrap wizard__input-info-wrap--dual-icon mb-4{% if has_actions %} wizard__input-info-wrap--has-actions{% endif %}{% if show_help_enabled and show_voice_enabled %} wizard__input-info-wrap--has-help-voice{% elsif has_actions %} wizard__input-info-wrap--has-help{% endif %} {{ field.wrap_class }}">
+  <input
+    type="text"
+    name="properties[{{ property_name }}]"
+    id="{{ field_key }}"
+    placeholder="{{ placeholder }}"
+    class="product-page__input w-full"
+    autocomplete="off"
+    inputmode="none"
+    data-flatpickr-date
+    {% if field.required %}aria-required="true"{% endif %}
+    aria-label="{{ placeholder }}"
+    {% if field_charge_cents > 0 %}data-additional-charge-cents="{{ field_charge_cents }}"{% endif %}
+  />
+  {% render 'product-field-trailing-actions',
+    trailing_icon: 'calendar',
+    show_help: show_help_enabled,
+    show_voice: show_voice_enabled,
+    show_video: show_video,
+    tooltip_id: tooltip_id,
+    tooltip_aria_label: 'Information about wedding date',
+    tooltip_title: help_title,
+    tooltip_body: help_body,
+    voice_audio_id: voice_audio_id,
+    voice_aria_label: help_title,
+    video_url: field.media_url,
+  %}
+</div>
+{% render 'product-form-field-info', info_label: field.info_label, additional_charge: field.additional_charge %}
+{% if show_voice_enabled %}
+  {%- assign field_voice_src = field.voice_src | default: 'wedding-poster.m4a' | asset_url -%}
+  {% render 'product-field-description-audio',
+    field_audio_id: voice_audio_id,
+    field_audio_src: field_voice_src,
+    field_audio_label: help_title
+  %}
+{% endif %}
+{%- endif -%}

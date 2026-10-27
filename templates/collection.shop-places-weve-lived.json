@@ -1,0 +1,65 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "shop_category": {
+      "type": "shop-category",
+      "blocks": {
+        "prod_0_property_coordinates": {
+          "type": "product",
+          "settings": {
+            "product": "property-coordinates"
+          }
+        },
+        "prod_1_property_postcard": {
+          "type": "product",
+          "settings": {
+            "product": "property-postcard"
+          }
+        },
+        "prod_2_property_novel_cover": {
+          "type": "product",
+          "settings": {
+            "product": "property-novel-cover"
+          }
+        },
+        "prod_3_property_transaction_record": {
+          "type": "product",
+          "settings": {
+            "product": "property-transaction-record"
+          }
+        },
+        "prod_4_property_message": {
+          "type": "product",
+          "settings": {
+            "product": "property-message"
+          }
+        }
+      },
+      "block_order": [
+        "prod_0_property_coordinates",
+        "prod_1_property_postcard",
+        "prod_2_property_novel_cover",
+        "prod_3_property_transaction_record",
+        "prod_4_property_message"
+      ],
+      "settings": {
+        "eyebrow": "Places & Property",
+        "heading": "Places We've Lived",
+        "intro": "<p>Coordinates, Postcard, Novel Cover, Transaction Record, and Message designs.</p>",
+        "include_current_collection": false,
+        "max_products": 48
+      }
+    }
+  },
+  "order": [
+    "shop_category"
+  ]
+}

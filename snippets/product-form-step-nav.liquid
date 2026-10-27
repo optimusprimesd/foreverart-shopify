@@ -1,0 +1,39 @@
+{%- assign form_steps = form_steps | default: nil -%}
+{%- if form_steps != nil -%}
+
+<nav class="wizard__step-nav w-full" aria-label="Wizard Steps" data-progress="1">
+  {%- assign visible_step_index = 0 -%}
+  {%- for step in form_steps -%}
+    {%- assign step_has_fields = false -%}
+    {%- for field in step.fields -%}
+      {%- assign field_enabled = true -%}
+      {%- if field.enabled == false -%}
+        {%- assign field_enabled = false -%}
+      {%- endif -%}
+      {%- if field_enabled -%}
+        {%- assign step_has_fields = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- unless step_has_fields -%}{%- continue -%}{%- endunless -%}
+    {%- assign visible_step_index = visible_step_index | plus: 1 -%}
+    {%- if visible_step_index > 1 -%}
+      <span class="wizard__step-connector" aria-hidden="true"></span>
+    {%- endif -%}
+    <button
+      type="button"
+      data-step="{{ step.number }}"
+      class="wizard__step-btn{% if visible_step_index == 1 %} wizard__step-btn--active{% else %} wizard__step-btn--pending{% endif %} flex flex-col items-center justify-center px-2 py-2 rounded-lg border text-sm font-medium transition-colors duration-200"
+      {% if visible_step_index == 1 %}aria-current="step"{% endif %}
+    >
+      <span class="wizard__step-badge" aria-hidden="true">
+        <span class="wizard__step-num">{{ visible_step_index }}</span>
+        <svg class="wizard__step-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="wizard__step-label">{{ step.nav_label }}</span>
+    </button>
+  {%- endfor -%}
+</nav>
+{%- endif -%}

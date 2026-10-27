@@ -1,0 +1,167 @@
+{%- assign field = field | default: nil -%}
+{%- assign product = product | default: nil -%}
+{%- if field != nil -%}
+
+{%- assign field_enabled = true -%}
+{%- if field.enabled == false -%}
+  {%- assign field_enabled = false -%}
+{%- endif -%}
+
+{%- if field_enabled -%}
+<div class="wizard__field">
+{%- assign field_type = field.type | default: 'text' -%}
+{%- assign field_key = field.key | default: '' -%}
+{%- assign property_name = field.property_name | default: field_key -%}
+{%- assign field_max_length = '' -%}
+{%- assign field_alphanumeric_only = false -%}
+{%- if field.validation -%}
+  {%- if field.validation.max_length != blank -%}
+    {%- assign field_max_length = field.validation.max_length -%}
+  {%- endif -%}
+  {%- if field.validation.alphanumeric_only == true -%}
+    {%- assign field_alphanumeric_only = true -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- case field_type -%}
+  {%- when 'text_color' -%}
+    {% render 'product-form-field-text-color', field: field, product: product %}
+  {%- when 'background_color' -%}
+    {% render 'product-form-field-background-color', field: field, product: product %}
+  {%- when 'size' -%}
+    {% render 'product-form-field-size', field: field %}
+  {%- when 'size_and_orientation' -%}
+    {% render 'product-form-field-size-and-orientation', field: field, product: product %}
+  {%- when 'radio' -%}
+    {% render 'product-form-field-orientation', field: field %}
+  {%- when 'custom_message' -%}
+    {% render 'product-form-field-custom-message', field: field, product: product %}
+  {%- when 'date' -%}
+    {% render 'product-form-field-date', field: field %}
+  {%- when 'year' -%}
+    {% render 'product-form-field-year', field: field, product: product %}
+  {%- when 'year_range' -%}
+    {% render 'product-form-field-year-range', field: field, product: product %}
+  {%- when 'repeatable' -%}
+    {% render 'product-form-field-repeatable', field: field, product: product %}
+  {%- when 'input_group' -%}
+    {% render 'product-form-field-input-group', field: field, product: product %}
+  {%- when 'upload' -%}
+    {% render 'product-form-field-upload', field: field, product: product %}
+  {%- when 'voice_block' -%}
+    {% render 'product-form-field-voice-block', field: field %}
+  {%- when 'textarea' -%}
+    {% render 'product-input-info',
+      product: product,
+      input_info_name: property_name,
+      input_info_id: field_key,
+      input_info_placeholder: field.placeholder,
+      input_info_rows: field.rows,
+      input_info_wrap_class: field.wrap_class,
+      input_info_required: field.required,
+      input_info_aria_label: field.aria_label,
+      input_info_show_help: field.show_help,
+      input_info_tooltip_title: field.help_title,
+      input_info_tooltip_body: field.help_body,
+      input_info_show_voice: field.show_voice,
+      input_info_show_video: field.show_video,
+      input_info_voice_src: field.voice_src,
+      input_info_media_url: field.media_url,
+      description_key: field.description_key,
+      input_info_max_length: field_max_length,
+      input_info_alphanumeric_only: field_alphanumeric_only,
+      input_info_label: field.info_label,
+      input_info_additional_charge: field.additional_charge
+    %}
+  {%- when 'select' -%}
+    {%- assign select_required = true -%}
+    {%- if field.required == false -%}
+      {%- assign select_required = false -%}
+    {%- endif -%}
+    {% render 'product-input-info',
+      product: product,
+      input_info_name: property_name,
+      input_info_id: field_key,
+      input_info_type: 'select',
+      input_info_placeholder: field.placeholder,
+      input_info_options: field.options,
+      input_info_wrap_class: field.wrap_class,
+      input_info_required: select_required,
+      input_info_aria_label: field.aria_label,
+      input_info_show_help: field.show_help,
+      input_info_tooltip_title: field.help_title,
+      input_info_tooltip_body: field.help_body,
+      input_info_show_voice: field.show_voice,
+      input_info_show_video: field.show_video,
+      input_info_voice_src: field.voice_src,
+      input_info_media_url: field.media_url,
+      input_info_label: field.info_label,
+      input_info_additional_charge: field.additional_charge,
+      input_info_show_input_on_selection: field.show_input_on_selection,
+      input_info_selection_input_key: field.selection_input_key,
+      input_info_selection_input_property_name: field.selection_input_property_name,
+      input_info_selection_input_placeholder: field.selection_input_placeholder,
+      input_info_selection_input_required: field.selection_input_required,
+      input_info_selection_input_type: field.selection_input_type,
+      input_info_option_modes: field.option_modes,
+      input_info_hide_selection_values: field.hide_selection_values,
+      input_info_show_selection_values: field.show_selection_values,
+      input_info_options_source: field.options_source,
+      input_info_date_properties: field.date_properties
+    %}
+  {%- when 'time' -%}
+    {%- if field.label != blank -%}
+      <label for="{{ field_key }}" class="product-page__label mb-0 min-w-0 flex-1 text-base mb-2"><strong>{{ field.label }}</strong></label>
+    {%- endif -%}
+    {%- assign time_wrap_class = field.wrap_class | default: 'mt-2' -%}
+    {% render 'product-input-info',
+      product: product,
+      input_info_name: property_name,
+      input_info_type: 'time',
+      input_info_id: field_key,
+      input_info_placeholder: field.placeholder,
+      input_info_wrap_class: time_wrap_class,
+      input_info_inputmode: 'none',
+      input_info_required: field.required,
+      input_info_aria_label: field.aria_label,
+      input_info_show_help: field.show_help,
+      input_info_tooltip_title: field.help_title,
+      input_info_tooltip_body: field.help_body,
+      input_info_show_voice: field.show_voice,
+      input_info_show_video: field.show_video,
+      input_info_voice_src: field.voice_src,
+      input_info_media_url: field.media_url,
+      input_info_max_length: field_max_length,
+      input_info_alphanumeric_only: field_alphanumeric_only,
+      input_info_label: field.info_label,
+      input_info_additional_charge: field.additional_charge
+    %}
+  {%- else -%}
+    {% render 'product-input-info',
+      product: product,
+      input_info_name: property_name,
+      input_info_type: field_type,
+      input_info_id: field_key,
+      input_info_placeholder: field.placeholder,
+      input_info_class: field.input_class,
+      input_info_autocomplete: field.autocomplete,
+      input_info_wrap_class: field.wrap_class,
+      input_info_required: field.required,
+      input_info_aria_label: field.aria_label,
+      input_info_show_help: field.show_help,
+      input_info_tooltip_title: field.help_title,
+      input_info_tooltip_body: field.help_body,
+      input_info_show_voice: field.show_voice,
+      input_info_show_video: field.show_video,
+      input_info_voice_src: field.voice_src,
+      input_info_media_url: field.media_url,
+      description_key: field.description_key,
+      input_info_max_length: field_max_length,
+      input_info_alphanumeric_only: field_alphanumeric_only,
+      input_info_label: field.info_label,
+      input_info_additional_charge: field.additional_charge
+    %}
+{%- endcase -%}
+</div>
+{%- endif -%}
+{%- endif -%}

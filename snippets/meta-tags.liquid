@@ -1,0 +1,211 @@
+{%- comment -%}
+  Dynamic SEO + social meta tags for product, collection, page, and other templates.
+  Uses Shopify page_title / page_description (Admin SEO fields) with sensible fallbacks.
+{%- endcomment -%}
+
+{%- liquid
+  assign og_title = page_title | default: shop.name
+  assign og_description = page_description | default: shop.description | default: shop.name
+  assign og_url = canonical_url | default: request.origin
+  assign og_type = 'website'
+  assign og_image = blank
+  assign og_image_alt = og_title
+  assign brand_title_suffix = 'Forever Art | OWN YOUR STORY'
+  assign brand_description = 'Forever Art — handmade custom posters and keepsakes that preserve the moments, places, and people that matter. Own your story.'
+  assign seo_title = brand_title_suffix
+
+  if request.page_type == 'index'
+    assign seo_title = brand_title_suffix
+    assign og_title = seo_title
+  elsif page_title != blank
+    assign seo_title = page_title | append: ' | ' | append: brand_title_suffix
+    assign og_title = seo_title
+  endif
+
+  if request.page_type == 'product'
+    assign og_type = 'product'
+    if product != blank
+      if page_description == blank and product.description != blank
+        assign og_description = product.description | strip_html | truncate: 160
+      endif
+      if product.featured_media != blank
+        assign og_image = product.featured_media.preview_image | default: product.featured_media
+      elsif product.featured_image != blank
+        assign og_image = product.featured_image
+      endif
+      if og_image != blank and og_image.alt != blank
+        assign og_image_alt = og_image.alt
+      elsif product.title != blank
+        assign og_image_alt = product.title
+      endif
+    endif
+  elsif request.page_type == 'collection'
+    if collection != blank
+      if page_description == blank and collection.description != blank
+        assign og_description = collection.description | strip_html | truncate: 160
+      endif
+      if collection.image != blank
+        assign og_image = collection.image
+      elsif collection.products.first != blank and collection.products.first.featured_media != blank
+        assign og_image = collection.products.first.featured_media.preview_image
+      endif
+      if og_image != blank and og_image.alt != blank
+        assign og_image_alt = og_image.alt
+      elsif collection.title != blank
+        assign og_image_alt = collection.title
+      endif
+    endif
+  elsif request.page_type == 'page'
+    if page != blank
+      if page_description == blank and page.content != blank
+        assign og_description = page.content | strip_html | truncate: 160
+      endif
+    endif
+  elsif request.page_type == 'article'
+    assign og_type = 'article'
+    if article != blank
+      if page_description == blank and article.excerpt_or_content != blank
+        assign og_description = article.excerpt_or_content | strip_html | truncate: 160
+      endif
+      if article.image != blank
+        assign og_image = article.image
+        if article.image.alt != blank
+          assign og_image_alt = article.image.alt
+        endif
+      endif
+    endif
+  elsif request.page_type == 'blog'
+    if page_description == blank and blog != blank and blog.articles.first != blank
+      assign og_description = blog.articles.first.excerpt_or_content | strip_html | truncate: 160
+    endif
+  elsif request.page_type == 'list-collections'
+    if page_description == blank
+      assign og_description = 'Browse all Forever Art collections.'
+    endif
+  endif
+
+  if og_image == blank and settings.share_image != blank
+    assign og_image = settings.share_image
+  endif
+
+  assign og_description_check = og_description | default: '' | strip_html | downcase
+  assign is_dummy_description = false
+  if og_description_check contains 'lorem ipsum'
+    assign is_dummy_description = true
+  elsif og_description_check contains 'dummy text'
+    assign is_dummy_description = true
+  elsif og_description_check contains 'typesetting industry'
+    assign is_dummy_description = true
+  elsif og_description_check contains 'type specimen book'
+    assign is_dummy_description = true
+  endif
+
+  if is_dummy_description
+    assign og_description = brand_description
+    if request.page_type == 'list-collections'
+      assign og_description = 'Browse all Forever Art collections.'
+    elsif request.page_type == 'product' and product != blank and product.description != blank
+      assign product_desc_check = product.description | strip_html | downcase
+      unless product_desc_check contains 'lorem ipsum' or product_desc_check contains 'dummy text'
+        assign og_description = product.description | strip_html | truncate: 160
+      endunless
+    elsif request.page_type == 'collection' and collection != blank and collection.description != blank
+      assign collection_desc_check = collection.description | strip_html | downcase
+      unless collection_desc_check contains 'lorem ipsum' or collection_desc_check contains 'dummy text'
+        assign og_description = collection.description | strip_html | truncate: 160
+      endunless
+    endif
+  endif
+
+  if request.page_type == 'index'
+    assign index_desc_check = og_description | default: '' | strip_html | downcase
+    if page_description == blank or index_desc_check contains 'lorem ipsum' or index_desc_check contains 'dummy text' or index_desc_check contains 'typesetting industry'
+      assign og_description = brand_description
+    endif
+  endif
+-%}
+
+<title>
+  {{ seo_title }}
+  {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+  {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+</title>
+
+{%- if og_description != blank -%}
+  <meta name="description" content="{{ og_description | escape | strip_newlines }}">
+{%- endif -%}
+
+<link rel="canonical" href="{{ og_url }}">
+<link rel="sitemap" type="application/xml" title="Sitemap" href="{{ shop.url }}/sitemap.xml">
+
+<link rel="icon" type="image/png" href="{{ 'favicon.png' | asset_url }}">
+<link rel="apple-touch-icon" href="{{ 'favicon.png' | asset_url }}">
+
+<meta property="og:site_name" content="{{ shop.name | escape }}">
+<meta property="og:url" content="{{ og_url }}">
+<meta property="og:title" content="{{ og_title | escape }}">
+<meta property="og:type" content="{{ og_type }}">
+{%- if og_description != blank -%}
+  <meta property="og:description" content="{{ og_description | escape | strip_newlines }}">
+{%- endif -%}
+<meta property="og:locale" content="{{ request.locale.iso_code | replace: '-', '_' }}">
+
+{%- if og_image != blank -%}
+  <meta property="og:image" content="http:{{ og_image | image_url: width: 1200 }}">
+  <meta property="og:image:secure_url" content="https:{{ og_image | image_url: width: 1200 }}">
+  <meta property="og:image:width" content="{{ og_image.width | default: 1200 }}">
+  <meta property="og:image:height" content="{{ og_image.height | default: 1200 }}">
+  <meta property="og:image:alt" content="{{ og_image_alt | escape }}">
+{%- endif -%}
+
+{%- if request.page_type == 'product' and product != blank -%}
+  {%- assign seo_variant = product.selected_or_first_available_variant -%}
+  {%- if seo_variant != blank -%}
+    <meta property="product:price:amount" content="{{ seo_variant.price | money_without_currency | strip_html | strip }}">
+    <meta property="product:price:currency" content="{{ cart.currency.iso_code | default: shop.currency }}">
+    {%- if seo_variant.available -%}
+      <meta property="product:availability" content="in stock">
+    {%- else -%}
+      <meta property="product:availability" content="out of stock">
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+
+<meta name="twitter:card" content="{% if og_image != blank %}summary_large_image{% else %}summary{% endif %}">
+<meta name="twitter:title" content="{{ og_title | escape }}">
+{%- if og_description != blank -%}
+  <meta name="twitter:description" content="{{ og_description | escape | strip_newlines }}">
+{%- endif -%}
+{%- if og_image != blank -%}
+  <meta name="twitter:image" content="https:{{ og_image | image_url: width: 1200 }}">
+  <meta name="twitter:image:alt" content="{{ og_image_alt | escape }}">
+{%- endif -%}
+
+{%- if request.page_type == 'product' and product != blank -%}
+  <script type="application/ld+json">
+    {{ product | structured_data }}
+  </script>
+{%- elsif request.page_type == 'collection' and collection != blank -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": {{ collection.title | json }},
+      "description": {{ og_description | strip_html | json }},
+      "url": {{ canonical_url | json }}
+      {%- if og_image != blank -%}
+        ,"image": {{ og_image | image_url: width: 1200 | prepend: 'https:' | json }}
+      {%- endif -%}
+    }
+  </script>
+{%- elsif request.page_type == 'page' and page != blank -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": {{ page.title | json }},
+      "description": {{ og_description | strip_html | json }},
+      "url": {{ canonical_url | json }}
+    }
+  </script>
+{%- endif -%}

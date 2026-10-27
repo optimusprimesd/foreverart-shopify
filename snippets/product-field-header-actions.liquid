@@ -1,0 +1,80 @@
+{%- assign field_key = field_key | default: '' -%}
+{%- assign tooltip_id = tooltip_id | default: '' -%}
+{%- if tooltip_id == blank and field_key != blank -%}
+  {%- assign tooltip_id = 'help-tooltip-' | append: field_key -%}
+{%- endif -%}
+{%- assign tooltip_aria_label = tooltip_aria_label | default: 'More information' -%}
+
+{%- assign field_desc = nil -%}
+{%- if product and field_key != blank -%}
+  {%- assign field_desc = product.metafields.custom[field_key] -%}
+{%- endif -%}
+
+{%- assign show_field_help = false -%}
+{%- assign show_field_voice = false -%}
+{%- assign show_field_video = false -%}
+
+{%- if show_help == true or show_help == 'true' -%}
+  {%- assign show_field_help = true -%}
+{%- elsif show_help == false or show_help == 'false' -%}
+  {%- assign show_field_help = false -%}
+{%- elsif field_desc -%}
+  {%- if field_desc.title != blank or field_desc.description != blank -%}
+    {%- assign show_field_help = true -%}
+  {%- endif -%}
+{%- elsif tooltip_title != blank or tooltip_body != blank -%}
+  {%- assign show_field_help = true -%}
+{%- endif -%}
+
+{%- if show_voice == true or show_voice == 'true' -%}
+  {%- assign show_field_voice = true -%}
+{%- elsif show_voice == false or show_voice == 'false' -%}
+  {%- assign show_field_voice = false -%}
+{%- elsif field_desc and field_desc.voice -%}
+  {%- assign show_field_voice = true -%}
+{%- endif -%}
+
+{%- if show_video == true or show_video == 'true' -%}
+  {%- assign show_field_video = true -%}
+{%- elsif show_video == false or show_video == 'false' -%}
+  {%- assign show_field_video = false -%}
+{%- elsif media_url != blank -%}
+  {%- assign show_field_video = true -%}
+{%- endif -%}
+
+{%- assign tooltip_title = field_desc.title | default: tooltip_title | default: '' -%}
+{%- assign tooltip_body = field_desc.description | default: tooltip_body | default: '' -%}
+{%- assign field_voice_audio_id = 'voice-audio-' | append: field_key -%}
+{%- assign field_voice_src = field_desc.voice_src | default: voice_src | default: 'wedding-poster.m4a' | asset_url -%}
+
+{% if show_field_help or show_field_voice or show_field_video %}
+  <div class="wizard__field-header-actions flex shrink-0 flex-wrap items-center justify-end gap-2">
+    {% if show_field_help %}
+      {% render 'product-help-tooltip-button',
+        tooltip_id: tooltip_id,
+        tooltip_aria_label: tooltip_aria_label,
+        tooltip_title: tooltip_title,
+        tooltip_body: tooltip_body
+      %}
+    {% endif %}
+    {% if show_field_voice %}
+      {% render 'product-voice-button',
+        voice_audio_id: field_voice_audio_id,
+        voice_aria_label: tooltip_title
+      %}
+    {% endif %}
+    {% if show_field_video %}
+      {% render 'product-video-button',
+        video_slide_index: media_url,
+        video_aria_label: tooltip_title
+      %}
+    {% endif %}
+  </div>
+  {% if show_field_voice %}
+    {% render 'product-field-description-audio',
+      field_audio_id: field_voice_audio_id,
+      field_audio_src: field_voice_src,
+      field_audio_label: tooltip_title
+    %}
+  {% endif %}
+{% endif %}

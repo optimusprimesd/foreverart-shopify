@@ -1,0 +1,20 @@
+{%- comment -%}
+  Product template — full customization wizard (ported from HTML prototype).
+{%- endcomment -%}
+
+{%- capture product_difference_html -%}
+  {%- section 'product-difference' -%}
+{%- endcapture -%}
+
+{%- capture product_shipping_highlights_html -%}
+  {%- section 'product-shipping-highlights' -%}
+{%- endcapture -%}
+
+{% render 'product-page', render_part: 'before_tabs' %}
+{% section 'product-tabs' %}
+{% render 'product-page',
+  render_part: 'after_tabs',
+  product_difference_html: product_difference_html,
+  product_shipping_highlights_html: product_shipping_highlights_html
+%}
+{% section 'product-you-may-also-like' %}

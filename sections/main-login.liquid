@@ -1,0 +1,155 @@
+<div class="customer-account-section" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+{%- comment -%}
+  Customer login (classic customer accounts).
+{%- endcomment -%}
+
+<div class="account-page account-page--auth mx-auto w-full min-w-0 max-w-[480px] px-4 py-10" data-header-context="light">
+  <div class="account-page__card">
+    <div class="account-page__card-head account-page__card-head--stack">
+      <p class="account-page__eyebrow">Account</p>
+      <h1 class="account-page__title account-page__title--sm">Log in</h1>
+      <p class="account-page__subtitle">Sign in to view your profile, addresses, and orders.</p>
+    </div>
+
+    {%- form 'customer_login', class: 'account-page__form' -%}
+      {%- if form.errors -%}
+        <div class="account-page__errors" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div class="account-page__field">
+        <label for="CustomerEmail">Email</label>
+        <input
+          id="CustomerEmail"
+          type="email"
+          name="customer[email]"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="off"
+          required
+          {% if form.errors contains 'form' %}aria-invalid="true"{% endif %}
+        >
+      </div>
+
+      <div class="account-page__field">
+        <label for="CustomerPassword">Password</label>
+        <input
+          id="CustomerPassword"
+          type="password"
+          name="customer[password]"
+          autocomplete="current-password"
+          required
+        >
+      </div>
+
+      <button type="submit" class="account-page__primary-btn w-full">Log in</button>
+    {%- endform -%}
+
+    <div class="account-page__auth-links">
+      <a class="account-page__text-link" href="{{ routes.account_register_url }}">Create account</a>
+      <a class="account-page__text-link" href="#recover" id="RecoverPasswordLink">Forgot password?</a>
+    </div>
+  </div>
+
+  <div class="account-page__card mt-6" id="recover" hidden>
+    <div class="account-page__card-head account-page__card-head--stack">
+      <h2 class="account-page__card-title">Reset password</h2>
+      <p class="account-page__subtitle">We’ll email you a link to reset your password.</p>
+    </div>
+
+    {%- form 'recover_customer_password', class: 'account-page__form' -%}
+      {%- if form.errors -%}
+        <div class="account-page__errors" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+      {%- if form.posted_successfully? -%}
+        <p class="account-page__success" role="status">Check your email for a password reset link.</p>
+      {%- endif -%}
+
+      <div class="account-page__field">
+        <label for="RecoverEmail">Email</label>
+        <input
+          id="RecoverEmail"
+          type="email"
+          name="email"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="off"
+          required
+        >
+      </div>
+
+      <button type="submit" class="account-page__primary-btn w-full">Send reset link</button>
+    {%- endform -%}
+
+    <div class="account-page__auth-links">
+      <a class="account-page__text-link" href="#login" id="HideRecoverPasswordLink">Back to log in</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var recover = document.getElementById("recover");
+    var showLink = document.getElementById("RecoverPasswordLink");
+    var hideLink = document.getElementById("HideRecoverPasswordLink");
+    if (!recover || !showLink || !hideLink) return;
+
+    function showRecover(e) {
+      if (e) e.preventDefault();
+      recover.hidden = false;
+      recover.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function hideRecover(e) {
+      if (e) e.preventDefault();
+      recover.hidden = true;
+    }
+
+    showLink.addEventListener("click", showRecover);
+    hideLink.addEventListener("click", hideRecover);
+    if (window.location.hash === "#recover") showRecover();
+  })();
+</script>
+
+</div>
+
+{% schema %}
+{
+  "name": "Customer login",
+  "tag": "section",
+  "class": "section-main-customer-account",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Legacy customer login and password recovery."
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

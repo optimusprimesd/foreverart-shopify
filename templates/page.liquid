@@ -1,0 +1,111 @@
+{%- comment -%}
+  Page template + object explorer.
+  Use this for debugging Liquid objects while building the theme.
+{%- endcomment -%}
+
+<div class="page">
+  <header class="page__header">
+    <h1 class="page__title">{{ page.title | escape }}</h1>
+  </header>
+
+  <div class="page__content rte">
+    {{ page.content }}
+  </div>
+
+  <section class="object-explorer" aria-label="Shopify Liquid objects">
+    <div class="object-explorer__header">
+      <h2 class="object-explorer__title">Shopify objects</h2>
+      <p class="object-explorer__subtitle">
+        This panel helps you see what Liquid objects contain on a real storefront request.
+      </p>
+    </div>
+
+    <div class="object-explorer__grid">
+      <details class="object-explorer__card" open>
+        <summary class="object-explorer__summary">shop</summary>
+        <div class="object-explorer__kv">
+          <div><span>Name</span><code>{{ shop.name | escape }}</code></div>
+          <div><span>Domain</span><code>{{ shop.domain | escape }}</code></div>
+          <div><span>Money format</span><code>{{ shop.money_format | escape }}</code></div>
+          <div><span>Currency</span><code>{{ shop.currency | escape }}</code></div>
+        </div>
+        <pre class="object-explorer__json">{{ shop | json }}</pre>
+      </details>
+
+      <details class="object-explorer__card">
+        <summary class="object-explorer__summary">page</summary>
+        <div class="object-explorer__kv">
+          <div><span>Title</span><code>{{ page.title | escape }}</code></div>
+          <div><span>Handle</span><code>{{ page.handle | escape }}</code></div>
+          <div><span>URL</span><code>{{ page.url | escape }}</code></div>
+        </div>
+        <pre class="object-explorer__json">{{ page | json }}</pre>
+      </details>
+
+      <details class="object-explorer__card">
+        <summary class="object-explorer__summary">request</summary>
+        <div class="object-explorer__kv">
+          <div><span>Locale</span><code>{{ request.locale.iso_code | escape }}</code></div>
+          <div><span>Page type</span><code>{{ request.page_type | escape }}</code></div>
+          <div><span>Design mode</span><code>{{ request.design_mode }}</code></div>
+        </div>
+        <pre class="object-explorer__json">{{ request | json }}</pre>
+      </details>
+
+      <details class="object-explorer__card">
+        <summary class="object-explorer__summary">routes</summary>
+        <div class="object-explorer__kv">
+          <div><span>Home</span><code>{{ routes.root_url | escape }}</code></div>
+          <div><span>Cart</span><code>{{ routes.cart_url | escape }}</code></div>
+          <div><span>Search</span><code>{{ routes.search_url | escape }}</code></div>
+          <div><span>Account</span><code>{{ routes.account_url | escape }}</code></div>
+        </div>
+        <pre class="object-explorer__json">{{ routes | json }}</pre>
+      </details>
+
+      <details class="object-explorer__card">
+        <summary class="object-explorer__summary">cart</summary>
+        <div class="object-explorer__kv">
+          <div><span>Item count</span><code>{{ cart.item_count }}</code></div>
+          <div><span>Total price</span><code>{{ cart.total_price | money }}</code></div>
+          <div><span>Note</span><code>{{ cart.note | default: '(none)' | escape }}</code></div>
+        </div>
+        <pre class="object-explorer__json">{{ cart | json }}</pre>
+      </details>
+
+      <details class="object-explorer__card">
+        <summary class="object-explorer__summary">customer</summary>
+        {%- if customer -%}
+          <div class="object-explorer__kv">
+            <div><span>ID</span><code>{{ customer.id }}</code></div>
+            <div><span>Name</span><code>{{ customer.name | escape }}</code></div>
+            <div><span>Orders</span><code>{{ customer.orders_count }}</code></div>
+            <div><span>Tags</span><code>{{ customer.tags | join: ', ' | escape }}</code></div>
+          </div>
+          <pre class="object-explorer__json">{{ customer | json }}</pre>
+        {%- else -%}
+          <p class="object-explorer__empty">No customer (not logged in).</p>
+        {%- endif -%}
+      </details>
+
+      <details class="object-explorer__card">
+        <summary class="object-explorer__summary">localization</summary>
+        <div class="object-explorer__kv">
+          <div><span>Country</span><code>{{ localization.country.iso_code | escape }}</code></div>
+          <div><span>Language</span><code>{{ localization.language.iso_code | escape }}</code></div>
+        </div>
+        <pre class="object-explorer__json">{{ localization | json }}</pre>
+      </details>
+
+      <details class="object-explorer__card">
+        <summary class="object-explorer__summary">settings</summary>
+        <div class="object-explorer__kv">
+          <div><span>Brand name</span><code>{{ settings.brand_name | default: '(unset)' | escape }}</code></div>
+          <div><span>Logo set</span><code>{% if settings.logo != blank %}true{% else %}false{% endif %}</code></div>
+        </div>
+        <pre class="object-explorer__json">{{ settings | json }}</pre>
+      </details>
+    </div>
+  </section>
+</div>
+

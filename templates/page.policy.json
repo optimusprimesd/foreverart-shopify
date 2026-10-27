@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "policy_page": {
+      "type": "policy-page",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "hero_eyebrow": "Policy",
+        "hero_heading": "",
+        "hero_lede": "",
+        "show_page_content": true,
+        "closing_heading": "Need help?",
+        "closing_body": "<p>If you have a question about this policy, we’re happy to help.</p>",
+        "cta_label": "Contact us",
+        "cta_url": "/pages/contact-us"
+      }
+    }
+  },
+  "order": ["policy_page"]
+}

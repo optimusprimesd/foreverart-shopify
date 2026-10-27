@@ -1,0 +1,50 @@
+{%- comment -%}
+  Accepted payment method logos (Visa, Mastercard, Amex, Afterpay).
+  Accepts optional class: wrapper_class
+{%- endcomment -%}
+<ul class="payment-logos {{ wrapper_class | default: '' | strip }}" aria-label="Accepted payment methods">
+  <li>
+    <img
+      src="{{ 'payment-visa.svg' | asset_url }}"
+      alt="Visa"
+      class="payment-logos__logo"
+      width="38"
+      height="24"
+      loading="lazy"
+      decoding="async"
+    >
+  </li>
+  <li>
+    <img
+      src="{{ 'payment-mastercard.svg' | asset_url }}"
+      alt="Mastercard"
+      class="payment-logos__logo"
+      width="38"
+      height="24"
+      loading="lazy"
+      decoding="async"
+    >
+  </li>
+  <li>
+    <img
+      src="{{ 'payment-amex.svg' | asset_url }}"
+      alt="American Express"
+      class="payment-logos__logo"
+      width="38"
+      height="24"
+      loading="lazy"
+      decoding="async"
+    >
+  </li>
+  <li>
+    <img
+      src="{{ 'payment-afterpay.svg' | asset_url }}"
+      alt="Afterpay"
+      class="payment-logos__logo"
+      width="38"
+      height="24"
+      loading="lazy"
+      decoding="async"
+    >
+  </li>
+</ul>

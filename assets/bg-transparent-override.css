@@ -1,0 +1,4 @@
+/* Loaded after app.css — Tailwind minify breaks 8-digit hex #000000cc */
+.bg-transparent {
+  background-color: #000000cc;
+}

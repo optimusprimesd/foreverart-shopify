@@ -1,0 +1,9 @@
+{%- assign info_label = info_label | default: '' -%}
+{%- assign additional_charge = additional_charge | default: '' -%}
+{%- if info_label == blank and additional_charge != blank -%}
+  {%- assign charge_money = additional_charge | times: 100 | money -%}
+  {%- assign info_label = 'Optional extra. Additional charge applies. (' | append: charge_money | append: ')' -%}
+{%- endif -%}
+{%- if info_label != blank -%}
+  <p class="wizard__field-info" role="note">{{ info_label | escape }}</p>
+{%- endif -%}

@@ -1,0 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "shop_category": {
+      "type": "shop-category",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "eyebrow": "",
+        "heading": "",
+        "intro": "",
+        "include_current_collection": true,
+        "max_products": 48
+      }
+    }
+  },
+  "order": [
+    "shop_category"
+  ]
+}

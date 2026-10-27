@@ -1,0 +1,23 @@
+{%- assign tooltip_id = tooltip_id | default: '' -%}
+{%- assign tooltip_aria_label = tooltip_aria_label | default: 'More information' -%}
+{%- assign tooltip_title = tooltip_title | default: '' -%}
+{%- assign tooltip_body = tooltip_body | default: '' -%}
+{%- assign tooltip_wrap_class = tooltip_wrap_class | default: '' -%}
+
+<div class="product-page__help-tooltip shrink-0 {{ tooltip_wrap_class }}">
+  <button
+    type="button"
+    class="wizard__input-info-btn product-page__help-tooltip-trigger focus:outline-none focus-visible:ring-2 focus-visible:ring-[#141414] focus-visible:ring-offset-2"
+    aria-expanded="false"
+    {% if tooltip_id != blank %}aria-controls="{{ tooltip_id }}"{% endif %}
+    aria-label="{{ tooltip_aria_label }}"
+  >
+    <i class="hgi hgi-stroke hgi-rounded hgi-help-circle leading-none" aria-hidden="true"></i>
+  </button>
+  {% render 'product-help-tooltip-panel',
+    tooltip_id: tooltip_id,
+    tooltip_title: tooltip_title,
+    tooltip_body: tooltip_body
+  %}
+</div>
+

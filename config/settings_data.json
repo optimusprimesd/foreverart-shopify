@@ -1,0 +1,214 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "current": {
+    "customization_fee_product": "customization-charge",
+    "dropbox_sync_enabled": true,
+    "dropbox_proxy_url": "https://forever-art-dropbox-upload.onrender.com",
+    "dropbox_folder": "/custom_wedding_posters",
+    "sections": {
+      "home-collections": {
+        "type": "home-collections",
+        "blocks": {
+          "collection_tab_M6URzW": {
+            "type": "collection_tab",
+            "settings": {
+              "tab_label": "Wedding Collection",
+              "description": "",
+              "image": "shopify://shop_images/pexels-vladimir-konoplev-155326297-12088591.jpg",
+              "image_alt": "",
+              "product_1": "welcome-sign-country",
+              "product_2": "wedding-welcome-sign-numerals",
+              "product_3": "wedding-welcome-sign-numeric-date-copy"
+            }
+          }
+        },
+        "block_order": [
+          "collection_tab_M6URzW"
+        ],
+        "settings": {
+          "heading": "Collections",
+          "tablist_label": "Collection categories"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "monogram_alt": "Forever Art monogram",
+          "intro": "<p>At Forever Art, we believe that every conversation is a fresh brushstroke on the canvas of our journey.</p><p>Whether you have a query, a story to share, or simply want to connect with the world of art, we're here to listen and respond.</p>",
+          "quick_links_title": "Quick Links",
+          "link_about": "",
+          "link_contact": "",
+          "link_process": "",
+          "link_faq": "",
+          "link_privacy": "",
+          "link_terms": "",
+          "link_refund": "",
+          "contact_title": "Contact Us",
+          "address": "PO Box 421 Aspley QLD 4034",
+          "phone": "0407 729 026",
+          "email": "create@foreverart.com.au",
+          "instagram_url": "https://www.instagram.com/foreverartau/",
+          "facebook_url": "https://www.facebook.com/foreverartau"
+        }
+      },
+      "product-difference": {
+        "type": "product-difference",
+        "blocks": {
+          "feature_texture": {
+            "type": "feature",
+            "settings": {
+              "icon": "hgi-material-and-texture",
+              "caption": "Premium textured vinyl finish"
+            }
+          },
+          "feature_leather": {
+            "type": "feature",
+            "settings": {
+              "icon": "hgi-border-full",
+              "caption": "Signature vintage leather border"
+            }
+          },
+          "feature_timber": {
+            "type": "feature",
+            "settings": {
+              "icon": "hgi-tree-01",
+              "caption": "Handmade timber frame"
+            }
+          },
+          "feature_display": {
+            "type": "feature",
+            "settings": {
+              "icon": "hgi-image-01",
+              "caption": "Ready to display on arrival"
+            }
+          }
+        },
+        "block_order": [
+          "feature_leather",
+          "feature_texture",
+          "feature_timber",
+          "feature_display"
+        ],
+        "settings": {
+          "show_banner": true,
+          "heading": "THE FOREVER ART DIFFERENCE",
+          "footer_bold_metafield_namespace": "custom",
+          "footer_bold_metafield_key": "footer_bold",
+          "footer_bold": "Made to order:",
+          "footer_text_metafield_namespace": "custom",
+          "footer_text_metafield_key": "footer_text",
+          "footer_text": "Each poster is handmade and ready for dispatch in 5–7 business days."
+        }
+      },
+      "product-shipping-highlights": {
+        "type": "product-shipping-highlights",
+        "blocks": {
+          "highlight_shipping": {
+            "type": "highlight",
+            "settings": {
+              "icon": "hgi-delivery-truck-01",
+              "text": "Free standard shipping Australia-wide"
+            }
+          },
+          "highlight_express": {
+            "type": "highlight",
+            "settings": {
+              "icon": "hgi-flash",
+              "text": "Express shipping available at checkout"
+            }
+          },
+          "highlight_display": {
+            "type": "highlight",
+            "settings": {
+              "icon": "hgi-image-01",
+              "text": "Ready to display on arrival"
+            }
+          }
+        },
+        "block_order": [
+          "highlight_shipping",
+          "highlight_express",
+          "highlight_display"
+        ],
+        "settings": {
+          "show_banner": true
+        }
+      },
+      "product-tabs": {
+        "type": "product-tabs",
+        "blocks": {
+          "tab_dTgH8F": {
+            "type": "tab",
+            "settings": {
+              "title": "Full Description",
+              "title_source": "theme",
+              "title_metafield_namespace": "",
+              "title_metafield_key": "",
+              "content_source": "metafield",
+              "content": "",
+              "metafield_namespace": "",
+              "metafield_key": "full_description"
+            }
+          },
+          "tab_eLFfbR": {
+            "type": "tab",
+            "settings": {
+              "title": "Craftmanship",
+              "title_source": "theme",
+              "title_metafield_namespace": "custom",
+              "title_metafield_key": "",
+              "content_source": "metafield",
+              "content": "",
+              "metafield_namespace": "custom",
+              "metafield_key": "craftmanship"
+            }
+          },
+          "tab_apYGHw": {
+            "type": "tab",
+            "settings": {
+              "title": "Care & Mounting",
+              "title_source": "theme",
+              "title_metafield_namespace": "custom",
+              "title_metafield_key": "",
+              "content_source": "metafield",
+              "content": "",
+              "metafield_namespace": "custom",
+              "metafield_key": "materials"
+            }
+          },
+          "tab_xRJ3Rm": {
+            "type": "tab",
+            "settings": {
+              "title": "Ordering & Shipping",
+              "title_source": "theme",
+              "title_metafield_namespace": "custom",
+              "title_metafield_key": "",
+              "content_source": "metafield",
+              "content": "",
+              "metafield_namespace": "custom",
+              "metafield_key": "ordering_shipping"
+            }
+          }
+        },
+        "block_order": [
+          "tab_dTgH8F",
+          "tab_eLFfbR",
+          "tab_apYGHw",
+          "tab_xRJ3Rm"
+        ],
+        "settings": {
+          "tablist_label": "Product information"
+        }
+      }
+    },
+    "content_for_index": []
+  }
+}

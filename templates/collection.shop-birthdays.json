@@ -1,0 +1,51 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "shop_category": {
+      "type": "shop-category",
+      "blocks": {
+        "src_0_music_collection": {
+          "type": "collection_source",
+          "settings": {
+            "collection": "music-collection"
+          }
+        },
+        "src_1_vehicle_collection": {
+          "type": "collection_source",
+          "settings": {
+            "collection": "vehicle-collection"
+          }
+        },
+        "src_2_quote_collection": {
+          "type": "collection_source",
+          "settings": {
+            "collection": "quote-collection"
+          }
+        }
+      },
+      "block_order": [
+        "src_0_music_collection",
+        "src_1_vehicle_collection",
+        "src_2_quote_collection"
+      ],
+      "settings": {
+        "eyebrow": "Gifts & Moments",
+        "heading": "Birthdays",
+        "intro": "<p>Birthday gifts from Music, Vehicle, and Quote collections.</p>",
+        "include_current_collection": true,
+        "max_products": 48
+      }
+    }
+  },
+  "order": [
+    "shop_category"
+  ]
+}

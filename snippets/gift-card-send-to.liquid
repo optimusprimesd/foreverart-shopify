@@ -1,0 +1,127 @@
+{%- comment -%}
+  Gift card “Send to” options:
+  - My email → code emailed to the buyer (customer email, or checkout email)
+  - Recipient → name + email (+ optional message) via Shopify gift card properties
+
+  Must be rendered inside the product form.
+{%- endcomment -%}
+
+{%- liquid
+  assign customer_email = ''
+  if customer and customer.email != blank
+    assign customer_email = customer.email
+  endif
+-%}
+
+<div class="gift-card-send-to" data-gift-card-send-to>
+  <p class="gift-card-send-to__heading">Send to</p>
+
+  <div class="gift-card-send-to__options" role="radiogroup" aria-label="Send gift card to">
+    <label class="gift-card-send-to__option">
+      <input
+        class="gift-card-send-to__radio"
+        type="radio"
+        name="gift_card_send_to"
+        value="self"
+        checked
+        data-gift-card-send-mode
+      >
+      <span class="gift-card-send-to__option-body">
+        <span class="gift-card-send-to__option-title">My email</span>
+        {%- if customer_email != blank -%}
+          <span class="gift-card-send-to__option-meta">{{ customer_email | escape }}</span>
+        {%- else -%}
+          <span class="gift-card-send-to__option-meta">We’ll email the gift card to the address you use at checkout.</span>
+        {%- endif -%}
+      </span>
+    </label>
+
+    <label class="gift-card-send-to__option">
+      <input
+        class="gift-card-send-to__radio"
+        type="radio"
+        name="gift_card_send_to"
+        value="recipient"
+        data-gift-card-send-mode
+      >
+      <span class="gift-card-send-to__option-body">
+        <span class="gift-card-send-to__option-title">Recipient’s email</span>
+        <span class="gift-card-send-to__option-meta">Enter their name and email to send the gift card for them.</span>
+      </span>
+    </label>
+  </div>
+
+  <div class="gift-card-send-to__recipient" data-gift-card-recipient-fields hidden>
+    {%- comment -%} Shopify requires this flag to process recipient delivery {%- endcomment -%}
+    <input
+      type="hidden"
+      name="properties[__shopify_send_gift_card_to_recipient]"
+      value="true"
+      disabled
+      data-gift-card-recipient-flag
+    >
+
+    <div class="gift-card-send-to__field">
+      <label class="gift-card-send-to__label" for="GiftCardRecipientName">Recipient name</label>
+      <input
+        id="GiftCardRecipientName"
+        class="gift-card-send-to__input"
+        type="text"
+        name="properties[Recipient name]"
+        autocomplete="name"
+        disabled
+        data-gift-card-recipient-input
+      >
+    </div>
+
+    <div class="gift-card-send-to__field">
+      <label class="gift-card-send-to__label" for="GiftCardRecipientEmail">
+        Recipient email <span class="gift-card-send-to__required">*</span>
+      </label>
+      <input
+        id="GiftCardRecipientEmail"
+        class="gift-card-send-to__input"
+        type="email"
+        name="properties[Recipient email]"
+        autocomplete="email"
+        inputmode="email"
+        disabled
+        data-gift-card-recipient-input
+        data-gift-card-recipient-email
+      >
+    </div>
+
+    <div class="gift-card-send-to__field">
+      <label class="gift-card-send-to__label" for="GiftCardRecipientMessage">Message <span class="gift-card-send-to__optional">(optional)</span></label>
+      <textarea
+        id="GiftCardRecipientMessage"
+        class="gift-card-send-to__input gift-card-send-to__textarea"
+        name="properties[Message]"
+        rows="3"
+        maxlength="200"
+        disabled
+        data-gift-card-recipient-input
+        data-gift-card-recipient-message
+      ></textarea>
+      <p class="gift-card-send-to__hint">
+        <span data-gift-card-message-count>0</span>/200 characters
+      </p>
+    </div>
+  </div>
+
+  {%- if form != blank and form.errors -%}
+    <div class="gift-card-send-to__errors" role="alert">
+      <ul>
+        {%- for field in form.errors -%}
+          <li>
+            {%- if field == 'form' -%}
+              {{ form.errors.messages[field] }}
+            {%- else -%}
+              {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+</div>

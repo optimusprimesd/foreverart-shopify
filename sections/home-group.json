@@ -1,0 +1,371 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "type": "aside",
+  "name": "Home Group",
+  "sections": {
+    "home-intro": {
+      "type": "home-intro",
+      "settings": {
+        "image_alt": "Quill monogram",
+        "heading": "OWN YOUR STORY",
+        "quote": "...because your story matters.",
+        "attribution_name": "Andrew Scott",
+        "attribution_role": "Founder | Artisan | Maker",
+        "show_scroll_indicator": true
+      }
+    },
+    "home-artisan": {
+      "type": "home-artisan",
+      "blocks": {
+        "artisan-card-about": {
+          "type": "card",
+          "settings": {
+            "icon": "about",
+            "title": "About us",
+            "description": "Who we are, and why we make what we make.",
+            "link": "/pages/about-us",
+            "emphasize": false
+          }
+        },
+        "artisan-card-process": {
+          "type": "card",
+          "settings": {
+            "icon": "process",
+            "title": "Our process",
+            "description": "How a Forever Art piece is thoughtfully created.",
+            "link": "/pages/our-process",
+            "emphasize": true
+          }
+        },
+        "artisan-card-work": {
+          "type": "card",
+          "settings": {
+            "icon": "heart",
+            "title": "How we work",
+            "description": "What to expect when you place an order.",
+            "link": "/pages/how-we-work",
+            "emphasize": false
+          }
+        },
+        "artisan-card-faq": {
+          "type": "card",
+          "settings": {
+            "icon": "faq",
+            "title": "FAQ's",
+            "description": "Answers to the questions we're asked most.",
+            "link": "/pages/faq",
+            "emphasize": false
+          }
+        }
+      },
+      "block_order": [
+        "artisan-card-about",
+        "artisan-card-process",
+        "artisan-card-work",
+        "artisan-card-faq"
+      ],
+      "settings": {
+        "eyebrow": "Before you begin",
+        "body": "<p>Forever Art is a little different. Take a few minutes to understand how we create, so your piece feels intentional from the start.</p>",
+        "footer_tagline": "OWN YOUR STORY",
+        "bg_color": "#ffffff",
+        "band_color": "#ffffff",
+        "text_color": "#1a1a1a",
+        "muted_color": "#8b6b4f",
+        "card_color": "#f7f4ef",
+        "card_active_color": "#e8d8c8"
+      }
+    },
+    "home_tagline_dbEJqa": {
+      "type": "home-tagline",
+      "name": "Home tagline",
+      "settings": {
+        "background_color": "#000000",
+        "text_color": "#ffffff",
+        "header_context": "light",
+        "heading": "Our Rebellion",
+        "quote": "\"As the noise increases, we choose authenticity over approval. Always\"",
+        "attribution_name": "Andrew Scott",
+        "attribution_role": "Founder | Artisan | Maker",
+        "show_scroll_indicator": true
+      }
+    },
+    "home-collections": {
+      "type": "home-collections",
+      "blocks": {
+        "collection_tab_LAat9a": {
+          "type": "collection_tab",
+          "settings": {
+            "tab_label": "Property",
+            "description": "Every property holds a story. The places we call home become part of who we are. The Property Collection preserves that connection,  turning an address, a chapter and the people who lived it into something made to be kept.",
+            "image": "shopify://shop_images/pexels-valeriiamiller-2771412.jpg",
+            "image_alt": "",
+            "product_1": "property-coordinates",
+            "product_2": "property-novel-cover",
+            "product_3": "property-message",
+            "product_4": ""
+          }
+        },
+        "collection-tab-wedding": {
+          "type": "collection_tab",
+          "settings": {
+            "tab_label": "Wedding",
+            "description": "Your wedding is one day. Your wedding story is forever.\nWe believe something created for such an important day deserves to live beyond it. The Wedding Collection turns the details of your day into a permanent part of the home and life you build together.",
+            "image": "shopify://shop_images/pexels-vladimir-konoplev-155326297-12088591.jpg",
+            "image_alt": "",
+            "product_1": "welcome-sign-country",
+            "product_2": "wedding-welcome-sign-numerals",
+            "product_3": "wedding-welcome-sign-numeric-date-copy",
+            "product_4": "welcome-sign-chloe"
+          }
+        },
+        "collection-tab-anniversary": {
+          "type": "collection_tab",
+          "settings": {
+            "tab_label": "Kids",
+            "description": "Every childhood is the beginning of a story. Names, dates, places and little details become part of who we are and where we belong. The Kids Collection preserves those early chapters in something made to grow up with them.",
+            "image": "shopify://shop_images/pexels-norma-mortenson-8457804.jpg",
+            "image_alt": "",
+            "product_1": "birth-record",
+            "product_2": "birth-story",
+            "product_3": "kids-name-australian-street-sign",
+            "product_4": ""
+          }
+        },
+        "collection-tab-property": {
+          "type": "collection_tab",
+          "settings": {
+            "tab_label": "Music",
+            "description": "Elevate your property with bespoke statement pieces—crafted signage and art that welcome guests and define your space.",
+            "image": "shopify://shop_images/pexels-gezerasph-22679280.jpg",
+            "image_alt": "",
+            "product_1": "music-coastal",
+            "product_2": "music-live",
+            "product_3": "music-quote",
+            "product_4": ""
+          }
+        },
+        "collection_tab_kUdWbQ": {
+          "type": "collection_tab",
+          "settings": {
+            "tab_label": "Vehicle",
+            "description": "Some vehicles become much more than something we own. They carry memories, experiences and chapters of our lives with them. The Vehicle Collection preserves what the specifications can't, the story of why that vehicle mattered to you.",
+            "image": "shopify://shop_images/pexels-danielellis-9609030.jpg",
+            "image_alt": "",
+            "product_1": "vehicle-australian-street-sign",
+            "product_2": "vehicle-certificate-of-ownership",
+            "product_3": "vehicle-european-street-sign",
+            "product_4": ""
+          }
+        },
+        "collection_tab_ekpjU4": {
+          "type": "collection_tab",
+          "settings": {
+            "tab_label": "Quote",
+            "description": "Some words stay with us forever. Their meaning comes from more than what they say. It comes from the person, moment or experience we connect them to. The Quote Collection gives those words a permanent place in your story.",
+            "image": "shopify://shop_images/0502.png",
+            "image_alt": "",
+            "product_1": "quote",
+            "product_2": "quote-1",
+            "product_3": "vehicle-quote-1",
+            "product_4": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_tab_LAat9a",
+        "collection-tab-wedding",
+        "collection-tab-anniversary",
+        "collection-tab-property",
+        "collection_tab_kUdWbQ",
+        "collection_tab_ekpjU4"
+      ],
+      "settings": {
+        "background_color": "#f1f1f1",
+        "text_color": "#141414",
+        "use_text_color_for_heading": false,
+        "header_context": "light",
+        "heading": "Collections",
+        "tablist_label": "Collection categories"
+      }
+    },
+    "home_tagline_JnXeKW": {
+      "type": "home-tagline",
+      "name": "Home tagline",
+      "settings": {
+        "background_color": "#000000",
+        "text_color": "#ffffff",
+        "header_context": "light",
+        "heading": "Our Journey",
+        "quote": "“What began as a creative pursuit became a commitment to meaning.”",
+        "attribution_name": "Andrew Scott",
+        "attribution_role": "Founder | Artisan | Maker",
+        "show_scroll_indicator": true
+      }
+    },
+    "home_featured_collection": {
+      "type": "home-featured-collection",
+      "blocks": {
+        "featured_slide_1": {
+          "type": "featured_slide",
+          "settings": {
+            "collection": "property-collection",
+            "product": "property-novel-cover",
+            "image_alt": "Property Novel Cover - Featured",
+            "description": "Every home tells a story. Inspired by the timeless design of a classic novel, this artwork transforms your home's chapter into a personalised book cover, celebrating the place where life's story unfolded.",
+            "tagline": "WE DON'T JUST LIVE IN HOMES. WE BUILD RELATIONSHIPS WITH THEM!",
+            "cta_label": "View Property Collections",
+            "cta_url": ""
+          }
+        },
+        "featured_slide_2": {
+          "type": "featured_slide",
+          "settings": {
+            "collection": "wedding",
+            "product": "welcome-sign-chloe",
+            "image_alt": "",
+            "description": "Inspired by the timeless elegance of traditional wedding welcome signs, the Chloe design transforms one of the most meaningful moments of your wedding day into a forever keepsake. Personalised with your names, wedding location and date, with the option to include your bridal party and a meaningful message, it preserves the story behind the celebration.",
+            "tagline": "YOUR WEDDING IS ONE DAY. YOUR WEDDING STORY IS FOREVER!",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        },
+        "featured_slide_3": {
+          "type": "featured_slide",
+          "settings": {
+            "collection": "kids",
+            "product": "birth-record",
+            "image_alt": "",
+            "description": "Imagine preserving not only the day your child arrived, but the family, home and chapter of life that surrounded it. Inspired by traditional archival records, the Birth Record design captures the details of your child's arrival together with the people and circumstances that formed the earliest chapter of your family's story.",
+            "tagline": "KNOWING HOW OUR STORY BEGAN STRENGTHENS OUR SCENSE OF IDENTITY, CONNECTION AND BELONGING!",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        },
+        "featured_slide_4": {
+          "type": "featured_slide",
+          "settings": {
+            "collection": "music-collection",
+            "product": "music-quote",
+            "image_alt": "",
+            "description": "Inspired by the lyrics and musical words that stay with us long after the song has ended, this design preserves meaningful lines, memories and messages that have become part of your story. Featuring your chosen quote together with its attribution, it transforms important words and the story behind them into a lasting piece of personalised artwork.",
+            "tagline": "WORDS BECOME POWERFUL WHEN WE CHOOSE TO GIVE THEM IMPORTANCE!",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        },
+        "featured_slide_5": {
+          "type": "featured_slide",
+          "settings": {
+            "collection": "vehicle-collection",
+            "product": "vehicle-australian-street-sign",
+            "image_alt": "",
+            "description": "A vehicle's story is rarely defined by specifications alone. It is shaped by the years of ownership, the memories created and the role it played in your life. The Certificate of Ownership preserves both the vehicle and the story attached to it in a timeless archival format.",
+            "tagline": "THE VEHICLES WE CONNECT WITH BECOME PART OF OUR STORY!",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        },
+        "featured_slide_6": {
+          "type": "featured_slide",
+          "settings": {
+            "collection": "quote-collection",
+            "product": "quote",
+            "image_alt": "",
+            "description": "Inspired by the words that shape our lives, this design preserves meaningful quotes, beliefs and sayings that continue to guide who we are. Featuring your chosen quote together with its attribution, it transforms words and their story into a lasting piece of personalised artwork.",
+            "tagline": "WORDS BECOME POWERFUL WHEN WE CHOOSE TO GIVE THEM IMPORTANCE!",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "featured_slide_1",
+        "featured_slide_2",
+        "featured_slide_3",
+        "featured_slide_4",
+        "featured_slide_5",
+        "featured_slide_6"
+      ],
+      "settings": {
+        "header_context": "dark",
+        "heading": "Featured Products",
+        "autoplay_delay": 5,
+        "cta_label_fallback": "View Collection",
+        "panel_background": "#000000",
+        "panel_text_color": "#ffffff",
+        "cta_background": "#a89078",
+        "cta_text_color": "#ffffff"
+      }
+    },
+    "home-tagline-rebellion": {
+      "type": "home-tagline",
+      "settings": {
+        "background_color": "#ffffff",
+        "text_color": "#141414",
+        "header_context": "light",
+        "heading": "Our Gratitude",
+        "quote": "\"To be trusted with the stories that have earned their place and the people that own them.\"",
+        "attribution_name": "Andrew Scott",
+        "attribution_role": "Founder | Artisan | Maker",
+        "show_scroll_indicator": true
+      }
+    },
+    "home-process": {
+      "type": "home-process",
+      "blocks": {
+        "media-slide-1": {
+          "type": "media_slide",
+          "settings": {
+            "media_type": "video",
+            "video_url": "",
+            "video_asset": "forever-art-home-process-video.mp4",
+            "media_label": "Forever Art artisan at work"
+          }
+        }
+      },
+      "block_order": [
+        "media-slide-1"
+      ],
+      "settings": {
+        "heading": "Creating your Forever Art piece should be as enjoyable as owning it.",
+        "body": "<p>1. Choose your design - Explore the collections and choose the poster that best fits the story you want to preserve.<br/><br/>2. Make it yours - Add the names, dates, places and details that belong in your story. We’ll guide you through exactly what we need.<br/><br/>3. We make it- Your poster is individually produced and finished by hand in our workshop using the materials and craftsmanship that define Forever Art.<br/><br/>4. Your story arrives - Your finished piece is carefully packed and delivered ready to hang, keep and become part of your home.</p>",
+        "cta_label": "How we work",
+        "cta_url": "/pages/how-we-work"
+      }
+    },
+    "home_tagline_y3t8tK": {
+      "type": "home-tagline",
+      "name": "Home tagline",
+      "settings": {
+        "background_color": "#ffffff",  
+        "text_color": "#141414",
+        "header_context": "light",
+        "heading": "Our Identity",
+        "quote": "“We exist for the sentimental. \nThe storytellers. The forever thinkers.”",
+        "attribution_name": "Andrew Scott",
+        "attribution_role": "Founder | Artisan | Maker",
+        "show_scroll_indicator": true
+      }
+    }
+  },
+  "order": [
+    "home-intro",
+    "home-artisan",
+    "home_tagline_dbEJqa",
+    "home-collections",
+    "home_tagline_JnXeKW",
+    "home_featured_collection",
+    "home-tagline-rebellion",
+    "home-process",
+    "home_tagline_y3t8tK"
+  ]
+}

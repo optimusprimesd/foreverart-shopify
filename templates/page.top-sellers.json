@@ -1,0 +1,63 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "top_sellers": {
+      "type": "top-sellers",
+      "blocks": {
+        "product_1": {
+          "type": "product",
+          "settings": {
+            "product": "street-sign-australian"
+          }
+        },
+        "product_2": {
+          "type": "product",
+          "settings": {
+            "product": "welcome-sign-traditional"
+          }
+        },
+        "product_3": {
+          "type": "product",
+          "settings": {
+            "product": "wedding-welcome-sign-numerals"
+          }
+        },
+        "product_4": {
+          "type": "product",
+          "settings": {
+            "product": "wedding-welcome-sign-numeric-date-copy"
+          }
+        },
+        "product_5": {
+          "type": "product",
+          "settings": {
+            "product": "music-live"
+          }
+        }
+      },
+      "block_order": [
+        "product_1",
+        "product_2",
+        "product_3",
+        "product_4",
+        "product_5"
+      ],
+      "settings": {
+        "heading": "Top Sellers",
+        "intro": "<p>Explore Forever Art’s most-loved pieces — customer favourites across Wedding, Property, Kids, Music, Vehicle, and Quote.</p>",
+        "hero_image": "shopify://shop_images/0502.png"
+      }
+    }
+  },
+  "order": [
+    "top_sellers"
+  ]
+}

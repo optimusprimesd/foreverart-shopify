@@ -1,0 +1,92 @@
+{%- liquid
+  assign has_products = false
+  for block in section.blocks
+    if block.settings.product != blank
+      assign has_products = true
+      break
+    endif
+  endfor
+
+  assign show_section = false
+  if has_products or section.settings.heading != blank or section.settings.description != blank or request.design_mode
+    assign show_section = true
+  endif
+-%}
+
+{%- if show_section -%}
+  <div
+    class="menu-top-sellers-section"
+    data-menu-top-sellers-section
+    {{ section.shopify_attributes }}
+  >
+    {% render 'menu-top-sellers', section: section %}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Menu top sellers",
+  "tag": "section",
+  "class": "menu-top-sellers-section",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#EFEFEF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#141414"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_text_color_for_heading",
+      "label": "Use text color for title",
+      "info": "When off, the title keeps the gold gradient style. On light backgrounds, text color is applied automatically.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+ 
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "More button label",
+      "default": "More"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "More button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Menu top sellers",
+      "blocks": [
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}

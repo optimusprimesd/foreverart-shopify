@@ -1,0 +1,168 @@
+<header
+  id="site-header"
+  class="site-header site-header-push-surface {% if is_home %}site-header--on-dark{% else %}site-header--on-light{% endif %} fixed top-0 left-0 right-0 z-50 h-[100px] w-full"
+>
+  <div class="site-header__template site-header__template--mobile" data-site-header-template="mobile">
+    <nav class="site-header__nav h-full border-0 bg-transparent" aria-label="Mobile header">
+      <div class="site-header__inner site-header__inner--mobile mx-auto flex h-full max-w-screen-xl items-center justify-between gap-3 px-4">
+        <a href="/" class="site-header__logo flex shrink-0 items-center" aria-label="Forever Art home">
+          <img
+            src="/assets/ForeverArt_Wordmark_Black.png"
+            alt="Forever Art"
+            class="site-header__logo-img site-header__logo-img--light"
+            width="1324"
+            height="176"
+            decoding="async"
+          >
+          <img
+            src="/assets/ForeverArt_Wordmark_White.png"
+            alt="Forever Art"
+            class="site-header__logo-img site-header__logo-img--dark"
+            width="1340"
+            height="196"
+            decoding="async"
+          >
+        </a>
+        <div class="site-header__actions site-header__actions--mobile flex shrink-0 items-center gap-1 sm:gap-2">
+          <div class="site-header__utilities flex items-center gap-1 sm:gap-2">
+            <a href="/cart/" class="site-header__utility-link flex h-10 w-10 items-center justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-default" aria-label="Cart">
+              <img src="/assets/cart.svg" alt="" class="h-6 w-6 object-contain" width="24" height="24" decoding="async" />
+            </a>
+          </div>
+          <button type="button" class="site-header__menu-toggle" data-site-header-menu-toggle aria-expanded="false" aria-controls="site-header-drawer-panel" aria-label="Open menu">
+            <span class="site-header__menu-toggle-box" aria-hidden="true">
+              <span class="site-header__menu-toggle-line"></span>
+              <span class="site-header__menu-toggle-line"></span>
+              <span class="site-header__menu-toggle-line"></span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="site-header__template site-header__template--desktop" data-site-header-template="desktop">
+    <nav class="site-header__nav h-full border-0 bg-transparent" aria-label="Primary">
+      <div class="site-header__inner site-header__inner--desktop mx-auto flex h-full max-w-screen-xl items-stretch justify-between gap-3 px-4">
+        <a href="/" class="site-header__logo flex shrink-0 items-center lg:h-full" aria-label="Forever Art home">
+          <img
+            src="/assets/ForeverArt_Wordmark_Black.png"
+            alt="Forever Art"
+            class="site-header__logo-img site-header__logo-img--light"
+            width="1324"
+            height="176"
+            decoding="async"
+          >
+          <img
+            src="/assets/ForeverArt_Wordmark_White.png"
+            alt="Forever Art"
+            class="site-header__logo-img site-header__logo-img--dark"
+            width="1340"
+            height="196"
+            decoding="async"
+          >
+        </a>
+        <div id="navbar-main-menu" class="site-header-primary-nav flex min-w-0 flex-1 items-stretch justify-center">
+          <ul class="flex h-full w-full flex-row items-stretch">
+            <li class="relative flex h-full items-stretch">
+              <button id="shop-mega-button" type="button" class="site-header__nav-link flex h-full items-center justify-center gap-1 px-3" aria-expanded="false" aria-haspopup="true" aria-controls="shop-mega-dropdown">
+                Shop
+                <svg class="ms-1.5 h-4 w-4 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" /></svg>
+              </button>
+              <div id="shop-mega-dropdown" class="shop-mega-dropdown z-[60] hidden w-full border-0 bg-[#EFEFEF] text-sm shadow-none">
+                <div class="shop-mega__inner relative mx-auto w-full max-w-screen-xl overflow-hidden px-4 py-8 md:px-6 md:py-10">
+                  <div class="shop-mega__layout">
+                    <div class="shop-mega__nav">
+                      <div class="shop-mega__col">
+                        <div class="shop-mega__section">
+                          <p class="shop-mega__category">Collections</p>
+                          <ul class="shop-mega__list">
+                            <li><a href="/collections/" class="shop-mega__link">Wedding</a></li>
+                            <li><a href="/collections/" class="shop-mega__link">Anniversary</a></li>
+                            <li><a href="/collections/" class="shop-mega__link">All collections</a></li>
+                          </ul>
+                        </div>
+                        <div class="shop-mega__section">
+                          <p class="shop-mega__category">Gift &amp; Moments</p>
+                          <ul class="shop-mega__list">
+                            <li><a href="/pages/gift-cards-page" class="shop-mega__link">Gift Cards</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="shop-mega__divider" aria-hidden="true"></div>
+                    <aside class="shop-mega__products" aria-label="Top sellers"><p class="shop-mega__products-title">Top Sellers</p></aside>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="flex h-full items-stretch"><a href="/collections/" class="site-header__nav-link {% if nav == 'collections' %}is-active{% endif %} flex h-full items-center px-3" {% if nav == 'collections' %}aria-current="page"{% endif %}>Collections</a></li>
+            <li class="flex h-full items-stretch"><a href="/corporate/" class="site-header__nav-link {% if nav == 'corporate' %}is-active{% endif %} flex h-full items-center px-3" {% if nav == 'corporate' %}aria-current="page"{% endif %}>Corporate</a></li>
+            <li class="flex h-full items-stretch">
+              <a href="/new-arrivals/" class="site-header__nav-link {% if nav == 'new_arrivals' %}is-active{% endif %} flex h-full shrink-0 items-center whitespace-nowrap px-3" {% if nav == 'new_arrivals' %}aria-current="page"{% endif %}>New Arrivals</a>
+            </li>
+            <li class="flex h-full items-stretch">
+              <a href="/pages/top-sellers" class="site-header__nav-link {% if nav == 'top_sellers' %}is-active{% endif %} flex h-full shrink-0 items-center whitespace-nowrap px-3" {% if nav == 'top_sellers' %}aria-current="page"{% endif %}>Top Sellers</a>
+            </li>
+            <li class="flex h-full items-stretch">
+              <a href="/create-your-space/" class="site-header__nav-link {% if nav == 'create_your_space' %}is-active{% endif %} flex h-full shrink-0 items-center whitespace-nowrap px-3" {% if nav == 'create_your_space' %}aria-current="page"{% endif %}>Create Your Space</a>
+            </li>
+          </ul>
+        </div>
+        <div class="site-header__actions site-header__actions--desktop flex shrink-0 items-center gap-2 lg:h-full">
+          <div class="site-header__utilities flex items-center gap-2">
+            {% render 'header-account', variant: 'icon' %}
+            <a href="/search/" class="site-header__utility-link flex h-10 w-10 items-center justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-default" aria-label="Search"><img src="/assets/search.svg" alt="" class="h-6 w-6 object-contain" width="24" height="24" decoding="async" /></a>
+            <a href="/cart/" class="site-header__utility-link flex h-10 w-10 items-center justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-default" aria-label="Cart"><img src="/assets/cart.svg" alt="" class="h-6 w-6 object-contain" width="24" height="24" decoding="async" /></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div id="site-header-drawer" class="site-header-drawer" data-site-header-drawer aria-hidden="true">
+  <div class="site-header-drawer__backdrop" data-site-header-drawer-backdrop tabindex="-1" aria-hidden="true"></div>
+  <aside id="site-header-drawer-panel" class="site-header-drawer__panel" role="dialog" aria-modal="true" aria-label="Site menu">
+    <div class="site-header-drawer__head">
+      <p class="site-header-drawer__title">Menu</p>
+      <button type="button" class="site-header-drawer__close" data-site-header-drawer-close aria-label="Close menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M6 6l12 12M18 6 6 18" /></svg>
+      </button>
+    </div>
+    <nav class="site-header-drawer__nav" aria-label="Mobile navigation">
+      <ul class="site-header-drawer__list">
+        <li class="site-header-drawer__item site-header-drawer__item--accordion">
+          <button type="button" class="site-header-drawer__link site-header-drawer__accordion-trigger" data-site-header-drawer-accordion aria-expanded="false" aria-controls="site-header-drawer-shop-panel">
+            Shop
+            <svg class="site-header-drawer__chevron" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" /></svg>
+          </button>
+          <div id="site-header-drawer-shop-panel" class="site-header-drawer__subpanel" hidden>
+            <div class="site-header-drawer__subgroup">
+              <p class="site-header-drawer__category">Collections</p>
+              <ul class="site-header-drawer__sublist">
+                <li><a href="/collections/" class="site-header-drawer__sublink">All collections</a></li>
+              </ul>
+            </div>
+            <div class="site-header-drawer__subgroup">
+              <p class="site-header-drawer__category">Gift &amp; Moments</p>
+              <ul class="site-header-drawer__sublist">
+                <li><a href="/pages/gift-cards-page" class="site-header-drawer__sublink">Gift Cards</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li class="site-header-drawer__item"><a href="/collections/" class="site-header-drawer__link{% if nav == 'collections' %} is-active{% endif %}">Collections</a></li>
+        <li class="site-header-drawer__item"><a href="/corporate/" class="site-header-drawer__link{% if nav == 'corporate' %} is-active{% endif %}">Corporate</a></li>
+        <li class="site-header-drawer__item"><a href="/new-arrivals/" class="site-header-drawer__link{% if nav == 'new_arrivals' %} is-active{% endif %}">New Arrivals</a></li>
+        <li class="site-header-drawer__item"><a href="/pages/top-sellers" class="site-header-drawer__link{% if nav == 'top_sellers' %} is-active{% endif %}">Top Sellers</a></li>
+        <li class="site-header-drawer__item"><a href="/create-your-space/" class="site-header-drawer__link{% if nav == 'create_your_space' %} is-active{% endif %}">Create Your Space</a></li>
+      </ul>
+      <div class="site-header-drawer__utilities">
+        {% render 'header-account', variant: 'drawer' %}
+        <a href="/search/" class="site-header-drawer__utility"><img src="/assets/search.svg" alt="" width="22" height="22" decoding="async" /><span>Search</span></a>
+        <a href="/cart/" class="site-header-drawer__utility"><img src="/assets/cart.svg" alt="" width="22" height="22" decoding="async" /><span>Cart</span></a>
+      </div>
+    </nav>
+  </aside>
+</div>

@@ -1,0 +1,117 @@
+<div class="customer-account-section" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+{%- comment -%}
+  Customer registration (classic customer accounts).
+{%- endcomment -%}
+
+<div class="account-page account-page--auth mx-auto w-full min-w-0 max-w-[480px] px-4 py-10" data-header-context="light">
+  <div class="account-page__card">
+    <div class="account-page__card-head account-page__card-head--stack">
+      <p class="account-page__eyebrow">Account</p>
+      <h1 class="account-page__title account-page__title--sm">Create account</h1>
+      <p class="account-page__subtitle">Join Forever Art to track orders and save your details.</p>
+    </div>
+
+    {%- form 'create_customer', class: 'account-page__form' -%}
+      {%- if form.errors -%}
+        <div class="account-page__errors" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div class="account-page__field">
+        <label for="RegisterFirstName">First name</label>
+        <input
+          id="RegisterFirstName"
+          type="text"
+          name="customer[first_name]"
+          autocomplete="given-name"
+          {% if form.first_name %}value="{{ form.first_name | escape }}"{% endif %}
+        >
+      </div>
+
+      <div class="account-page__field">
+        <label for="RegisterLastName">Last name</label>
+        <input
+          id="RegisterLastName"
+          type="text"
+          name="customer[last_name]"
+          autocomplete="family-name"
+          {% if form.last_name %}value="{{ form.last_name | escape }}"{% endif %}
+        >
+      </div>
+
+      <div class="account-page__field">
+        <label for="RegisterEmail">Email</label>
+        <input
+          id="RegisterEmail"
+          type="email"
+          name="customer[email]"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="off"
+          required
+          {% if form.email %}value="{{ form.email | escape }}"{% endif %}
+          {% if form.errors contains 'email' %}aria-invalid="true"{% endif %}
+        >
+      </div>
+
+      <div class="account-page__field">
+        <label for="RegisterPassword">Password</label>
+        <input
+          id="RegisterPassword"
+          type="password"
+          name="customer[password]"
+          autocomplete="new-password"
+          required
+          {% if form.errors contains 'password' %}aria-invalid="true"{% endif %}
+        >
+      </div>
+
+      <button type="submit" class="account-page__primary-btn w-full">Create account</button>
+    {%- endform -%}
+
+    <div class="account-page__auth-links">
+      <a class="account-page__text-link" href="{{ routes.account_login_url }}">Already have an account? Log in</a>
+    </div>
+  </div>
+</div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Customer register",
+  "tag": "section",
+  "class": "section-main-customer-account",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Legacy customer registration form."
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

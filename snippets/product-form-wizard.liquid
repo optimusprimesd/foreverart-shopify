@@ -1,0 +1,180 @@
+{%- comment -%}
+  Dynamic product customization wizard.
+  Config: product.metafields.custom.product_form_configuration (JSON) or theme default.
+  Default: config/product-form-config.sample.json → snippets/product-form-config-sample.liquid
+  Docs:    docs/product-form-config.md
+  After editing the config JSON, re-copy: cp config/product-form-config.sample.json snippets/product-form-config-sample.liquid
+{%- endcomment -%}
+{%- liquid
+  assign form_config = nil
+  if product.metafields.custom.product_form_configuration != blank
+    assign form_config = product.metafields.custom.product_form_configuration.value
+  endif
+  if form_config == nil
+    capture default_config_str
+      render 'product-form-config-sample'
+    endcapture
+    assign default_config_str = default_config_str | strip
+    assign form_config = default_config_str | parse_json
+  endif
+  assign form_steps = form_config.steps
+  assign wizard_heading = form_config.heading
+  if wizard_heading == blank and section != blank and section.settings.wizard_heading != blank
+    assign wizard_heading = section.settings.wizard_heading
+  endif
+  if wizard_heading == blank
+    assign wizard_heading = 'Customize Your Sign'
+  endif
+  assign hide_wizard_heading = hide_wizard_heading | default: false
+  assign lock_quantity = lock_quantity | default: false
+  assign show_gift_card_send_to = show_gift_card_send_to | default: false
+
+  assign visible_form_step_count = 0
+  unless show_gift_card_send_to
+    for step in form_steps
+      assign step_has_fields = false
+      for field in step.fields
+        assign field_enabled = true
+        if field.enabled == false
+          assign field_enabled = false
+        endif
+        if field_enabled
+          assign step_has_fields = true
+          break
+        endif
+      endfor
+      if step_has_fields
+        assign visible_form_step_count = visible_form_step_count | plus: 1
+      endif
+    endfor
+  endunless
+-%}
+
+{%- unless show_gift_card_send_to -%}
+  <script type="application/json" id="product-form-config">{{ form_config | json }}</script>
+{%- endunless -%}
+
+<input
+  type="hidden"
+  name="properties[_additional_charge_cents]"
+  value="0"
+  data-additional-charge-total-input
+>
+
+<div id="product-wizard" class="mb-8" data-base-variant-price-cents="{{ product.selected_or_first_available_variant.price }}">
+  {%- unless show_gift_card_send_to -%}
+    <div class="product-wizard__sticky-head">
+      {%- unless hide_wizard_heading -%}
+        <h3 class="text-xl font-bold mb-6 mt-6">{{ wizard_heading | escape }}</h3>
+      {%- endunless -%}
+      {%- if visible_form_step_count >= 3 -%}
+        <div class="wizard__step-nav-wrap mb-6">
+          {% render 'product-form-step-nav', form_steps: form_steps %}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="wizard__steps">
+      {%- for step in form_steps -%}
+        {%- assign step_has_fields = false -%}
+        {%- for field in step.fields -%}
+          {%- assign field_enabled = true -%}
+          {%- if field.enabled == false -%}
+            {%- assign field_enabled = false -%}
+          {%- endif -%}
+          {%- if field_enabled -%}
+            {%- assign step_has_fields = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- unless step_has_fields -%}{%- continue -%}{%- endunless -%}
+
+        {%- assign step_number = step.number -%}
+        {%- assign step_wrapper_class = 'product-page__personalize mb-8' -%}
+        {%- if step_number == 1 -%}
+          {%- assign step_wrapper_class = 'wizard__step-content' -%}
+        {%- elsif step_number == 5 -%}
+          {%- assign step_wrapper_class = 'product-page__personalize mb-8 mt-4' -%}
+        {%- endif -%}
+
+        <section
+          class="{{ step_wrapper_class }}"
+          data-wizard-step="{{ step_number }}"
+          id="wizard-step-{{ step_number }}"
+          {% if step_number == 2 or step_number == 3 or step_number == 5 %}aria-labelledby="personalize-heading"{% endif %}
+        >
+          {%- if step.title != blank -%}
+            <p class="product-page__label{% if step_number == 2 %} text-lg mb-4 mt-6 font-bold{% elsif step_number == 3 %} text-lg mb-4 mt-6 font-bold{% elsif step_number == 4 %} mb-0 min-w-0 flex-1 text-lg mt-4 font-bold{% else %} mb-0 text-lg font-bold text-[#141414] mb-2{% endif %}">
+              {%- if step_number == 4 -%}<strong>{{ step.title }}</strong>{%- else -%}{{ step.title }}{%- endif -%}
+            </p>
+          {%- endif -%}
+
+          {%- if step_number == 1 -%}
+            <div class="product-page__colors mb-4">
+              <div class="wizard__step-fields">
+          {%- else -%}
+            <div class="wizard__step-fields">
+          {%- endif -%}
+
+          {%- for field in step.fields -%}
+            {% render 'product-form-field', field: field, product: product %}
+          {%- endfor -%}
+
+          {%- if step_number == 1 -%}
+              </div>
+            </div>
+          {%- else -%}
+            </div>
+          {%- endif -%}
+        </section>
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    {% render 'gift-card-send-to', form: form %}
+  {%- endunless -%}
+
+  <div class="product-wizard__actions flex flex-col gap-3 mt-8">
+    <div class="product-wizard__cart-row">
+      <div class="product-wizard__cart-qty">
+        <label class="sr-only" for="product-quantity">Quantity</label>
+        <input
+          type="number"
+          id="product-quantity"
+          name="quantity"
+          class="product-wizard__qty-input{% if lock_quantity %} product-wizard__qty-input--locked{% endif %}"
+          value="1"
+          min="1"
+          {% if lock_quantity %}max="1" readonly tabindex="-1" aria-disabled="true"{% else %}step="1"{% endif %}
+          inputmode="numeric"
+          aria-label="Quantity"
+        >
+      </div>
+      <p class="product-wizard__cart-price" data-product-price-display data-product-price-quantity>{{ product_price }}</p>
+      <button
+        type="submit"
+        class="product-page__btn product-page__btn--cart product-wizard__cart-btn rounded-sm"
+        name="add"
+        data-product-add-to-cart
+        aria-label="Add to cart, {{ product_price }}"
+        aria-busy="false"
+      >
+        <span class="product-page__btn-cart-row" data-product-add-to-cart-label>
+          <img src="{{ 'cart.svg' | asset_url }}" alt="" class="h-6 w-6 object-contain" width="24" height="24" decoding="async">
+          <span>Add to Cart</span>
+        </span>
+        <span class="product-page__btn-cart-loading" data-product-add-to-cart-loading hidden>
+          <span class="product-page__btn-spinner" aria-hidden="true"></span>
+          <span>Adding to cart…</span>
+        </span>
+      </button>
+    </div>
+    {% render 'payment-logos', wrapper_class: 'payment-logos--product' %}
+    {{ form | payment_button }}
+  </div>
+</div>
+
+{%- if shipping_highlights_html != blank -%}
+  {{ shipping_highlights_html }}
+{%- else -%}
+  {% render 'product-shipping-highlights' %}
+{%- endif -%}

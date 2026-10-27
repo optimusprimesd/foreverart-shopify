@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WZE8P9GBCQ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-WZE8P9GBCQ');
+    </script>
+    {% render 'meta-tags' %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Forum&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    >
+    {{ 'tailwind.min.css' | asset_url | stylesheet_tag }}
+    {{ 'app.min.css' | asset_url | stylesheet_tag }}
+    {{ 'zolina.min.css' | asset_url | stylesheet_tag }}
+    {{ 'custom.min.css' | asset_url | stylesheet_tag }}
+    {%- if template.name == 'product' -%}
+      {{ 'product-wizard.min.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
+    {{ 'toastify.min.css' | asset_url | stylesheet_tag }}
+    {{ 'toastify-overrides.min.css' | asset_url | stylesheet_tag }}
+    <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css" crossorigin="anonymous" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css" crossorigin="anonymous"></noscript>
+    {{ 'bg-transparent-override.min.css' | asset_url | stylesheet_tag }}
+    {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+    {{ 'flatpickr.min.css' | asset_url | stylesheet_tag }}
+
+    {{ content_for_header }}
+  </head>
+  <body class="min-h-screen bg-neutral-secondary-soft font-sans text-body antialiased flex flex-col{% unless template.name == 'index' or template.name == 'collection' %} site-header-offset{% endunless %}"{% if template.name == 'index' %} data-page="home"{% endif %}>
+    {% sections 'header-group' %}
+    <main role="main" id="MainContent" class="site-header-push-surface">
+      {{ content_for_layout }}
+      {%- if template.name == 'index' -%}
+        {% sections 'home-group' %}
+      {%- endif -%}
+    </main>
+    {% section 'footer' %}
+    <script src="{{ 'flowbite.min.js' | asset_url }}" defer></script>
+    <script src="{{ 'gsap.min.js' | asset_url }}" defer></script>
+    <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+    <script src="{{ 'flatpickr.min.js' | asset_url }}" defer></script>
+
+    <script src="{{ 'toastify.min.js' | asset_url }}" defer></script>
+    {%- if template.name == 'product' -%}
+      <script type="application/json" id="forever-art-dropbox-config">
+        {
+          "enabled": {{ settings.dropbox_sync_enabled | json }},
+          "proxyUrl": {{ settings.dropbox_proxy_url | default: '' | json }},
+          "folder": {{ settings.dropbox_folder | default: '/custom_wedding_posters' | json }}
+        }
+      </script>
+      <script src="{{ 'product-wizard.min.js' | asset_url }}" defer></script>
+      <script src="{{ 'product-form-pricing.min.js' | asset_url }}" defer></script>
+    {%- endif -%}
+    {%- if template.name == 'page' and page.template_suffix == 'contact-us' -%}
+      <script src="{{ 'contact-send-email.min.js' | asset_url }}" defer></script>
+    {%- endif -%}
+    <script src="{{ 'main.min.js' | asset_url }}" defer></script>
+  </body>
+</html>

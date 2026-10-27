@@ -1,0 +1,297 @@
+<section
+    class="home-story-2 origin-center relative z-10 flex w-full flex-col items-center justify-center bg-white px-6 !pb-24 text-center text-white"
+    data-header-context="dark"
+    aria-labelledby="home-story-heading"
+  >
+  
+    <h2
+      id="home-story-heading"
+      class="home-story__headline mb-8 text-2xl uppercase text-black md:mb-10 md:text-3xl lg:text-4xl"
+    >
+      Our Rebellion
+    </h2>
+    <blockquote class="home-story__quote mx-auto mb-10 max-w-xl md:mb-12">
+      <p class="leading-relaxed text-black">
+        “As the noise increases, we choose authenticity over approval. Always”
+      </p>
+    </blockquote>
+    <footer class="home-story__attribution flex flex-col items-center gap-1">
+      <p class="home-story__name text-sm text-black md:text-base">Andrew Scott</p>
+      <p class="home-story__role text-[0.65rem] uppercase tracking-[0.18em] text-black/75 md:text-xs">
+        Founder | Artisan | Maker
+      </p>
+    </footer>
+    <div class="mt-8 text-black flex justify-center md:mt-10" aria-hidden="true">
+        <img src="/assets/arrow-down.svg" alt="Arrow down" class="h-6 w-6 object-contain" width="24" height="24" decoding="async" />
+    </div>
+  </section>
+
+  <section class="home-collections relative z-10 bg-black px-4 py-16 text-center md:px-6 md:py-20 lg:py-24" data-header-context="light" aria-labelledby="home-collections-heading">
+    <div class="mx-auto max-w-4xl">
+      <h2 id="home-collections-heading" class="home-collections__title mb-10 text-4xl md:mb-12 md:text-5xl lg:text-6xl">
+        Corporate
+      </h2>
+  
+      <div
+        class="home-collections__filters mb-10 flex flex-wrap items-center justify-center gap-3 md:mb-12 md:gap-4"
+        role="tablist"
+        aria-label="Collection categories"
+      >
+        <button
+          type="button"
+          class="home-collections__pill home-corporate__pill home-collections__pill home-corporate__pill--active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="home-collections-panel"
+          id="home-collections-tab-wedding"
+        >
+         Real Estate
+        </button>
+        <button
+          type="button"
+          class="home-collections__pill home-corporate__pill"
+          role="tab"
+          aria-selected="false"
+          tabindex="-1"
+        >
+         Commercial Spaces
+        </button>
+        <button
+          type="button"
+          class="home-collections__pill home-corporate__pill"
+          role="tab"
+          aria-selected="false"
+          tabindex="-1"
+        >
+       Home Office
+        </button>
+        <button type="button" class="home-collections__pill home-corporate__pill" role="tab" aria-selected="false" tabindex="-1">
+          More…
+        </button>
+      </div>
+  
+      <div
+        id="home-collections-panel"
+        role="tabpanel"
+        aria-labelledby="home-collections-tab-wedding"
+        class="home-collections__description home-corporate__description mx-auto max-w-2xl !text-white text-pretty"
+      >
+        <p>
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+          standard dummy text ever since…
+        </p>
+      </div>
+    </div>
+    <section class="my-10 mx-auto max-w-screen">
+      <div class="flex gap-4 justify-center justify-between">
+     
+        <div class="flex flex-wrap gap-4">
+          {% render 'partials/product-item',  product_item_image:'/assets/p1.png', product_item_title:'Samantha', product_item_price_amount:'$595.00', product_item_href:'/product/samantha' %}
+
+          {% render 'partials/product-item',  product_item_image:'/assets/p1.png', product_item_title:'Samantha', product_item_price_amount:'$595.00', product_item_href:'/product/samantha' %}
+          
+          {% render 'partials/product-item',  product_item_image:'/assets/p2.png', product_item_title:'Ava', product_item_price_amount:'$450.00', product_item_href:'/product/ava' %}
+  
+          {% render 'partials/product-item', product_item_image:'/assets/p3.png', product_item_title:'Sophia', product_item_price_amount:'$650.00', product_item_href:'/product/sophia' %}
+        </div>
+      </div>
+    </section>
+  
+  </section>
+  
+  
+  
+  <section class="home-collections relative z-10 bg-white px-4 py-16 text-center md:px-6 md:py-20 lg:py-24 justify-center flex" data-header-context="light" aria-labelledby="home-collections-heading">
+    <img src="/assets/top-sellers.png" alt="Corporate 1" class="m-auto" width="1200" height="400" />
+  </section>
+
+  <section
+    class="home-story-2 origin-center relative z-10 flex w-full flex-col items-center justify-center bg-black px-6 !pt-24 !pb-24 text-center text-white"
+    data-header-context="dark"
+    aria-labelledby="home-story-heading"
+  >
+  
+    <h2
+      id="home-story-heading"
+      class="home-story__headline mb-8 text-3xl uppercase text-white md:mb-10 md:text-3xl lg:text-4xl"
+    >
+      Our Journey
+    </h2>
+    <blockquote class="home-story__quote mx-auto mb-10 max-w-xl md:mb-12">
+      <p class="leading-relaxed text-white">
+        “What began as a creative pursuit became a commitment to meaning.”
+      </p>
+    </blockquote>
+    <footer class="home-story__attribution flex flex-col items-center gap-1">
+      <p class="home-story__name text-sm text-white md:text-base">Andrew Scott</p>
+      <p class="home-story__role text-[0.65rem] uppercase tracking-[0.18em] text-white/75 md:text-xs">
+        Founder | Artisan | Maker
+      </p>
+    </footer>
+    <div class="mt-8 text-white flex justify-center md:mt-10" aria-hidden="true">
+        <img src="/assets/arrow-down.svg" alt="Arrow down" class="h-6 w-6 object-contain" width="24" height="24" decoding="async" />
+    </div>
+  </section>
+
+  <section class="home-collections relative z-10 bg-white px-4 py-16 text-center md:px-6 md:py-20 lg:py-24 justify-center flex" data-header-context="light" aria-labelledby="home-collections-heading">
+    <img src="/assets/new-arrivals.png" alt="Corporate 1" class="m-auto" width="1200" height="400" />
+  </section>
+
+
+  <section class="home-collections relative z-10 bg-white px-4 pb-16 text-center md:px-6 md:py-0 lg:py-0" data-header-context="light" aria-labelledby="home-collections-heading">
+    <div class="mx-auto max-w-4xl">
+      <h2 id="home-collections-heading" class="home-collections__title mb-10 text-4xl md:mb-12 md:text-5xl lg:text-6xl">
+    Curate Your Space
+      </h2>
+  
+      <div
+        class="home-collections__filters mb-10 flex flex-wrap items-center justify-center gap-3 md:mb-12 md:gap-4"
+        role="tablist"
+        aria-label="Collection categories"
+      >
+        <button
+          type="button"
+          class="home-collections__pill home-collections__pill--active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="home-collections-panel"
+          id="home-collections-tab-wedding"
+        >
+          Home Entrance
+        </button>
+        <button
+          type="button"
+          class="home-collections__pill"
+          role="tab"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          Hall Way
+        </button>
+        <button
+          type="button"
+          class="home-collections__pill"
+          role="tab"
+          aria-selected="false"
+          tabindex="-1"
+        >
+         Living Area
+        </button>
+
+        <button
+          type="button"
+          class="home-collections__pill"
+          role="tab"
+          aria-selected="false"
+          tabindex="-1"
+        >
+    Bedroom
+        </button>
+        <button
+          type="button"
+          class="home-collections__pill"
+          role="tab"
+          aria-selected="false"
+          tabindex="-1"
+        >
+    Office
+        </button>
+    
+      </div>
+  
+      <div
+        id="home-collections-panel"
+        role="tabpanel"
+        aria-labelledby="home-collections-tab-wedding"
+        class="home-collections__description mx-auto max-w-2xl text-pretty"
+      >
+        <p>
+         
+        </p>
+      </div>
+    </div>
+    <section class="my-10 mx-auto max-w-screen">
+      <div class="flex gap-4 justify-center justify-between">
+        <div>
+          <img src="/assets/c-2.png" alt="Collection 1" width="800" height="800" />
+        </div>
+        <div class="flex flex-wrap gap-4">
+          {% render 'partials/product-item',  product_item_image:'/assets/c1.png', product_item_title:'Samantha', product_item_price_amount:'$595.00', product_item_href:'/product/samantha' %}
+          
+          {% render 'partials/product-item',  product_item_image:'/assets/c2.png', product_item_title:'Ava', product_item_price_amount:'$450.00', product_item_href:'/product/ava' %}
+  
+          {% render 'partials/product-item', product_item_image:'/assets/c3.png', product_item_title:'Sophia', product_item_price_amount:'$650.00', product_item_href:'/product/sophia' %}
+        </div>
+      </div>
+    </section>
+  
+  </section>
+  
+  
+  
+  <section
+    class="home-story-2 origin-center relative z-10 flex w-full flex-col items-center justify-center bg-black px-6 py-24 text-center text-white"
+    data-header-context="dark"
+    aria-labelledby="home-story-heading"
+  >
+  
+    <h2
+      id="home-story-heading"
+      class="home-story__headline mb-8 text-2xl uppercase text-white md:mb-10 md:text-3xl lg:text-4xl"
+    >
+      Our Gratitude
+    </h2>
+    <blockquote class="home-story__quote mx-auto mb-10 max-w-xl md:mb-12">
+      <p class="leading-relaxed text-white">
+        “To be trusted with the stories that have earned their place and the people that own them.”
+      </p>
+    </blockquote>
+    <footer class="home-story__attribution flex flex-col items-center gap-1">
+      <p class="home-story__name text-sm text-white md:text-base">Andrew Scott</p>
+      <p class="home-story__role text-[0.65rem] uppercase tracking-[0.18em] text-white/75 md:text-xs">
+        Founder | Artisan | Maker
+      </p>
+    </footer>
+    <div class="mt-8 text-white flex justify-center md:mt-10" aria-hidden="true">
+        <img src="/assets/arrow-down.svg" alt="Arrow down" class="h-6 w-6 object-contain" width="24" height="24" decoding="async" />
+    </div>
+  </section>
+
+  <section style="background:#F5EBE3" class="w-full relative z-10 bg-[#F5EBE3] text-center  justify-center flex" data-header-context="light" aria-labelledby="home-collections-heading">
+    <img src="/assets/stay-e.png" alt="Corporate 1" class="m-auto" width="1200" height="400" />
+  </section>
+
+
+  <section
+    class="home-story-2 origin-center relative z-10 flex w-full flex-col items-center justify-center bg-white px-6 py-24 text-center text-white"
+    data-header-context="dark"
+    aria-labelledby="home-story-heading"
+  >
+  
+    <h2
+      id="home-story-heading"
+      class="home-story__headline mb-8 text-2xl uppercase text-black md:mb-10 md:text-3xl lg:text-4xl"
+    >
+      Our Identity
+    </h2>
+    <blockquote class="home-story__quote mx-auto mb-10 max-w-xl md:mb-12">
+      <p class="leading-relaxed text-black">
+        “We exist for the sentimental. The storytellers. The forever thinkers.”
+      </p>
+    </blockquote>
+    <footer class="home-story__attribution flex flex-col items-center gap-1">
+      <p class="home-story__name text-sm text-black md:text-base">Andrew Scott</p>
+      <p class="home-story__role text-[0.65rem] uppercase tracking-[0.18em] text-black/75 md:text-xs">
+        Founder | Artisan | Maker
+      </p>
+    </footer>
+    <div class="mt-8 text-black flex justify-center md:mt-10" aria-hidden="true">
+        <img src="/assets/arrow-down.svg" alt="Arrow down" class="h-6 w-6 object-contain" width="24" height="24" decoding="async" />
+    </div>
+  </section>
+
+
+
+  <section style="background:#000" class="w-full relative z-10 bg-[#F5EBE3] text-center  justify-center flex" data-header-context="light" aria-labelledby="home-collections-heading">
+    <img src="/assets/bottom.png" alt="Corporate 1" class="m-auto" width="1200" height="400" />
+  </section>

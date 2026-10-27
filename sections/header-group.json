@@ -1,0 +1,40 @@
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "header": {
+      "type": "header"
+    },
+    "menu-top-sellers": {
+      "type": "menu-top-sellers",
+      "blocks": {
+        "product_1": {
+          "type": "product",
+          "settings": {
+            "product": "quote-1"
+          }
+        },
+        "product_2": {
+          "type": "product",
+          "settings": {
+            "product": "birth-record"
+          }
+        }
+      },
+      "block_order": [
+        "product_1",
+        "product_2"
+      ],
+      "settings": {
+        "background_color": "#EFEFEF",
+        "text_color": "#141414",
+        "use_text_color_for_heading": true,
+        "cta_label": "More"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "menu-top-sellers"
+  ]
+}

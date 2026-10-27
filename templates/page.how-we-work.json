@@ -1,0 +1,64 @@
+{
+  "sections": {
+    "how_we_work": {
+      "type": "how-we-work",
+      "blocks": {
+        "chapter_ordering": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "The process",
+            "heading": "Ordering made simple",
+            "body": "<p>Every design has been carefully considered before you reach it. Our product images and mock-ups show you exactly what to expect, while our ordering fields guide you through the information we need to make the piece yours.</p><p>You won’t be asked to make unnecessary design decisions or work through a lengthy proofing process.</p>",
+            "tone": "light"
+          }
+        },
+        "quote_choose": {
+          "type": "pullquote",
+          "settings": {
+            "quote": "Simply choose your design, provide your details and leave the rest to us.",
+            "attribution": "How Forever Art orders work"
+          }
+        },
+        "steps_order": {
+          "type": "steps",
+          "settings": {
+            "heading": "What happens when you order",
+            "intro": "<p>We’ve designed the experience so you can move from idea to order with clarity — without the friction of endless decisions.</p>",
+            "s1": "Choose your design from our carefully considered collections and product options.",
+            "s2": "Use our product images and mock-ups to see exactly what to expect from the finished piece.",
+            "s3": "Complete the ordering fields that guide you through the information we need to make the piece yours.",
+            "s4": "Leave the rest to us — we make and finish every piece so it matches or exceeds the expectations created when you ordered.",
+            "closing": "<p>Our job is to make sure the finished piece you receive matches — or exceeds — the expectations we created when you ordered it.</p>"
+          }
+        },
+        "callout_wedding": {
+          "type": "callout",
+          "settings": {
+            "kicker": "Please note",
+            "heading": "Wedding posters are the exception.",
+            "body": "<p>Because they’re often displayed on the wedding day, wedding posters include our proofing process before production.</p><p>This extra step helps ensure the piece is exactly right for one of the most important days of your life.</p>",
+            "card_label": "Exception",
+            "card_title": "Wedding",
+            "card_note": "Proofing included before production."
+          }
+        }
+      },
+      "block_order": [
+        "chapter_ordering",
+        "quote_choose",
+        "steps_order",
+        "callout_wedding"
+      ],
+      "settings": {
+        "hero_eyebrow": "How we work",
+        "hero_heading": "We’ve worked hard to make ordering Forever Art easy.",
+        "hero_lede": "Every design has been carefully considered before you reach it. Simply choose your design, provide your details and leave the rest to us.",
+        "closing_heading": "Leave the rest to us.",
+        "closing_body": "<p>Our job is to make sure the finished piece you receive matches — or exceeds — the expectations we created when you ordered it.</p>",
+        "cta_label": "Start your piece",
+        "cta_url": "/collections"
+      }
+    }
+  },
+  "order": ["how_we_work"]
+}

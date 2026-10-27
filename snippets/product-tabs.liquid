@@ -1,0 +1,185 @@
+{%- comment -%}
+  Product tabs (desktop) / accordion (mobile). Pass blocks from sections/product-tabs.liquid.
+{%- endcomment -%}
+<div style="clear: both;"></div>
+{%- if blocks != blank and blocks.size > 0 -%}
+  {%- assign tab_section_id = section_id | default: 'default' -%}
+  <div class="product-page__tabs min-w-0 w-full flex-1 mt-4" data-product-tabs>
+    <div
+      class="product-page__tablist -mx-1 flex gap-2 overflow-x-auto overscroll-x-contain px-1 pb-1 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] sm:flex-wrap sm:overflow-visible sm:pb-0 [&::-webkit-scrollbar]:hidden"
+      role="tablist"
+      aria-label="{{ tablist_label | default: 'Product information' | escape }}"
+    >
+      {%- assign first_visible_tab_button = true -%}
+      {%- for block in blocks -%}
+        {%- liquid
+          assign content_source = block.settings.content_source
+          if content_source == blank and block.settings.use_product_description
+            assign content_source = 'description'
+          endif
+          if content_source == blank
+            assign content_source = 'theme'
+          endif
+
+          assign tab_label = block.settings.title
+          assign title_source = block.settings.title_source | default: 'theme'
+          assign title_metafield_namespace = block.settings.title_metafield_namespace | default: block.settings.metafield_namespace | default: 'custom' | strip
+          assign title_metafield_key = block.settings.title_metafield_key | strip
+          if title_metafield_key == blank and block.settings.metafield_key != blank
+            assign title_metafield_key = block.settings.metafield_key | append: '_label'
+          endif
+
+          if title_source == 'metafield' and title_metafield_key != blank
+            assign title_metafield = product.metafields[title_metafield_namespace][title_metafield_key]
+            if title_metafield != blank and title_metafield.value != blank
+              assign tab_label = title_metafield.value
+            endif
+          endif
+
+          assign tab_has_content = false
+          case content_source
+            when 'description'
+              if product.description != blank
+                assign tab_has_content = true
+              endif
+            when 'metafield'
+              assign metafield_namespace = block.settings.metafield_namespace | default: 'custom' | strip
+              assign metafield_key = block.settings.metafield_key | strip
+              if metafield_key != blank
+                assign tab_metafield = product.metafields[metafield_namespace][metafield_key]
+                if tab_metafield != blank
+                  assign tab_has_content = true
+                endif
+              endif
+            else
+              if block.settings.content != blank
+                assign tab_has_content = true
+              endif
+          endcase
+
+          unless tab_label != blank or tab_has_content
+            continue
+          endunless
+        -%}
+        {%- assign tab_id = 'tab-' | append: tab_section_id | append: '-' | append: block.id -%}
+        {%- assign panel_id = 'panel-' | append: tab_section_id | append: '-' | append: block.id -%}
+        <button
+          type="button"
+          class="product-page__tab shrink-0 snap-start{% if first_visible_tab_button %} product-page__tab--active{% endif %}"
+          role="tab"
+          aria-selected="{% if first_visible_tab_button %}true{% else %}false{% endif %}"
+          {% unless first_visible_tab_button %}tabindex="-1"{% endunless %}
+          aria-controls="{{ panel_id }}"
+          id="{{ tab_id }}"
+        >
+          {{ tab_label | default: block.settings.title | escape }}
+        </button>
+        {%- assign first_visible_tab_button = false -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="product-page__tab-items">
+      {%- for block in blocks -%}
+        {%- liquid
+          assign content_source = block.settings.content_source
+          if content_source == blank and block.settings.use_product_description
+            assign content_source = 'description'
+          endif
+          if content_source == blank
+            assign content_source = 'theme'
+          endif
+
+          assign tab_label = block.settings.title
+          assign title_source = block.settings.title_source | default: 'theme'
+          assign title_metafield_namespace = block.settings.title_metafield_namespace | default: block.settings.metafield_namespace | default: 'custom' | strip
+          assign title_metafield_key = block.settings.title_metafield_key | strip
+          if title_metafield_key == blank and block.settings.metafield_key != blank
+            assign title_metafield_key = block.settings.metafield_key | append: '_label'
+          endif
+
+          if title_source == 'metafield' and title_metafield_key != blank
+            assign title_metafield = product.metafields[title_metafield_namespace][title_metafield_key]
+            if title_metafield != blank and title_metafield.value != blank
+              assign tab_label = title_metafield.value
+            endif
+          endif
+
+          assign tab_has_content = false
+          case content_source
+            when 'description'
+              if product.description != blank
+                assign tab_has_content = true
+              endif
+            when 'metafield'
+              assign metafield_namespace = block.settings.metafield_namespace | default: 'custom' | strip
+              assign metafield_key = block.settings.metafield_key | strip
+              if metafield_key != blank
+                assign tab_metafield = product.metafields[metafield_namespace][metafield_key]
+                if tab_metafield != blank
+                  assign tab_has_content = true
+                endif
+              endif
+            else
+              if block.settings.content != blank
+                assign tab_has_content = true
+              endif
+          endcase
+
+          unless tab_label != blank or tab_has_content
+            continue
+          endunless
+        -%}
+        {%- assign tab_id = 'tab-' | append: tab_section_id | append: '-' | append: block.id -%}
+        {%- assign panel_id = 'panel-' | append: tab_section_id | append: '-' | append: block.id -%}
+        {%- assign accordion_id = 'accordion-' | append: tab_section_id | append: '-' | append: block.id -%}
+        <div
+          class="product-page__tab-item"
+          data-tab-item
+          {{ block.shopify_attributes }}
+        >
+          <button
+            type="button"
+            id="{{ accordion_id }}"
+            class="product-page__accordion-trigger"
+            aria-expanded="false"
+            aria-controls="{{ panel_id }}"
+          >
+            <span class="product-page__accordion-label">{{ tab_label | default: block.settings.title | escape }}</span>
+            <span class="product-page__accordion-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <div
+            id="{{ panel_id }}"
+            class="product-page__tab-panel hidden mt-3 rounded-md bg-[#f5f5f5] p-4 text-sm leading-relaxed text-[#333] sm:mt-4 sm:p-5 md:p-6 md:text-[0.9375rem]"
+            role="tabpanel"
+            aria-labelledby="{{ tab_id }}"
+            hidden
+          >
+            {%- case content_source -%}
+              {%- when 'description' -%}
+                {%- if product.description != blank -%}
+                  <div class="product-page__rte">{{ product.description }}</div>
+                {%- endif -%}
+              {%- when 'metafield' -%}
+                {%- assign metafield_namespace = block.settings.metafield_namespace | default: 'custom' | strip -%}
+                {%- assign metafield_key = block.settings.metafield_key | strip -%}
+                {%- if metafield_key != blank -%}
+                  {%- assign tab_metafield = product.metafields[metafield_namespace][metafield_key] -%}
+                  {%- if tab_metafield != blank -%}
+                    <div class="product-page__rte">{{ tab_metafield | metafield_tag }}</div>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- else -%}
+                {%- if block.settings.content != blank -%}
+                  <div class="product-page__rte">{{ block.settings.content }}</div>
+                {%- endif -%}
+            {%- endcase -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}

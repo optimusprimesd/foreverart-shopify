@@ -1,0 +1,401 @@
+{%- comment -%}
+  Cart template (Horizon-like scaffold) using the `cart` object.
+{%- endcomment -%}
+
+<div class="mx-auto w-full min-w-0 max-w-[1280px] px-4 py-10">
+  <div class="mb-6 flex items-end justify-between gap-4">
+    <h1 class="text-2xl font-semibold tracking-tight">Cart</h1>
+    <a class="text-sm text-gray-600 hover:text-gray-900 underline underline-offset-4" href="{{ routes.all_products_collection_url }}">
+      Continue shopping
+    </a>
+  </div>
+
+  {%- if cart.item_count == 0 -%}
+    <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center">
+      <div class="mx-auto mb-4 max-w-xs">
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg w-full h-auto rounded-xl bg-gray-100' }}
+      </div>
+      <p class="text-base text-gray-700">Your cart is currently empty.</p>
+      <a
+        class="mt-5 inline-flex items-center justify-center rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white hover:bg-black"
+        href="{{ routes.all_products_collection_url }}"
+      >
+        Shop products
+      </a>
+    </div>
+  {%- else -%}
+    {%- form 'cart', cart, id: 'CartForm' -%}
+      <div class="grid gap-8 lg:grid-cols-12">
+        <div class="lg:col-span-8">
+          <div class="rounded-2xl border border-gray-200 bg-white">
+            <div class="divide-y divide-gray-200">
+              {%- assign cart_additional_charge_total = 0 -%}
+              {%- assign cart_fee_line_total = 0 -%}
+              {%- assign cart_has_fee_lines = false -%}
+              {%- assign cart_has_gift_card = false -%}
+              {%- comment -%} First pass: detect real fee lines so we don't double-count display money. {%- endcomment -%}
+              {%- for item in cart.items -%}
+                {%- if item.properties != blank -%}
+                  {%- for property in item.properties -%}
+                    {%- if property.first == '_customization_fee' and property.last == '1' -%}
+                      {%- assign cart_has_fee_lines = true -%}
+                      {%- assign cart_fee_line_total = cart_fee_line_total | plus: item.final_line_price -%}
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- comment -%} Products first, customization fee line(s) last. {%- endcomment -%}
+              {%- for item in cart.items -%}
+                {%- liquid
+                  assign is_fee_line = false
+                  assign line_additional_charge_cents = 0
+                  assign item_handle = item.product.handle | default: '' | downcase
+                  if item_handle == 'customization-charge' or item_handle == 'customization-fee'
+                    assign is_fee_line = true
+                  endif
+                  if item.properties != blank
+                    for property in item.properties
+                      if property.first == '_customization_fee' and property.last == '1'
+                        assign is_fee_line = true
+                      endif
+                      if property.first == '_additional_charge_cents' and property.last != blank
+                        assign line_additional_charge_cents = property.last | times: 1
+                      endif
+                    endfor
+                  endif
+
+                  if is_fee_line
+                    continue
+                  endif
+
+                  comment
+                    Price chart under the product price:
+                    previous (line) → customization → total.
+                    Real fee money still lives on hidden fee lines.
+                  endcomment
+                  assign line_base_price_cents = item.final_line_price
+                  assign line_extra_total_cents = line_additional_charge_cents | times: item.quantity
+                  assign line_display_price_cents = line_base_price_cents | plus: line_extra_total_cents
+                  if cart_has_fee_lines == false and line_extra_total_cents > 0
+                    assign cart_additional_charge_total = cart_additional_charge_total | plus: line_extra_total_cents
+                  endif
+                -%}
+                {%- liquid
+                  assign is_gift_card_line = false
+                  if item.gift_card or item.product.gift_card?
+                    assign is_gift_card_line = true
+                  endif
+                  if is_gift_card_line == false and item.product.template_suffix == 'gift-card-product'
+                    assign is_gift_card_line = true
+                  endif
+                  if is_gift_card_line == false
+                    for collection in item.product.collections
+                      assign collection_handle_lc = collection.handle | downcase
+                      assign collection_title_lc = collection.title | downcase
+                      if collection_handle_lc contains 'gift-card' or collection_title_lc contains 'gift card'
+                        assign is_gift_card_line = true
+                        break
+                      endif
+                    endfor
+                  endif
+                  if is_gift_card_line
+                    assign cart_has_gift_card = true
+                  endif
+                -%}
+                <div class="p-5">
+                  <div class="flex gap-4">
+                    <a class="block h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-gray-100" href="{{ item.url }}">
+                      {%- if item.image -%}
+                        {{
+                          item.image
+                          | image_url: width: 240
+                          | image_tag:
+                            loading: 'lazy',
+                            class: 'h-full w-full object-cover',
+                            alt: item.product.title | escape
+                        }}
+                      {%- else -%}
+                        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg h-full w-full' }}
+                      {%- endif -%}
+                    </a>
+
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-start justify-between gap-4">
+                        <div class="min-w-0 flex-1">
+                          <a class="block text-sm font-medium text-gray-900 hover:underline underline-offset-4 whitespace-normal break-words [overflow-wrap:anywhere]" href="{{ item.url }}">
+                            {{ item.product.title | escape }}
+                          </a>
+                          {%- if item.variant.title and item.variant.title != 'Default Title' -%}
+                            <p class="mt-1 text-sm text-gray-600 whitespace-normal break-words [overflow-wrap:anywhere]">{{ item.variant.title | escape }}</p>
+                          {%- endif -%}
+
+                          {%- if item.properties != blank -%}
+                            <dl class="mt-2 space-y-2 text-xs text-gray-600">
+                              {%- for p in item.properties -%}
+                                {%- assign property_first_char = p.first | slice: 0 -%}
+                                {%- if p.last != blank and property_first_char != '_' -%}
+                                  <div class="min-w-0">
+                                    <dt class="font-medium text-gray-700">{{ p.first | escape }}</dt>
+                                    <dd class="mt-0.5 min-w-0 whitespace-pre-wrap break-words [overflow-wrap:anywhere]">{{ p.last | escape | newline_to_br }}</dd>
+                                  </div>
+                                {%- endif -%}
+                              {%- endfor -%}
+                            </dl>
+                          {%- endif -%}
+                        </div>
+
+                        <div class="shrink-0 text-right">
+                          {%- if line_extra_total_cents > 0 -%}
+                            <p class="text-sm font-medium text-gray-900">{{ line_display_price_cents | money }}</p>
+                            <dl class="mt-2 space-y-1 text-xs text-gray-600">
+                              <div class="flex items-center justify-end gap-2">
+                                <dt>Previous price</dt>
+                                <dd class="font-medium text-gray-800">{{ line_base_price_cents | money }}</dd>
+                              </div>
+                              <div class="flex items-center justify-end gap-2">
+                                <dt>Customization</dt>
+                                <dd class="font-medium text-gray-800">{{ line_extra_total_cents | money }}</dd>
+                              </div>
+                              <div class="flex items-center justify-end gap-2 border-t border-gray-200 pt-1 text-gray-900">
+                                <dt class="font-medium">Total</dt>
+                                <dd class="font-semibold">{{ line_display_price_cents | money }}</dd>
+                              </div>
+                            </dl>
+                          {%- else -%}
+                            {%- if item.original_line_price > item.final_line_price -%}
+                              <p class="text-xs text-gray-500"><s>{{ item.original_line_price | money }}</s></p>
+                            {%- endif -%}
+                            <p class="text-sm font-medium text-gray-900">{{ line_display_price_cents | money }}</p>
+                          {%- endif -%}
+                        </div>
+                      </div>
+
+                      <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                          {%- if is_gift_card_line -%}
+                            <span class="text-xs text-gray-600">Qty</span>
+                            <span class="inline-flex h-10 min-w-20 items-center justify-center rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700">
+                              {{ item.quantity }}
+                            </span>
+                            <input type="hidden" name="updates[{{ item.key }}]" value="{{ item.quantity }}">
+                          {%- else -%}
+                            <label class="text-xs text-gray-600" for="Quantity-{{ item.key | handleize }}">Qty</label>
+                            <input
+                              id="Quantity-{{ item.key | handleize }}"
+                              class="h-10 w-20 rounded-xl border border-gray-300 px-3 text-sm focus:border-gray-900 focus:outline-none"
+                              type="number"
+                              name="updates[{{ item.key }}]"
+                              value="{{ item.quantity }}"
+                              min="0"
+                              inputmode="numeric"
+                            >
+                          {%- endif -%}
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                          <a
+                            class="cart-page__action inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 underline underline-offset-4"
+                            href="{{ item.url_to_remove }}"
+                            data-cart-remove
+                            aria-busy="false"
+                            aria-label="Remove {{ item.product.title | escape }} from cart"
+                          >
+                            <span data-cart-action-label>Remove</span>
+                            <span class="cart-page__action-loading" data-cart-action-loading hidden>
+                              <span class="cart-page__btn-spinner cart-page__btn-spinner--sm cart-page__btn-spinner--dark" aria-hidden="true"></span>
+                              <span>Removing…</span>
+                            </span>
+                          </a>
+                        </div>
+                      </div>
+
+                      {%- if item.discounts != blank -%}
+                        <ul class="mt-3 space-y-1 text-xs text-emerald-700">
+                          {%- for discount in item.discounts -%}
+                            <li>{{ discount.title | escape }} (−{{ discount.amount | money }})</li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+
+                      {%- if item.selling_plan_allocation -%}
+                        <p class="mt-3 text-xs text-gray-600">
+                          {{ item.selling_plan_allocation.selling_plan.name | escape }}
+                        </p>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+
+              {%- comment -%} Keep fee lines in the form (hidden) so Update cart preserves them. {%- endcomment -%}
+              {%- for item in cart.items -%}
+                {%- liquid
+                  assign is_fee_line = false
+                  assign item_handle = item.product.handle | default: '' | downcase
+                  if item_handle == 'customization-charge' or item_handle == 'customization-fee'
+                    assign is_fee_line = true
+                  endif
+                  if item.properties != blank
+                    for property in item.properties
+                      if property.first == '_customization_fee' and property.last == '1'
+                        assign is_fee_line = true
+                        break
+                      endif
+                    endfor
+                  endif
+                -%}
+                {%- if is_fee_line -%}
+                  <input type="hidden" name="updates[{{ item.key }}]" value="{{ item.quantity }}">
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 p-5">
+              <button
+                class="cart-page__action inline-flex items-center justify-center rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50"
+                type="submit"
+                name="update"
+                data-cart-update
+                aria-busy="false"
+              >
+                <span data-cart-action-label>Update cart</span>
+                <span class="cart-page__action-loading" data-cart-action-loading hidden>
+                  <span class="cart-page__btn-spinner cart-page__btn-spinner--dark" aria-hidden="true"></span>
+                  <span>Updating…</span>
+                </span>
+              </button>
+
+              {%- if cart.cart_level_discount_applications.size > 0 -%}
+                <div class="text-sm text-emerald-700">
+                  {%- for discount_application in cart.cart_level_discount_applications -%}
+                    <p>{{ discount_application.title | escape }} (−{{ discount_application.total_allocated_amount | money }})</p>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+
+        <aside class="lg:col-span-4">
+          <div class="sticky top-6 rounded-2xl border border-gray-200 bg-white p-5">
+            <h2 class="text-base font-semibold text-gray-900">Order summary</h2>
+
+            <div class="mt-4 space-y-3 text-sm">
+              {%- liquid
+                assign cart_summary_total = cart.total_price
+                assign cart_includes_charge_total = cart_fee_line_total
+                if cart_has_fee_lines == false and cart_additional_charge_total > 0
+                  assign cart_summary_total = cart.total_price | plus: cart_additional_charge_total
+                  assign cart_includes_charge_total = cart_additional_charge_total
+                endif
+              -%}
+              <div class="flex items-center justify-between text-gray-700">
+                <span>Subtotal</span>
+                <span class="font-medium text-gray-900">{{ cart_summary_total | money }}</span>
+              </div>
+              {%- if cart_includes_charge_total > 0 -%}
+                <p class="text-xs text-gray-600">Includes {{ cart_includes_charge_total | money }} in customization charges.</p>
+              {%- endif -%}
+              {%- if cart_has_fee_lines == false and cart_additional_charge_total > 0 -%}
+                <p class="text-xs text-amber-700">Customization charges are shown here but are not in checkout yet. Remove this item and add it again so the fee line is included.</p>
+              {%- endif -%}
+
+              {%- if cart.taxes_included -%}
+                <p class="text-xs text-gray-600">Taxes included. Shipping calculated at checkout.</p>
+              {%- else -%}
+                <p class="text-xs text-gray-600">Taxes and shipping calculated at checkout.</p>
+              {%- endif -%}
+            </div>
+
+            {%- unless cart_has_gift_card -%}
+              <div class="mt-5">
+                <label class="mb-2 block text-xs font-medium text-gray-700" for="CartDiscount">Discount or gift card code</label>
+                <div class="flex gap-2">
+                  <input
+                    id="CartDiscount"
+                    class="min-w-0 flex-1 rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none"
+                    type="text"
+                    value=""
+                    placeholder="e.g. SALE10 or gift card code"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-cart-discount-code
+                  >
+                  <button
+                    class="cart-page__action inline-flex shrink-0 items-center justify-center rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50"
+                    type="button"
+                    data-cart-discount-apply
+                    aria-busy="false"
+                  >
+                    <span data-cart-action-label>Apply</span>
+                    <span class="cart-page__action-loading" data-cart-action-loading hidden>
+                      <span class="cart-page__btn-spinner cart-page__btn-spinner--dark cart-page__btn-spinner--sm" aria-hidden="true"></span>
+                      <span>Applying…</span>
+                    </span>
+                  </button>
+                </div>
+                {%- if cart.cart_level_discount_applications.size > 0 -%}
+                  <ul class="mt-3 space-y-2 rounded-xl border border-emerald-200 bg-emerald-50/60 p-3" data-cart-discount-list>
+                    {%- for discount_application in cart.cart_level_discount_applications -%}
+                      <li class="flex flex-wrap items-center justify-between gap-2 text-xs text-emerald-800" data-cart-discount-applied>
+                        <span>
+                          <span class="font-medium">Discount applied:</span>
+                          {{ discount_application.title | escape }} (−{{ discount_application.total_allocated_amount | money }})
+                        </span>
+                        <button
+                          type="button"
+                          form=""
+                          class="inline-flex shrink-0 items-center justify-center rounded-lg border border-emerald-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-800 hover:bg-gray-50"
+                          data-cart-discount-remove
+                          aria-busy="false"
+                          aria-label="Remove discount {{ discount_application.title | escape }}"
+                        >
+                          <span data-cart-discount-remove-label>Remove discount</span>
+                          <span data-cart-discount-remove-loading hidden>Removing…</span>
+                        </button>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                <p class="mt-1.5 text-xs text-gray-500" data-cart-discount-message>
+                  Discount codes update the cart total here. Gift card codes are applied as payment at checkout.
+                </p>
+              </div>
+            {%- endunless -%}
+
+            <div class="mt-5">
+              <label class="mb-2 block text-xs font-medium text-gray-700" for="CartNote">Order note (optional)</label>
+              <textarea
+                id="CartNote"
+                class="min-h-24 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none"
+                name="note"
+              >{{ cart.note }}</textarea>
+            </div>
+
+            <button
+              class="cart-page__action mt-5 inline-flex w-full items-center justify-center rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white hover:bg-black"
+              type="submit"
+              name="checkout"
+              data-cart-checkout
+              aria-busy="false"
+            >
+              <span data-cart-action-label>Checkout</span>
+              <span class="cart-page__action-loading" data-cart-action-loading hidden>
+                <span class="cart-page__btn-spinner" aria-hidden="true"></span>
+                <span>Checking out…</span>
+              </span>
+            </button>
+
+            {%- if additional_checkout_buttons -%}
+              <div class="mt-3">
+                {{ content_for_additional_checkout_buttons }}
+              </div>
+            {%- endif -%}
+          </div>
+        </aside>
+      </div>
+    {%- endform -%}
+  {%- endif -%}
+</div>
+

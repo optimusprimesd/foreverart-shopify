@@ -1,0 +1,86 @@
+<div class="customer-account-section" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+{%- comment -%}
+  Activate customer account (classic Shopify customer accounts).
+{%- endcomment -%}
+
+<div class="account-page account-page--auth mx-auto w-full min-w-0 max-w-[480px] px-4 py-10" data-header-context="light">
+  <div class="account-page__card">
+    <div class="account-page__card-head account-page__card-head--stack">
+      <p class="account-page__eyebrow">Account</p>
+      <h1 class="account-page__title account-page__title--sm">Activate account</h1>
+      <p class="account-page__subtitle">Create your password to activate your account.</p>
+    </div>
+
+    {%- form 'activate_customer_password', class: 'account-page__form' -%}
+      {%- if form.errors -%}
+        <div class="account-page__errors" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div class="account-page__field">
+        <label for="CustomerPasswordActivate">Password</label>
+        <input
+          id="CustomerPasswordActivate"
+          type="password"
+          name="customer[password]"
+          autocomplete="new-password"
+          required
+        >
+      </div>
+
+      <div class="account-page__field">
+        <label for="CustomerPasswordConfirmation">Confirm password</label>
+        <input
+          id="CustomerPasswordConfirmation"
+          type="password"
+          name="customer[password_confirmation]"
+          autocomplete="new-password"
+          required
+        >
+      </div>
+
+      <button type="submit" class="account-page__primary-btn">Activate account</button>
+    {%- endform -%}
+  </div>
+</div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Activate account",
+  "tag": "section",
+  "class": "section-main-customer-account",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Legacy customer account activation."
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

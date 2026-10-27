@@ -1,0 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "shop_category": {
+      "type": "shop-category",
+      "blocks": {
+        "src_0_quote_collection": {
+          "type": "collection_source",
+          "settings": {
+            "collection": "quote-collection"
+          }
+        },
+        "src_1_wedding_collection": {
+          "type": "collection_source",
+          "settings": {
+            "collection": "wedding-collection"
+          }
+        }
+      },
+      "block_order": [
+        "src_0_quote_collection",
+        "src_1_wedding_collection"
+      ],
+      "settings": {
+        "eyebrow": "Gifts & Moments",
+        "heading": "Anniversaries",
+        "intro": "<p>Celebrate years together with Quote and Wedding Collection pieces.</p>",
+        "include_current_collection": true,
+        "max_products": 48
+      }
+    }
+  },
+  "order": [
+    "shop_category"
+  ]
+}

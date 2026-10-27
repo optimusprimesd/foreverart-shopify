@@ -1,0 +1,293 @@
+{%- comment -%}
+  "The Forever Art Difference" feature banner.
+  @param section {section} optional — uses section.settings + section.blocks when set
+  @param heading {string}
+  @param footer_bold {string}
+  @param footer_text {string}
+  @param show_specs {boolean}
+  @param product {product} optional — used for custom field overrides
+{%- endcomment -%}
+
+{%- liquid
+  assign diff_heading = heading
+  assign diff_footer_bold = footer_bold
+  assign diff_footer_text = footer_text
+  assign diff_blocks = nil
+  assign diff_show_specs = show_specs
+  assign diff_spec_finished_size = ''
+  assign diff_spec_depth = ''
+  assign diff_spec_weight = ''
+
+  assign finished_size_namespace = 'custom'
+  assign finished_size_key = 'finished_size'
+  assign depth_namespace = 'custom'
+  assign depth_key = 'depth'
+  assign weight_namespace = 'custom'
+  assign weight_key = 'weight'
+  assign finished_size_fallback = '101 × 63 cm'
+  assign depth_fallback = '3.5 cm'
+  assign weight_fallback = '3.9 kg'
+
+  assign footer_bold_namespace = 'custom'
+  assign footer_bold_key = 'footer_bold'
+  assign footer_text_namespace = 'custom'
+  assign footer_text_key = 'footer_text'
+
+  if section != blank
+    assign diff_heading = section.settings.heading
+    assign diff_footer_bold = section.settings.footer_bold
+    assign diff_footer_text = section.settings.footer_text
+    assign diff_blocks = section.blocks
+
+    if diff_show_specs == nil
+      assign diff_show_specs = section.settings.show_specs
+    endif
+
+    if section.settings.footer_bold_metafield_namespace != blank
+      assign footer_bold_namespace = section.settings.footer_bold_metafield_namespace | strip
+    endif
+    if section.settings.footer_bold_metafield_key != blank
+      assign footer_bold_key = section.settings.footer_bold_metafield_key | strip
+    endif
+    if section.settings.footer_text_metafield_namespace != blank
+      assign footer_text_namespace = section.settings.footer_text_metafield_namespace | strip
+    endif
+    if section.settings.footer_text_metafield_key != blank
+      assign footer_text_key = section.settings.footer_text_metafield_key | strip
+    endif
+
+    if section.settings.spec_finished_size_metafield_namespace != blank
+      assign finished_size_namespace = section.settings.spec_finished_size_metafield_namespace | strip
+    endif
+    if section.settings.spec_finished_size_metafield_key != blank
+      assign finished_size_key = section.settings.spec_finished_size_metafield_key | strip
+    endif
+    if section.settings.spec_depth_metafield_namespace != blank
+      assign depth_namespace = section.settings.spec_depth_metafield_namespace | strip
+    endif
+    if section.settings.spec_depth_metafield_key != blank
+      assign depth_key = section.settings.spec_depth_metafield_key | strip
+    endif
+    if section.settings.spec_weight_metafield_namespace != blank
+      assign weight_namespace = section.settings.spec_weight_metafield_namespace | strip
+    endif
+    if section.settings.spec_weight_metafield_key != blank
+      assign weight_key = section.settings.spec_weight_metafield_key | strip
+    endif
+    if section.settings.spec_finished_size != blank
+      assign finished_size_fallback = section.settings.spec_finished_size
+    endif
+    if section.settings.spec_depth != blank
+      assign depth_fallback = section.settings.spec_depth
+    endif
+    if section.settings.spec_weight != blank
+      assign weight_fallback = section.settings.spec_weight
+    endif
+  endif
+
+  if diff_show_specs == nil
+    assign diff_show_specs = settings.product_difference_show_specs | default: true
+  endif
+
+  if section == blank
+    if settings.product_difference_footer_bold_metafield_namespace != blank
+      assign footer_bold_namespace = settings.product_difference_footer_bold_metafield_namespace | strip
+    endif
+    if settings.product_difference_footer_bold_metafield_key != blank
+      assign footer_bold_key = settings.product_difference_footer_bold_metafield_key | strip
+    endif
+    if settings.product_difference_footer_text_metafield_namespace != blank
+      assign footer_text_namespace = settings.product_difference_footer_text_metafield_namespace | strip
+    endif
+    if settings.product_difference_footer_text_metafield_key != blank
+      assign footer_text_key = settings.product_difference_footer_text_metafield_key | strip
+    endif
+    if settings.product_difference_spec_finished_size_metafield_namespace != blank
+      assign finished_size_namespace = settings.product_difference_spec_finished_size_metafield_namespace | strip
+    endif
+    if settings.product_difference_spec_finished_size_metafield_key != blank
+      assign finished_size_key = settings.product_difference_spec_finished_size_metafield_key | strip
+    endif
+    if settings.product_difference_spec_depth_metafield_namespace != blank
+      assign depth_namespace = settings.product_difference_spec_depth_metafield_namespace | strip
+    endif
+    if settings.product_difference_spec_depth_metafield_key != blank
+      assign depth_key = settings.product_difference_spec_depth_metafield_key | strip
+    endif
+    if settings.product_difference_spec_weight_metafield_namespace != blank
+      assign weight_namespace = settings.product_difference_spec_weight_metafield_namespace | strip
+    endif
+    if settings.product_difference_spec_weight_metafield_key != blank
+      assign weight_key = settings.product_difference_spec_weight_metafield_key | strip
+    endif
+    if settings.product_difference_spec_finished_size != blank
+      assign finished_size_fallback = settings.product_difference_spec_finished_size
+    endif
+    if settings.product_difference_spec_depth != blank
+      assign depth_fallback = settings.product_difference_spec_depth
+    endif
+    if settings.product_difference_spec_weight != blank
+      assign weight_fallback = settings.product_difference_spec_weight
+    endif
+  endif
+
+  if product != blank
+    if footer_bold_key != blank
+      assign footer_bold_metafield = product.metafields[footer_bold_namespace][footer_bold_key]
+      if footer_bold_metafield != blank
+        if footer_bold_metafield.value != blank
+          assign diff_footer_bold = footer_bold_metafield.value
+        else
+          assign diff_footer_bold = footer_bold_metafield
+        endif
+      endif
+    endif
+
+    if footer_text_key != blank
+      assign footer_text_metafield = product.metafields[footer_text_namespace][footer_text_key]
+      if footer_text_metafield != blank
+        if footer_text_metafield.value != blank
+          assign diff_footer_text = footer_text_metafield.value
+        else
+          assign diff_footer_text = footer_text_metafield
+        endif
+      endif
+    endif
+
+    if finished_size_key != blank
+      assign finished_size_metafield = product.metafields[finished_size_namespace][finished_size_key]
+      if finished_size_metafield != blank
+        if finished_size_metafield.value != blank
+          assign diff_spec_finished_size = finished_size_metafield.value
+        else
+          assign diff_spec_finished_size = finished_size_metafield
+        endif
+      endif
+    endif
+
+    if depth_key != blank
+      assign depth_metafield = product.metafields[depth_namespace][depth_key]
+      if depth_metafield != blank
+        if depth_metafield.value != blank
+          assign diff_spec_depth = depth_metafield.value
+        else
+          assign diff_spec_depth = depth_metafield
+        endif
+      endif
+    endif
+
+    if weight_key != blank
+      assign weight_metafield = product.metafields[weight_namespace][weight_key]
+      if weight_metafield != blank
+        if weight_metafield.value != blank
+          assign diff_spec_weight = weight_metafield.value
+        else
+          assign diff_spec_weight = weight_metafield
+        endif
+      endif
+    endif
+  endif
+
+  if diff_spec_finished_size == blank
+    assign diff_spec_finished_size = finished_size_fallback
+  endif
+  if diff_spec_depth == blank
+    assign diff_spec_depth = depth_fallback
+  endif
+  if diff_spec_weight == blank
+    assign diff_spec_weight = weight_fallback
+  endif
+
+  if diff_heading == blank
+    assign diff_heading = settings.product_difference_heading | default: 'THE FOREVER ART DIFFERENCE'
+  endif
+  if diff_footer_bold == blank
+    assign diff_footer_bold = settings.product_difference_footer_bold | default: 'Made to order:'
+  endif
+  if diff_footer_text == blank
+    assign diff_footer_text = settings.product_difference_footer_text | default: 'Each poster is handmade and ready for dispatch in 5–7 business days.'
+  endif
+
+  assign diff_has_specs = false
+  if diff_spec_finished_size != blank or diff_spec_depth != blank or diff_spec_weight != blank
+    assign diff_has_specs = true
+  endif
+-%}
+
+
+
+<section class="product-difference" aria-labelledby="product-difference-heading">
+  {%- if diff_heading != blank -%}
+    <h2 id="product-difference-heading" class="product-difference__heading">{{ diff_heading | escape }}</h2>
+  {%- endif -%}
+
+  <ul class="product-difference__features" role="list">
+    {%- if diff_blocks != blank and diff_blocks.size > 0 -%}
+      {%- for block in diff_blocks -%}
+        {%- if block.type == 'feature' and block.settings.caption != blank -%}
+          <li class="product-difference__feature" {{ block.shopify_attributes }}>
+            <span class="product-difference__icon-wrap" aria-hidden="true">
+              <i class="product-difference__icon hgi hgi-stroke hgi-rounded {{ block.settings.icon | default: 'hgi-checkmark-circle-02' }}"></i>
+            </span>
+            <p class="product-difference__caption">{{ block.settings.caption | escape }}</p>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..4) -%}
+        {%- capture icon_setting -%}product_difference_feature_{{ i }}_icon{%- endcapture -%}
+        {%- capture caption_setting -%}product_difference_feature_{{ i }}_caption{%- endcapture -%}
+        {%- assign feature_icon = settings[icon_setting] -%}
+        {%- assign feature_caption = settings[caption_setting] -%}
+        {%- if feature_caption != blank -%}
+          <li class="product-difference__feature">
+            <span class="product-difference__icon-wrap" aria-hidden="true">
+              <i class="product-difference__icon hgi hgi-stroke hgi-rounded {{ feature_icon | default: 'hgi-checkmark-circle-02' }}"></i>
+            </span>
+            <p class="product-difference__caption">{{ feature_caption | escape }}</p>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  </ul>
+
+  {%- if diff_footer_bold != blank or diff_footer_text != blank -%}
+    <p class="product-difference__footer">
+      {%- if diff_footer_bold != blank -%}
+        <strong class="product-difference__footer-bold">{{ diff_footer_bold | escape }}</strong>
+      {%- endif -%}
+      {%- if diff_footer_text != blank -%}
+        <span class="product-difference__footer-text">{{ diff_footer_text | escape }}</span>
+      {%- endif -%}
+    </p>
+  {%- endif -%}
+</section>
+
+{%- if diff_show_specs and diff_has_specs -%}
+  <div class="product-specs" aria-label="Product dimensions">
+    <span class="product-specs__icon-wrap" aria-hidden="true">
+      <i class="product-specs__icon hgi hgi-stroke hgi-rounded hgi-ruler"></i>
+    </span>
+
+    {%- if diff_spec_finished_size != blank -%}
+      <div class="product-specs__item">
+        <span class="product-specs__label product-specs__label--size">Finished size</span>
+        <span class="product-specs__value">{{ diff_spec_finished_size | escape }}</span>
+      </div>
+    {%- endif -%}
+
+    {%- if diff_spec_depth != blank -%}
+      <div class="product-specs__item">
+        <span class="product-specs__label">Depth</span>
+        <span class="product-specs__value">{{ diff_spec_depth | escape }}</span>
+      </div>
+    {%- endif -%}
+
+    {%- if diff_spec_weight != blank -%}
+      <div class="product-specs__item">
+        <span class="product-specs__label">Weight</span>
+        <span class="product-specs__value">{{ diff_spec_weight | escape }}</span>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

@@ -1,0 +1,109 @@
+{% layout none %}
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>{{ gift_card.balance | money }} gift card — {{ shop.name }}</title>
+    {{ content_for_header }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Forum&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    {{ 'gift-card.min.css' | asset_url | stylesheet_tag }}
+  </head>
+  <body class="gift-card-page">
+    <main class="gift-card">
+      <header class="gift-card__header">
+        <a class="gift-card__shop" href="{{ shop.url }}">{{ shop.name }}</a>
+        <h1 class="gift-card__title">
+          {%- if gift_card.enabled and gift_card.expired == false -%}
+            Here’s your gift card
+          {%- elsif gift_card.expired -%}
+            This gift card has expired
+          {%- else -%}
+            This gift card is no longer active
+          {%- endif -%}
+        </h1>
+      </header>
+
+      <article class="gift-card__card" aria-label="Gift card">
+        <div class="gift-card__balance-wrap">
+          <p class="gift-card__balance-label">Balance</p>
+          <p class="gift-card__balance" data-gift-card-balance>{{ gift_card.balance | money }}</p>
+          {%- if gift_card.balance != gift_card.initial_value -%}
+            <p class="gift-card__initial">Initial value {{ gift_card.initial_value | money }}</p>
+          {%- endif -%}
+        </div>
+
+        <div class="gift-card__code-wrap">
+          <p class="gift-card__code-label">Gift card code</p>
+          <p class="gift-card__code" id="gift-card-code">{{ gift_card.code | format_code }}</p>
+          <button type="button" class="gift-card__copy" data-gift-card-copy aria-label="Copy gift card code">
+            Copy code
+          </button>
+        </div>
+
+        {%- if gift_card.pass_url -%}
+          <a class="gift-card__apple-wallet" href="{{ gift_card.pass_url }}">
+            <img
+              src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
+              alt="Add to Apple Wallet"
+              width="120"
+              height="40"
+              loading="lazy"
+            >
+          </a>
+        {%- endif -%}
+
+        {%- if gift_card.qr_identifier -%}
+          <div class="gift-card__qr">
+            <img
+              src="{{ gift_card.qr_identifier }}"
+              alt="Gift card QR code"
+              width="120"
+              height="120"
+              loading="lazy"
+            >
+          </div>
+        {%- endif -%}
+
+        {%- if gift_card.expires_on -%}
+          <p class="gift-card__expires">
+            {%- if gift_card.expired -%}
+              Expired on {{ gift_card.expires_on | date: format: 'date' }}
+            {%- else -%}
+              Expires on {{ gift_card.expires_on | date: format: 'date' }}
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+      </article>
+
+      <div class="gift-card__actions">
+        <a class="gift-card__btn gift-card__btn--primary" href="{{ routes.root_url }}">Continue shopping</a>
+        <a class="gift-card__btn" href="{{ shop.url }}">Visit {{ shop.name }}</a>
+      </div>
+
+      <p class="gift-card__print-hint">
+        <button type="button" class="gift-card__print" onclick="window.print();">Print this gift card</button>
+      </p>
+    </main>
+
+    <script>
+      (function () {
+        var btn = document.querySelector("[data-gift-card-copy]");
+        var codeEl = document.getElementById("gift-card-code");
+        if (!btn || !codeEl || !navigator.clipboard) return;
+        btn.addEventListener("click", function () {
+          var code = (codeEl.textContent || "").replace(/\s+/g, "");
+          navigator.clipboard.writeText(code).then(function () {
+            btn.textContent = "Copied";
+            setTimeout(function () {
+              btn.textContent = "Copy code";
+            }, 1600);
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

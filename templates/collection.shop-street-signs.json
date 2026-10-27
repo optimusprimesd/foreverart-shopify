@@ -1,0 +1,51 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "shop_category": {
+      "type": "shop-category",
+      "blocks": {
+        "prod_0_street_sign_australian": {
+          "type": "product",
+          "settings": {
+            "product": "street-sign-australian"
+          }
+        },
+        "prod_1_street_sign_international": {
+          "type": "product",
+          "settings": {
+            "product": "street-sign-international"
+          }
+        },
+        "prod_2_street_sign_european": {
+          "type": "product",
+          "settings": {
+            "product": "street-sign-european"
+          }
+        }
+      },
+      "block_order": [
+        "prod_0_street_sign_australian",
+        "prod_1_street_sign_international",
+        "prod_2_street_sign_european"
+      ],
+      "settings": {
+        "eyebrow": "Places & Property",
+        "heading": "Street Signs",
+        "intro": "<p>Australian, International, and European street sign designs.</p>",
+        "include_current_collection": false,
+        "max_products": 48
+      }
+    }
+  },
+  "order": [
+    "shop_category"
+  ]
+}

@@ -1,0 +1,51 @@
+{%- assign field_key = field_key | default: '' -%}
+{%- assign tooltip_id = tooltip_id | default: '' -%}
+{%- if tooltip_id == blank and field_key != blank -%}
+  {%- assign tooltip_id = 'help-tooltip-' | append: field_key -%}
+{%- endif -%}
+{%- assign tooltip_aria_label = tooltip_aria_label | default: 'More information' -%}
+
+{%- assign field_desc = nil -%}
+{%- if product.description and field_key != blank -%}
+  {%- assign field_desc = product.description[field_key] -%}
+{%- endif -%}
+
+{%- assign show_field_help = false -%}
+{%- assign show_field_voice = false -%}
+{%- if field_desc -%}
+  {%- if field_desc.title != blank or field_desc.description != blank -%}
+    {%- assign show_field_help = true -%}
+  {%- endif -%}
+  {%- if field_desc.voice -%}
+    {%- assign show_field_voice = true -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- assign tooltip_title = field_desc.title | default: tooltip_title | default: '' -%}
+{%- assign tooltip_body = field_desc.description | default: tooltip_body | default: '' -%}
+{%- assign field_voice_audio_id = 'voice-audio-' | append: field_key -%}
+{%- assign field_voice_src = field_desc.voice_src | default: '/assets/wedding-poster.m4a' -%}
+
+{% if show_field_help or show_field_voice %}
+  <div class="flex shrink-0 flex-wrap items-center justify-end gap-2">
+    {% if show_field_help %}
+      {% include 'partials/product-help-tooltip-button',
+        tooltip_id: tooltip_id,
+        tooltip_aria_label: tooltip_aria_label,
+        tooltip_title: tooltip_title,
+        tooltip_body: tooltip_body
+      %}
+    {% endif %}
+    {% if show_field_voice %}
+      {% include 'partials/product-voice-button',
+        voice_audio_id: field_voice_audio_id,
+        voice_aria_label: tooltip_title
+      %}
+    {% endif %}
+  </div>
+  {% include 'partials/product-field-description-audio',
+    field_audio_id: field_voice_audio_id,
+    field_audio_src: field_voice_src,
+    field_audio_label: tooltip_title
+  %}
+{% endif %}

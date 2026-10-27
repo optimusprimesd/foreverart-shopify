@@ -1,0 +1,103 @@
+{
+  "sections": {
+    "about_us": {
+      "type": "about-us",
+      "blocks": {
+        "chapter_origin": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "The origin",
+            "heading": "A story that took time to find",
+            "body": "<p>Forever Art wasn’t the result of a plan to start an art business.</p><p>I’m an electrician by trade. I spent much of my twenties travelling the world with that trade before returning home and joining my father and brother in our family business. For 14 years, I worked across sales, manufacturing, servicing, hire and the distribution of products throughout Australia and New Zealand.</p><p>In 2014, I made the difficult decision to leave.</p><p>I didn’t know exactly what I was looking for. I just knew there were creative parts of me I hadn’t fully explored yet.</p><p>For the next five years, houses became my canvas. I bought, renovated and sold properties, returning to my construction roots while discovering how much I enjoyed taking something familiar and seeing what else it could become.</p><p>Eventually, life changed direction again.</p><p>After having children and my wife, Jaque, returning to work, I unexpectedly became the stay-at-home dad. In the small pockets of time that came with that, I found myself back in the shed making things.</p><p>At first, they were simply experiments.</p><p>Then one of them changed everything.</p>",
+            "tone": "light"
+          }
+        },
+        "chapter_beginning": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "The spark",
+            "heading": "The beginning of an idea",
+            "body": "<p>I wanted to make a vintage-style concert poster for myself — except there was no concert.</p><p>Instead, I created my dream lineup. The artists I would choose, on the same bill, without worrying whether the event had ever happened or ever could.</p><p>The first version was made almost entirely from things I had lying around. An old internal door became the frame. Weed matting became the textured surface. A piece of hessian became the border.</p><p>It was rough and experimental, but the idea stayed with me.</p><p>I had taken something with an understood purpose — a concert poster — and used it differently. Instead of advertising somebody else’s event, it told something about me.</p><p>Not long afterwards, I made my father a Christmas gift following the sale of his home. Inspired by a street sign, the piece recorded the street and the years he had lived there: <strong>CLAYTON ST 1992–2020</strong>.</p><p>Those two pieces were very different, but together they revealed something.</p>",
+            "tone": "light"
+          }
+        },
+        "quote_familiar": {
+          "type": "pullquote",
+          "settings": {
+            "quote": "A familiar format could become personal. A handful of words, dates or numbers could represent decades of memories.",
+            "attribution": "That was the idea that became Forever Art."
+          }
+        },
+        "chapter_finish": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "The craft",
+            "heading": "Finding the Forever Art finish",
+            "body": "<p>The way Forever Art pieces are made evolved alongside the idea itself.</p><p>From the beginning, I knew the poster needed a border that did more than simply finish the edge. The hessian on that first concert poster wasn’t it, so I kept experimenting.</p><p>Eventually, I tried leather.</p><p>After testing different weights and finishes, I found the 3mm vintage leather we still use today. The moment I put it around the artwork, I knew I’d found it. It gave the piece weight, character and permanence unlike anything I’d tried before.</p><p>Even the way it’s attached came through experimentation. I tried different adhesives and fixings before using a nail gun simply as a way of temporarily getting the leather into position. Initially, I wondered whether the exposed fixing was too industrial.</p><p>Instead, it became part of the piece.</p><p>The leather and visible fixings are still defining features of Forever Art today — materials and methods borrowed from somewhere else and given a completely different purpose.</p>",
+            "tone": "light"
+          }
+        },
+        "id_plate": {
+          "type": "id_plate",
+          "settings": {
+            "kicker": "A story within the story",
+            "heading": "The Poster ID Plate",
+            "body": "<p>That thinking also led to one of the smallest details on a Forever Art piece.</p><p>The Poster ID Plate began as a serial number for my original Dream Concert poster. The number I chose was the phone number of my childhood home.</p><p>To almost anyone else, those numbers meant nothing. To me, they immediately connected to a particular place and period of my life. And that was precisely the point.</p><p>What number, word, date or tiny reference could do the same for somebody else?</p><p>The hand-punched metal plate itself came from another part of my story. As an electrician working on industrial sites, I’d encountered old cable markers and identification plates — functional objects carrying the unmistakable evidence of human hands.</p><p>No two characters were ever quite identical. They were functional, practical and perfectly imperfect. Today, that little metal plate gives every customer another opportunity to preserve a story within their story.</p>",
+            "plate_number": "203 2428",
+            "plate_note": "The phone number of a childhood home."
+          }
+        },
+        "collections": {
+          "type": "collections",
+          "settings": {
+            "heading": "One idea. Many stories.",
+            "body": "<p>Once I understood what those first pieces represented, the possibilities became difficult to ignore.</p><p>A wedding came next. Attending one took me back to my own wedding and made me realise how little remained physically from the occasion itself. The welcome sign was filled with information about an incredibly significant day — yet it had effectively been designed to become redundant as soon as that day was over.</p><p>What if it were created from the beginning as something worth keeping?</p><p>Homes. Weddings. Childhood. Music. Vehicles. Words. The subjects are different, but the idea behind them isn’t. Every part of life contains stories worth preserving.</p><p>Today, Forever Art brings those stories together through six collections — each built around moments, people, places and experiences that mean something to the person creating it.</p>",
+            "collection_1": "property",
+            "label_1": "Property",
+            "collection_2": "wedding",
+            "label_2": "Wedding",
+            "collection_3": "kids",
+            "label_3": "Kids",
+            "collection_4": "music",
+            "label_4": "Music",
+            "collection_5": "vehicle",
+            "label_5": "Vehicle",
+            "collection_6": "quote",
+            "label_6": "Quote"
+          }
+        },
+        "questions": {
+          "type": "questions",
+          "settings": {
+            "heading": "Question the way it’s always been done.",
+            "intro": "<p>The longer I’ve built Forever Art, the more I’ve realised that the same thinking behind those early experiments extends far beyond the materials I use.</p><p>Sometimes the best opportunity is simply to question the accepted purpose of something.</p>",
+            "q1": "Why should a settlement gift be another bottle, hamper or branded reminder of the agent who gave it?",
+            "q2": "Why should a wedding welcome sign be created for one day and then discarded?",
+            "q3": "Why should the art on a child’s wall tell somebody else’s story?",
+            "q4": "Why should something meaningful be temporary simply because that’s the way it’s always been done?",
+            "closing": "<p>Forever Art exists to challenge some of that inherited thinking. Not for the sake of being different, but because sometimes doing things differently creates something more meaningful.</p><p>Every Forever Art piece is individually made and finished by me in Australia. The leather is cut and fitted. The frame is made. The ID Plate is punched by hand. The piece is assembled, finished and prepared to leave my hands and become part of somebody else’s home.</p><p>Because if the story is worth preserving, I believe the object preserving it should feel worthy of it.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "chapter_origin",
+        "chapter_beginning",
+        "quote_familiar",
+        "chapter_finish",
+        "id_plate",
+        "collections",
+        "questions"
+      ],
+      "settings": {
+        "hero_eyebrow": "About Forever Art",
+        "hero_heading": "Forever Art wasn’t the plan.",
+        "hero_lede": "There was no moment when I decided to start an art business. The path here has been far less direct — electrician, family business, property renovations, stay-at-home dad, and eventually a collection of experiments in a shed. Somewhere amongst all of that, Forever Art emerged.",
+        "closing_heading": "Own your story.",
+        "closing_body": "<p>Forever Art started with a concert that never happened and a home that held 28 years of someone’s life.</p><p>Today, the stories are yours. They might mark one of life’s biggest moments or something almost nobody else would understand. They might preserve where you’ve been, who was there, what you loved, or simply something you never want to forget.</p><p>There are no rules about which stories matter enough. That’s yours to decide.</p>",
+        "cta_label": "Explore the collections",
+        "cta_url": "/collections"
+      }
+    }
+  },
+  "order": ["about_us"]
+}

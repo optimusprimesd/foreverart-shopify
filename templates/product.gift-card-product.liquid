@@ -1,0 +1,17 @@
+{%- comment -%}
+  Gift card product template — same layout as product.liquid,
+  with a single 16:9 image (no gallery slider or thumbnails).
+
+  Assign in Admin: Products → [gift card] → Theme template → gift-card-product
+{%- endcomment -%}
+
+{%- capture product_shipping_highlights_html -%}
+  {%- section 'product-shipping-highlights' -%}
+{%- endcapture -%}
+
+{% render 'product-page', render_part: 'before_tabs', gallery_mode: 'gift_card' %}
+{% render 'product-page',
+  render_part: 'after_tabs',
+  gallery_mode: 'gift_card',
+  product_shipping_highlights_html: product_shipping_highlights_html
+%}

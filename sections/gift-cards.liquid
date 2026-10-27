@@ -1,0 +1,203 @@
+{%- liquid
+  assign gift_collection = section.settings.gift_cards_collection
+  assign heading = section.settings.heading | default: page.title | default: 'Gift Cards'
+  assign intro = section.settings.intro | default: page.content
+  assign list_by_amount = true
+  if section.settings.list_by_amount == false
+    assign list_by_amount = false
+  endif
+  assign display_count = 0
+-%}
+
+<div class="gift-cards-page collection-page" data-page-intro>
+  <section class="collection-hero gift-cards-page__hero" aria-label="{{ heading | escape }}">
+    <div class="collection-hero__media" data-page-intro-media>
+      {%- if section.settings.hero_image != blank -%}
+        {{
+          section.settings.hero_image
+          | image_url: width: 2000
+          | image_tag:
+            loading: 'eager',
+            class: 'collection-hero__image',
+            sizes: '100vw',
+            widths: '800, 1200, 1600, 2000',
+            alt: section.settings.hero_image.alt | default: heading | escape
+        }}
+      {%- elsif gift_collection != blank and gift_collection.image -%}
+        {{
+          gift_collection.image
+          | image_url: width: 2000
+          | image_tag:
+            loading: 'eager',
+            class: 'collection-hero__image',
+            sizes: '100vw',
+            widths: '800, 1200, 1600, 2000',
+            alt: gift_collection.image.alt | default: heading | escape
+        }}
+      {%- else -%}
+        <div class="collection-hero__image collection-hero__image--placeholder gift-cards-page__hero-fallback"></div>
+      {%- endif -%}
+    </div>
+
+    <div class="collection-hero__overlay" aria-hidden="true" data-page-intro-overlay></div>
+
+    <div class="collection-hero__content">
+      <p class="gift-cards-page__eyebrow" data-page-intro-subtitle>Forever Art</p>
+      <h1 class="collection-hero__title" data-page-intro-title>{{ heading | escape }}</h1>
+      {%- if intro != blank -%}
+        <div class="collection-hero__description gift-cards-page__intro" data-page-intro-subtitle>
+          {{ intro }}
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  <div class="collection-page__container gift-cards-page__container">
+    {%- if gift_collection != blank -%}
+      {%- paginate gift_collection.products by 48 -%}
+        {%- if gift_collection.products.size > 0 -%}
+          {%- comment -%}Count available denominations for the header{%- endcomment -%}
+          {%- for product in gift_collection.products -%}
+            {%- if list_by_amount -%}
+              {%- for variant in product.variants -%}
+                {%- if variant.available -%}
+                  {%- assign display_count = display_count | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- else -%}
+              {%- assign display_count = display_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          <header class="collection-page__header" data-page-intro-panel>
+            <p class="collection-page__count">
+              {{ display_count }}
+              gift card{% if display_count != 1 %}s{% endif %}
+              {%- if list_by_amount %} available{% endif %}
+            </p>
+          </header>
+
+          <ul class="collection-grid gift-cards-page__grid" role="list">
+            {%- for product in gift_collection.products -%}
+              {% render 'gift-card-product-card', product: product, list_variants: list_by_amount %}
+            {%- endfor -%}
+          </ul>
+
+          {%- if paginate.pages > 1 -%}
+            <nav class="collection-pagination" aria-label="Pagination">
+              {%- if paginate.previous -%}
+                <a class="collection-pagination__link" href="{{ paginate.previous.url }}">Previous</a>
+              {%- endif -%}
+              <span class="collection-pagination__status">
+                Page {{ paginate.current_page }} of {{ paginate.pages }}
+              </span>
+              {%- if paginate.next -%}
+                <a class="collection-pagination__link" href="{{ paginate.next.url }}">Next</a>
+              {%- endif -%}
+            </nav>
+          {%- endif -%}
+        {%- else -%}
+          <div class="collection-empty">
+            <p>No gift cards in this collection yet.</p>
+            <a class="collection-empty__link" href="{{ routes.all_products_collection_url }}">Browse all products</a>
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      {%- comment -%}Fallback: scan catalog for gift card products{%- endcomment -%}
+      {%- assign auto_count = 0 -%}
+      {%- paginate collections.all.products by 250 -%}
+        {%- for product in collections.all.products -%}
+          {%- if product.gift_card? -%}
+            {%- if list_by_amount -%}
+              {%- for variant in product.variants -%}
+                {%- if variant.available -%}
+                  {%- assign auto_count = auto_count | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- else -%}
+              {%- assign auto_count = auto_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        <header class="collection-page__header" data-page-intro-panel>
+          <p class="collection-page__count">
+            {%- if auto_count > 0 -%}
+              {{ auto_count }} gift card{% if auto_count != 1 %}s{% endif %} available
+            {%- else -%}
+              Choose a gift card amount
+            {%- endif -%}
+          </p>
+        </header>
+
+        <ul class="collection-grid gift-cards-page__grid" role="list">
+          {%- for product in collections.all.products -%}
+            {%- if product.gift_card? -%}
+              {% render 'gift-card-product-card', product: product, list_variants: list_by_amount %}
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endpaginate -%}
+
+      {%- if auto_count == 0 -%}
+        <div class="collection-empty">
+          <p>No gift card products found.</p>
+          <p class="gift-cards-page__empty-hint">
+            In Shopify Admin, go to <strong>Products → Add product</strong> and create a
+            <strong>Gift card</strong> product (with amounts as variants).
+            Issued gift cards under <strong>Products → Gift cards</strong> are customer balances and do not appear in the storefront catalog.
+          </p>
+          <a class="collection-empty__link" href="{{ routes.root_url }}">Back to home</a>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Gift Cards",
+  "tag": "section",
+  "class": "gift-cards-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Gift Cards",
+      "info": "Leave blank to use the page title."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "default": "<p>Give the gift of a Forever Art story. Choose an amount and send it instantly.</p>",
+      "info": "Leave blank to use the page content."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "collection",
+      "id": "gift_cards_collection",
+      "label": "Gift cards collection",
+      "info": "Use a collection of Gift Card products (Products → Add product → Gift card). Issued cards under Products → Gift cards are not listed here."
+    },
+    {
+      "type": "checkbox",
+      "id": "list_by_amount",
+      "label": "Show each amount as its own card",
+      "default": true,
+      "info": "If your gift card product has variants ($25, $50, $100), each amount appears as a separate card."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gift Cards"
+    }
+  ]
+}
+{% endschema %}

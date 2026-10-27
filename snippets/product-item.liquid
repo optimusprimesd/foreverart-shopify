@@ -1,0 +1,39 @@
+{%- assign _default_product_item_image = '1.jpg' | asset_url -%}
+{%- assign product_item_image = product_item_image | default: _default_product_item_image -%}
+{%- assign product_item_title = product_item_title | default: 'Wedding - Welcome Sign - Taylor' -%}
+{%- assign product_item_price_amount = product_item_price_amount | default: '$595.00' -%}
+{%- assign product_item_price_suffix = product_item_price_suffix | default: '' -%}
+{%- assign product_item_href = product_item_href | default: '/product/wedding-welcome-sign-taylor' -%}
+{%- assign product_item_alt = product_item_alt | default: '' -%}
+
+<article
+  class="product-card product-item"
+  data-product-card
+  data-product-name="{{ product_item_title | escape }}"
+  data-product-price="{{ product_item_price_amount | escape }}"
+>
+  <a href="{{ product_item_href }}" class="product-card__media-link">
+    <div class="product-card__media">
+      <img
+        src="{{ product_item_image }}"
+        alt="{{ product_item_alt | default: product_item_title | escape }}"
+        class="product-card__img"
+        width="600"
+        height="720"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </a>
+  <div class="product-card__body">
+    <h3 class="product-card__title">
+      <a href="{{ product_item_href }}">{{ product_item_title | upcase }}</a>
+    </h3>
+    <p class="product-card__price">
+      <strong>{{ product_item_price_amount }}</strong>
+      {% if product_item_price_suffix != blank %} {{ product_item_price_suffix }}{% endif %}
+    </p>
+  
+  </div>
+</article>
+

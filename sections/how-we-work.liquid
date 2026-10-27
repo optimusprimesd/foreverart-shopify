@@ -1,0 +1,243 @@
+{%- liquid
+  assign hero_eyebrow = section.settings.hero_eyebrow | default: 'How we work'
+  assign hero_heading = section.settings.hero_heading | default: 'We’ve worked hard to make ordering Forever Art easy.'
+  assign hero_lede = section.settings.hero_lede | default: 'Every design has been carefully considered before you reach it. Simply choose your design, provide your details and leave the rest to us.'
+  assign closing_heading = section.settings.closing_heading | default: 'Leave the rest to us.'
+  assign closing_body = section.settings.closing_body
+-%}
+
+<div class="about-us how-we-work" data-header-context="dark" data-page-intro>
+  <header class="about-us__hero">
+    <div class="about-us__hero-inner">
+      {%- if hero_eyebrow != blank -%}
+        <p class="about-us__eyebrow" data-page-intro-subtitle>{{ hero_eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if hero_heading != blank -%}
+        <h1 class="about-us__hero-heading" data-page-intro-title>{{ hero_heading | escape }}</h1>
+      {%- endif -%}
+      {%- if hero_lede != blank -%}
+        <p class="about-us__hero-lede" data-page-intro-panel>{{ hero_lede | escape }}</p>
+      {%- endif -%}
+    </div>
+  </header>
+
+  <div class="about-us__body">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'chapter' -%}
+          <section
+            class="about-us__chapter{% if block.settings.tone == 'dark' %} about-us__chapter--dark{% endif %}"
+            data-page-intro-item
+            {{ block.shopify_attributes }}
+          >
+            <div class="about-us__chapter-inner">
+              {%- if block.settings.kicker != blank -%}
+                <p class="about-us__kicker">{{ block.settings.kicker | escape }}</p>
+              {%- endif -%}
+              {%- if block.settings.heading != blank -%}
+                <h2 class="about-us__heading">{{ block.settings.heading | escape }}</h2>
+              {%- endif -%}
+              {%- if block.settings.body != blank -%}
+                <div class="about-us__prose">
+                  {{ block.settings.body }}
+                </div>
+              {%- endif -%}
+            </div>
+          </section>
+
+        {%- when 'pullquote' -%}
+          <figure class="about-us__pullquote" data-page-intro-item {{ block.shopify_attributes }}>
+            <blockquote class="about-us__quote">
+              <p>{{ block.settings.quote | escape }}</p>
+            </blockquote>
+            {%- if block.settings.attribution != blank -%}
+              <figcaption class="about-us__quote-attr">{{ block.settings.attribution | escape }}</figcaption>
+            {%- endif -%}
+          </figure>
+
+        {%- when 'callout' -%}
+          <section class="about-us__plate" data-page-intro-item {{ block.shopify_attributes }}>
+            <div class="about-us__plate-inner">
+              <div class="about-us__plate-copy">
+                {%- if block.settings.kicker != blank -%}
+                  <p class="about-us__kicker">{{ block.settings.kicker | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="about-us__heading">{{ block.settings.heading | escape }}</h2>
+                {%- endif -%}
+                {%- if block.settings.body != blank -%}
+                  <div class="about-us__prose">
+                    {{ block.settings.body }}
+                  </div>
+                {%- endif -%}
+              </div>
+              <div class="about-us__plate-card" aria-hidden="true">
+                <p class="about-us__plate-label">{{ block.settings.card_label | default: 'Exception' | escape }}</p>
+                <p class="about-us__plate-number">{{ block.settings.card_title | default: 'Wedding' | escape }}</p>
+                <p class="about-us__plate-note">{{ block.settings.card_note | default: 'Proofing included before production.' | escape }}</p>
+              </div>
+            </div>
+          </section>
+
+        {%- when 'steps' -%}
+          <section class="about-us__questions" data-page-intro-item {{ block.shopify_attributes }}>
+            <div class="about-us__chapter-inner">
+              {%- if block.settings.heading != blank -%}
+                <h2 class="about-us__heading">{{ block.settings.heading | escape }}</h2>
+              {%- endif -%}
+              {%- if block.settings.intro != blank -%}
+                <div class="about-us__prose about-us__prose--lead">
+                  {{ block.settings.intro }}
+                </div>
+              {%- endif -%}
+              <ul class="about-us__question-list" role="list">
+                {%- if block.settings.s1 != blank -%}<li>{{ block.settings.s1 | escape }}</li>{%- endif -%}
+                {%- if block.settings.s2 != blank -%}<li>{{ block.settings.s2 | escape }}</li>{%- endif -%}
+                {%- if block.settings.s3 != blank -%}<li>{{ block.settings.s3 | escape }}</li>{%- endif -%}
+                {%- if block.settings.s4 != blank -%}<li>{{ block.settings.s4 | escape }}</li>{%- endif -%}
+              </ul>
+              {%- if block.settings.closing != blank -%}
+                <div class="about-us__prose">
+                  {{ block.settings.closing }}
+                </div>
+              {%- endif -%}
+            </div>
+          </section>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+
+  <section class="about-us__closing" data-page-intro-item>
+    <div class="about-us__closing-inner">
+      {%- if closing_heading != blank -%}
+        <h2 class="about-us__closing-heading">{{ closing_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if closing_body != blank -%}
+        <div class="about-us__prose about-us__prose--on-dark">
+          {{ closing_body }}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+        <a class="about-us__cta" href="{{ section.settings.cta_url }}">
+          {{ section.settings.cta_label | escape }}
+          <span aria-hidden="true">→</span>
+        </a>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "How we work",
+  "tag": "section",
+  "class": "how-we-work-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Hero eyebrow",
+      "default": "How we work"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero heading",
+      "default": "We’ve worked hard to make ordering Forever Art easy."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_lede",
+      "label": "Hero lede",
+      "default": "Every design has been carefully considered before you reach it. Simply choose your design, provide your details and leave the rest to us."
+    },
+    {
+      "type": "text",
+      "id": "closing_heading",
+      "label": "Closing heading",
+      "default": "Leave the rest to us."
+    },
+    {
+      "type": "richtext",
+      "id": "closing_body",
+      "label": "Closing body",
+      "default": "<p>Our job is to make sure the finished piece you receive matches — or exceeds — the expectations we created when you ordered it.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "Start your piece"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Chapter",
+      "settings": [
+        { "type": "text", "id": "kicker", "label": "Kicker" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Ordering made simple" },
+        { "type": "richtext", "id": "body", "label": "Body" },
+        {
+          "type": "select",
+          "id": "tone",
+          "label": "Tone",
+          "options": [
+            { "value": "light", "label": "Light" },
+            { "value": "dark", "label": "Dark" }
+          ],
+          "default": "light"
+        }
+      ]
+    },
+    {
+      "type": "pullquote",
+      "name": "Pull quote",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "Simply choose your design, provide your details and leave the rest to us."
+        },
+        { "type": "text", "id": "attribution", "label": "Attribution" }
+      ]
+    },
+    {
+      "type": "callout",
+      "name": "Callout",
+      "settings": [
+        { "type": "text", "id": "kicker", "label": "Kicker", "default": "Please note" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Wedding posters are the exception." },
+        { "type": "richtext", "id": "body", "label": "Body" },
+        { "type": "text", "id": "card_label", "label": "Card label", "default": "Exception" },
+        { "type": "text", "id": "card_title", "label": "Card title", "default": "Wedding" },
+        { "type": "text", "id": "card_note", "label": "Card note", "default": "Proofing included before production." }
+      ]
+    },
+    {
+      "type": "steps",
+      "name": "Steps",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "What happens when you order" },
+        { "type": "richtext", "id": "intro", "label": "Intro" },
+        { "type": "textarea", "id": "s1", "label": "Step 1" },
+        { "type": "textarea", "id": "s2", "label": "Step 2" },
+        { "type": "textarea", "id": "s3", "label": "Step 3" },
+        { "type": "textarea", "id": "s4", "label": "Step 4" },
+        { "type": "richtext", "id": "closing", "label": "Closing" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "How we work"
+    }
+  ]
+}
+{% endschema %}

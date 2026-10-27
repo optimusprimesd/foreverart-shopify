@@ -1,0 +1,56 @@
+{%- comment -%}
+  Trailing field actions: help tooltip, audio, and/or video.
+  Pass show_help, show_voice, show_video explicitly (boolean).
+{%- endcomment -%}
+{%- assign show_help = show_help | default: false -%}
+{%- assign show_voice = show_voice | default: false -%}
+{%- assign show_video = show_video | default: false -%}
+{%- assign tooltip_id = tooltip_id | default: '' -%}
+{%- assign tooltip_aria_label = tooltip_aria_label | default: 'More information' -%}
+{%- assign tooltip_title = tooltip_title | default: '' -%}
+{%- assign tooltip_body = tooltip_body | default: '' -%}
+{%- assign voice_audio_id = voice_audio_id | default: '' -%}
+{%- assign voice_aria_label = voice_aria_label | default: tooltip_title -%}
+{%- assign video_slide_index = video_url | default: '' -%}
+{%- assign video_aria_label = video_aria_label | default: tooltip_title -%}
+{%- assign trailing_icon = trailing_icon | default: '' -%}
+
+{% if trailing_icon != blank or show_help or show_voice or show_video %}
+  <div class="wizard__input-trailing">
+    {% if trailing_icon == 'calendar' %}
+      <span class="wizard__event-date-icon" aria-hidden="true">
+        <i class="hgi hgi-stroke hgi-rounded hgi-calendar-01 text-[1.25rem] leading-none"></i>
+      </span>
+    {% endif %}
+    {% if show_help %}
+      <div class="product-page__help-tooltip">
+        <button
+          type="button"
+          class="wizard__input-info-btn product-page__help-tooltip-trigger focus:outline-none focus-visible:ring-2 focus-visible:ring-[#141414] focus-visible:ring-offset-2"
+          aria-expanded="false"
+          {% if tooltip_id != blank %}aria-controls="{{ tooltip_id }}"{% endif %}
+          aria-label="{{ tooltip_aria_label }}"
+        >
+          <i class="hgi hgi-stroke hgi-rounded hgi-help-circle leading-none" aria-hidden="true"></i>
+        </button>
+        {% render 'product-help-tooltip-panel',
+          tooltip_id: tooltip_id,
+          tooltip_title: tooltip_title,
+          tooltip_body: tooltip_body
+        %}
+      </div>
+    {% endif %}
+    {% if show_voice %}
+      {% render 'product-voice-button',
+        voice_audio_id: voice_audio_id,
+        voice_aria_label: voice_aria_label
+      %}
+    {% endif %}
+    {% if show_video %}
+      {% render 'product-video-button',
+        video_slide_index: video_slide_index,
+        video_aria_label: video_aria_label
+      %}
+    {% endif %}
+  </div>
+{% endif %}

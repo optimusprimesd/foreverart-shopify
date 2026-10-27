@@ -1,0 +1,178 @@
+{%- if section.blocks.size > 0 -%}
+  <div
+    id="product-page-intro-tabs"
+    data-product-page-intro-tabs
+    class="product-page__grid-bottom min-w-0 w-full flex-1 lg:mt-0"
+  >
+    {% render 'product-tabs',
+      blocks: section.blocks,
+      section_id: section.id,
+      tablist_label: section.settings.tablist_label
+    %}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product tabs",
+  "tag": "div",
+  "class": "product-tabs-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tablist_label",
+      "label": "Tab list accessibility label",
+      "default": "Product information"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab label",
+          "default": "Tab",
+          "info": "Fallback label when product custom field label is empty."
+        },
+        {
+          "type": "select",
+          "id": "title_source",
+          "label": "Tab label source",
+          "options": [
+            {
+              "value": "theme",
+              "label": "Theme editor"
+            },
+            {
+              "value": "metafield",
+              "label": "Product custom field"
+            }
+          ],
+          "default": "theme"
+        },
+        {
+          "type": "text",
+          "id": "title_metafield_namespace",
+          "label": "Label custom field namespace",
+          "default": "custom",
+          "info": "Usually custom. Used when tab label source is Product custom field."
+        },
+        {
+          "type": "text",
+          "id": "title_metafield_key",
+          "label": "Label custom field key",
+          "info": "Single-line text metafield per product, e.g. materials_label. If blank, uses {content key}_label."
+        },
+        {
+          "type": "select",
+          "id": "content_source",
+          "label": "Content source",
+          "options": [
+            {
+              "value": "theme",
+              "label": "Theme editor"
+            },
+            {
+              "value": "description",
+              "label": "Product description"
+            },
+            {
+              "value": "metafield",
+              "label": "Product custom field"
+            }
+          ],
+          "default": "theme"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Tab content",
+          "info": "Used when content source is Theme editor."
+        },
+        {
+          "type": "text",
+          "id": "metafield_namespace",
+          "label": "Custom field namespace",
+          "default": "custom",
+          "info": "Usually custom. Used when content source is Product custom field."
+        },
+        {
+          "type": "text",
+          "id": "metafield_key",
+          "label": "Custom field key",
+          "info": "The metafield key from Shopify admin, e.g. materials or assembly_and_mounting."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product tabs",
+      "blocks": [
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Description",
+            "title_source": "metafield",
+            "title_metafield_key": "description_label",
+            "content_source": "description"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Craftmanship",
+            "title_source": "theme",
+            "content_source": "metafield",
+            "metafield_namespace": "custom",
+            "metafield_key": "craftmanship"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Care & Mounting",
+            "title_source": "theme",
+            "content_source": "metafield",
+            "metafield_namespace": "custom",
+            "metafield_key": "materials"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Assembly and Mounting",
+            "title_source": "metafield",
+            "title_metafield_key": "assembly_and_mounting_label",
+            "content_source": "metafield",
+            "metafield_key": "assembly_and_mounting"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Just so You Know",
+            "title_source": "metafield",
+            "title_metafield_key": "just_so_you_know_label",
+            "content_source": "metafield",
+            "metafield_key": "just_so_you_know"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "title": "Ordering & Shipping",
+            "title_source": "theme",
+            "content_source": "metafield",
+            "metafield_namespace": "custom",
+            "metafield_key": "ordering_shipping"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

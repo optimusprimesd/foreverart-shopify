@@ -1,0 +1,14 @@
+{%- assign voice_audio_id = voice_audio_id | default: '' -%}
+{%- assign voice_aria_label = voice_aria_label | default: 'Play audio' -%}
+
+<button
+  type="button"
+  class="product-page__voice-toggle wizard__input-info-btn inline-flex items-center justify-center rounded-full p-2"
+  style="background-color: #e3f2fd;"
+  aria-label="{{ voice_aria_label }}"
+  data-voice-toggle
+  {% if voice_audio_id != blank %}data-voice-for="{{ voice_audio_id }}"{% endif %}
+>
+  <i class="hgi hgi-stroke hgi-rounded hgi-play-circle-02 voice-icon-play text-[1.25rem] leading-none text-[#141414]" aria-hidden="true"></i>
+  <i class="hgi hgi-stroke hgi-rounded hgi-pause voice-icon-pause text-[1.25rem] leading-none text-[#141414]" aria-hidden="true" style="display:none"></i>
+</button>

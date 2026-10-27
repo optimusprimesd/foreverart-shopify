@@ -1,0 +1,15 @@
+{%- assign field_audio_id = field_audio_id | default: '' -%}
+{%- assign _default_field_audio_src = 'wedding-poster.m4a' | asset_url -%}
+{%- assign field_audio_src = field_audio_src | default: _default_field_audio_src -%}
+{%- assign field_audio_label = field_audio_label | default: 'Field audio' -%}
+
+{% if field_audio_id != blank %}
+  <audio
+    id="{{ field_audio_id }}"
+    class="product-page__field-voice-audio sr-only"
+    preload="metadata"
+    src="{{ field_audio_src }}"
+    aria-label="{{ field_audio_label }}"
+  ></audio>
+{% endif %}
+

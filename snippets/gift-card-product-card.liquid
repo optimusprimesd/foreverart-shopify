@@ -1,0 +1,105 @@
+{%- comment -%}
+  Renders one card per gift-card denomination (variant).
+  If list_variants is false, renders a single product card.
+{%- endcomment -%}
+{%- assign product = product | default: nil -%}
+{%- assign list_variants = list_variants | default: true -%}
+
+{%- if product != nil -%}
+  {%- if list_variants -%}
+    {%- for variant in product.variants -%}
+      {%- if variant.available -%}
+      {%- assign variant_url = product.url | append: '?variant=' | append: variant.id -%}
+      {%- assign amount_label = variant.title -%}
+      {%- if amount_label == 'Default Title' or amount_label == blank -%}
+        {%- assign amount_label = variant.price | money -%}
+      {%- endif -%}
+      <li
+        class="collection-grid__item gift-cards-page__item"
+        data-page-intro-item
+        data-product-item
+        data-product-title="{{ product.title | escape }} {{ amount_label | escape }}"
+        data-product-price="{{ variant.price }}"
+      >
+        <article class="product-card gift-card-card">
+          <a class="product-card__media gift-card-card__media" href="{{ variant_url }}">
+            {%- if variant.featured_media -%}
+              {{
+                variant.featured_media
+                | image_url: width: 1400
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'product-card__image',
+                  sizes: '(min-width: 1100px) 33vw, (min-width: 740px) 50vw, 100vw',
+                  widths: '400, 600, 800, 1000, 1200, 1400',
+                  alt: product.title | escape
+              }}
+            {%- elsif product.featured_media -%}
+              {{
+                product.featured_media
+                | image_url: width: 1400
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'product-card__image',
+                  sizes: '(min-width: 1100px) 33vw, (min-width: 740px) 50vw, 100vw',
+                  widths: '400, 600, 800, 1000, 1200, 1400',
+                  alt: product.title | escape
+              }}
+            {%- else -%}
+              <div class="gift-card-card__placeholder" aria-hidden="true">
+                <span class="gift-card-card__placeholder-mark">{{ variant.price | money }}</span>
+              </div>
+            {%- endif -%}
+            <span class="gift-card-card__badge">Gift Card</span>
+          </a>
+
+          <div class="product-card__meta">
+            <h2 class="product-card__title">
+              <a href="{{ variant_url }}">{{ product.title | escape }}</a>
+            </h2>
+            <a class="gift-card-card__cta product-page__btn product-page__btn--primary" href="{{ variant_url }}">Buy</a>
+          </div>
+        </article>
+      </li>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- assign card_variant = product.selected_or_first_available_variant -%}
+    <li
+      class="collection-grid__item gift-cards-page__item"
+      data-page-intro-item
+      data-product-item
+      data-product-title="{{ product.title | escape }}"
+      data-product-price="{{ card_variant.price }}"
+    >
+      <article class="product-card gift-card-card">
+        <a class="product-card__media gift-card-card__media" href="{{ product.url }}">
+          {%- if product.featured_media -%}
+            {{
+              product.featured_media
+              | image_url: width: 1400
+              | image_tag:
+                loading: 'lazy',
+                class: 'product-card__image',
+                sizes: '(min-width: 1100px) 33vw, (min-width: 740px) 50vw, 100vw',
+                widths: '400, 600, 800, 1000, 1200, 1400',
+                alt: product.title | escape
+            }}
+          {%- else -%}
+            <div class="gift-card-card__placeholder" aria-hidden="true">
+              <span class="gift-card-card__placeholder-mark">FA</span>
+            </div>
+          {%- endif -%}
+          {% comment %} <span class="gift-card-card__badge">Gift Card</span> {% endcomment %}
+        </a>
+
+        <div class="product-card__meta">
+          <h2 class="product-card__title">
+            <a href="{{ product.url }}">{{ product.title | escape }}</a>
+          </h2>
+          <a class="gift-card-card__cta product-page__btn product-page__btn--primary" href="{{ product.url }}">Buy</a>
+        </div>
+      </article>
+    </li>
+  {%- endif -%}
+{%- endif -%}

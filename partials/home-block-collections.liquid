@@ -1,0 +1,75 @@
+<section class="home-collections relative z-10 bg-white px-4 py-16 text-center md:px-6 md:py-20 lg:py-24" data-header-context="light" aria-labelledby="home-collections-heading">
+  <div class="mx-auto max-w-4xl">
+    <h2 id="home-collections-heading" class="home-collections__title mb-10 text-4xl md:mb-12 md:text-5xl lg:text-6xl">
+      Collections
+    </h2>
+
+    <div
+      class="home-collections__filters mb-10 flex flex-wrap items-center justify-center gap-3 md:mb-12 md:gap-4"
+      role="tablist"
+      aria-label="Collection categories"
+    >
+      <button
+        type="button"
+        class="home-collections__pill home-collections__pill--active"
+        role="tab"
+        aria-selected="true"
+        aria-controls="home-collections-panel"
+        id="home-collections-tab-wedding"
+      >
+        Wedding Collection
+      </button>
+      <button
+        type="button"
+        class="home-collections__pill"
+        role="tab"
+        aria-selected="false"
+        tabindex="-1"
+      >
+        Anniversary Collections
+      </button>
+      <button
+        type="button"
+        class="home-collections__pill"
+        role="tab"
+        aria-selected="false"
+        tabindex="-1"
+      >
+        Property Collection
+      </button>
+      <button type="button" class="home-collections__pill" role="tab" aria-selected="false" tabindex="-1">
+        More…
+      </button>
+    </div>
+
+    <div
+      id="home-collections-panel"
+      role="tabpanel"
+      aria-labelledby="home-collections-tab-wedding"
+      class="home-collections__description mx-auto max-w-2xl text-pretty"
+    >
+      <p>
+       
+        
+      </p>
+    </div>
+  </div>
+  <section class="my-10 mx-auto max-w-screen">
+    <div class="flex gap-4 justify-center justify-between">
+      <div>
+        <img src="/assets/c-1.png" alt="Collection 1" width="800" height="800" />
+      </div>
+      <div class="flex flex-wrap gap-4">
+        {% render 'partials/product-item',  product_item_image:'/assets/p1.png', product_item_title:'Samantha', product_item_price_amount:'$595.00', product_item_href:'/product' %}
+        
+        {% render 'partials/product-item',  product_item_image:'/assets/p2.png', product_item_title:'Ava', product_item_price_amount:'$450.00', product_item_href:'/product' %}
+
+        {% render 'partials/product-item', product_item_image:'/assets/p3.png', product_item_title:'Sophia', product_item_price_amount:'$650.00', product_item_href:'/product' %}
+      </div>
+    </div>
+  </section>
+
+</section>
+
+
+

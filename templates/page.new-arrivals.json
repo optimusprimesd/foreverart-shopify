@@ -1,0 +1,91 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "new_arrivals": {
+      "type": "new-arrivals",
+      "blocks": {
+        "product_wedding_novel_cover": {
+          "type": "product",
+          "settings": {
+            "product": "welcome-sign-novel-cover"
+          }
+        },
+        "product_wedding_movie": {
+          "type": "product",
+          "settings": {
+            "product": "welcome-sign-movie"
+          }
+        },
+        "product_property_post_card": {
+          "type": "product",
+          "settings": {
+            "product": "property-postcard"
+          }
+        },
+        "product_property_coordinates": {
+          "type": "product",
+          "settings": {
+            "product": "property-coordinates"
+          }
+        },
+        "product_kids_birth_story": {
+          "type": "product",
+          "settings": {
+            "product": "birth-story"
+          }
+        },
+        "product_kids_birth_record": {
+          "type": "product",
+          "settings": {
+            "product": "birth-record"
+          }
+        },
+        "product_music_coastal": {
+          "type": "product",
+          "settings": {
+            "product": "music-coastal"
+          }
+        },
+        "product_music_sonic": {
+          "type": "product",
+          "settings": {
+            "product": "music-sonic"
+          }
+        },
+        "product_vehicle_certificate": {
+          "type": "product",
+          "settings": {
+            "product": "vehicle-certificate-of-ownership"
+          }
+        }
+      },
+      "block_order": [
+        "product_wedding_novel_cover",
+        "product_wedding_movie",
+        "product_property_post_card",
+        "product_property_coordinates",
+        "product_kids_birth_story",
+        "product_kids_birth_record",
+        "product_music_coastal",
+        "product_music_sonic",
+        "product_vehicle_certificate"
+      ],
+      "settings": {
+        "heading": "New Arrivals",
+        "intro": "<p>Discover the latest Forever Art pieces — newly released designs across Wedding, Property, Kids, Music, and Vehicle.</p>",
+        "hero_image": "shopify://shop_images/CUSTOMLIFESTYLE.png"
+      }
+    }
+  },
+  "order": [
+    "new_arrivals"
+  ]
+}

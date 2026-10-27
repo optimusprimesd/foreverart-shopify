@@ -1,0 +1,37 @@
+{%- comment -%}
+  Card for You may also like grid (matches collection product cards).
+  @param related_product {product}
+  @param card_variant {variant}
+{%- endcomment -%}
+
+<article class="product-card">
+  <a class="product-card__media" href="{{ related_product.url }}">
+    {%- if related_product.featured_media -%}
+      {{
+        related_product.featured_media
+        | image_url: width: 900
+        | image_tag:
+          loading: 'lazy',
+          class: 'product-card__image',
+          sizes: '(min-width: 990px) 25vw, (min-width: 740px) 33vw, 50vw',
+          widths: '240, 360, 480, 600, 720, 900',
+          alt: related_product.title | escape
+      }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product-card__image' }}
+    {%- endif -%}
+  </a>
+
+  <div class="product-card__meta">
+    <h3 class="product-card__title">
+      <a href="{{ related_product.url }}">{{ related_product.title | escape }}</a>
+    </h3>
+
+    <div class="product-card__price">
+      <span class="product-card__price-current">{{ card_variant.price | money }}</span>
+      {%- if card_variant.compare_at_price > card_variant.price -%}
+        <span class="product-card__price-compare"><s>{{ card_variant.compare_at_price | money }}</s></span>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

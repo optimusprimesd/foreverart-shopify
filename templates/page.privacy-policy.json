@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "policy_page": {
+      "type": "policy-page",
+      "blocks": {
+        "chapter_intro": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Privacy",
+            "heading": "Your privacy matters",
+            "body": "<p>This page outlines how Forever Art collects, uses and protects your personal information. Replace this content with your full privacy policy in the theme editor, or paste it into the Shopify page body and turn on “Show Shopify page content”.</p>",
+            "tone": "light"
+          }
+        }
+      },
+      "block_order": ["chapter_intro"],
+      "settings": {
+        "hero_eyebrow": "Legal",
+        "hero_heading": "Privacy Policy",
+        "hero_lede": "How we collect, use and look after your information.",
+        "show_page_content": true,
+        "closing_heading": "Questions?",
+        "closing_body": "<p>If you’d like to know more about how we handle your information, get in touch.</p>",
+        "cta_label": "Contact us",
+        "cta_url": "/pages/contact-us"
+      }
+    }
+  },
+  "order": ["policy_page"]
+}

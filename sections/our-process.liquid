@@ -1,0 +1,301 @@
+{%- liquid
+  assign hero_eyebrow = section.settings.hero_eyebrow | default: 'Our process'
+  assign hero_heading = section.settings.hero_heading | default: 'Creating your Forever Art piece should be as enjoyable as owning it.'
+  assign hero_lede = section.settings.hero_lede | default: 'We’ve made the process simple from the beginning.'
+  assign closing_heading = section.settings.closing_heading | default: 'Your story arrives.'
+  assign closing_body = section.settings.closing_body
+-%}
+
+<div class="about-us our-process" data-header-context="dark" data-page-intro>
+  <header class="about-us__hero">
+    <div class="about-us__hero-inner">
+      {%- if hero_eyebrow != blank -%}
+        <p class="about-us__eyebrow" data-page-intro-subtitle>{{ hero_eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if hero_heading != blank -%}
+        <h1 class="about-us__hero-heading" data-page-intro-title>{{ hero_heading | escape }}</h1>
+      {%- endif -%}
+      {%- if hero_lede != blank -%}
+        <p class="about-us__hero-lede" data-page-intro-panel>{{ hero_lede | escape }}</p>
+      {%- endif -%}
+    </div>
+  </header>
+
+  <div class="about-us__body">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'chapter' -%}
+          {%- liquid
+            assign show_image = block.settings.show_image
+            assign image_position = block.settings.image_position | default: 'right'
+            assign chapter_mod = ''
+            if show_image
+              assign chapter_mod = ' about-us__chapter--with-media about-us__chapter--media-' | append: image_position
+            endif
+          -%}
+          <section
+            class="about-us__chapter{% if block.settings.tone == 'dark' %} about-us__chapter--dark{% endif %}{{ chapter_mod }}"
+            data-page-intro-item
+            {{ block.shopify_attributes }}
+          >
+            <div class="about-us__chapter-layout{% if show_image %} about-us__chapter-layout--media{% endif %}">
+              <div class="about-us__chapter-inner">
+                {%- if block.settings.kicker != blank -%}
+                  <p class="about-us__kicker">{{ block.settings.kicker | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="about-us__heading">{{ block.settings.heading | escape }}</h2>
+                {%- endif -%}
+                {%- if block.settings.body != blank -%}
+                  <div class="about-us__prose">
+                    {{ block.settings.body }}
+                  </div>
+                {%- endif -%}
+              </div>
+
+              {%- if show_image -%}
+                <div class="about-us__chapter-media">
+                  {%- if block.settings.image != blank -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 1200
+                      | image_tag:
+                        class: 'about-us__chapter-image',
+                        loading: 'lazy',
+                        widths: '400, 600, 800, 1200',
+                        sizes: '(min-width: 900px) 40vw, 100vw',
+                        alt: block.settings.image.alt | default: block.settings.heading | escape
+                    }}
+                  {%- else -%}
+                    <div class="about-us__chapter-placeholder" role="img" aria-label="{{ block.settings.heading | default: 'Process step' | escape }} image placeholder">
+                      <svg viewBox="0 0 24 24" fill="none" width="32" height="32" aria-hidden="true">
+                        <rect x="3" y="5" width="18" height="14" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="9" cy="10" r="1.75" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="m5.5 17 4-4.5 3 3 3.5-4.5L18.5 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span>Add image</span>
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </section>
+
+        {%- when 'pullquote' -%}
+          <figure class="about-us__pullquote" data-page-intro-item {{ block.shopify_attributes }}>
+            <blockquote class="about-us__quote">
+              <p>{{ block.settings.quote | escape }}</p>
+            </blockquote>
+            {%- if block.settings.attribution != blank -%}
+              <figcaption class="about-us__quote-attr">{{ block.settings.attribution | escape }}</figcaption>
+            {%- endif -%}
+          </figure>
+
+        {%- when 'callout' -%}
+          <section class="about-us__plate" data-page-intro-item {{ block.shopify_attributes }}>
+            <div class="about-us__plate-inner">
+              <div class="about-us__plate-copy">
+                {%- if block.settings.kicker != blank -%}
+                  <p class="about-us__kicker">{{ block.settings.kicker | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="about-us__heading">{{ block.settings.heading | escape }}</h2>
+                {%- endif -%}
+                {%- if block.settings.body != blank -%}
+                  <div class="about-us__prose">
+                    {{ block.settings.body }}
+                  </div>
+                {%- endif -%}
+              </div>
+              <div class="about-us__plate-card" aria-hidden="true">
+                <p class="about-us__plate-label">{{ block.settings.card_label | default: 'Step 03' | escape }}</p>
+                <p class="about-us__plate-number">{{ block.settings.card_title | default: 'We make it' | escape }}</p>
+                <p class="about-us__plate-note">{{ block.settings.card_note | default: 'Hand finished in our workshop.' | escape }}</p>
+              </div>
+            </div>
+          </section>
+
+        {%- when 'steps' -%}
+          <section class="about-us__questions" data-page-intro-item {{ block.shopify_attributes }}>
+            <div class="about-us__chapter-inner">
+              {%- if block.settings.heading != blank -%}
+                <h2 class="about-us__heading">{{ block.settings.heading | escape }}</h2>
+              {%- endif -%}
+              {%- if block.settings.intro != blank -%}
+                <div class="about-us__prose about-us__prose--lead">
+                  {{ block.settings.intro }}
+                </div>
+              {%- endif -%}
+              <ul class="about-us__question-list" role="list">
+                {%- if block.settings.s1 != blank -%}<li>{{ block.settings.s1 | escape }}</li>{%- endif -%}
+                {%- if block.settings.s2 != blank -%}<li>{{ block.settings.s2 | escape }}</li>{%- endif -%}
+                {%- if block.settings.s3 != blank -%}<li>{{ block.settings.s3 | escape }}</li>{%- endif -%}
+                {%- if block.settings.s4 != blank -%}<li>{{ block.settings.s4 | escape }}</li>{%- endif -%}
+              </ul>
+              {%- if block.settings.closing != blank -%}
+                <div class="about-us__prose">
+                  {{ block.settings.closing }}
+                </div>
+              {%- endif -%}
+            </div>
+          </section>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+
+  <section class="about-us__closing" data-page-intro-item>
+    <div class="about-us__closing-inner">
+      {%- if closing_heading != blank -%}
+        <h2 class="about-us__closing-heading">{{ closing_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if closing_body != blank -%}
+        <div class="about-us__prose about-us__prose--on-dark">
+          {{ closing_body }}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+        <a class="about-us__cta" href="{{ section.settings.cta_url }}">
+          {{ section.settings.cta_label | escape }}
+          <span aria-hidden="true">→</span>
+        </a>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Our process",
+  "tag": "section",
+  "class": "our-process-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Hero eyebrow",
+      "default": "Our process"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero heading",
+      "default": "Creating your Forever Art piece should be as enjoyable as owning it."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_lede",
+      "label": "Hero lede",
+      "default": "We’ve made the process simple from the beginning."
+    },
+    {
+      "type": "text",
+      "id": "closing_heading",
+      "label": "Closing heading",
+      "default": "Your story arrives."
+    },
+    {
+      "type": "richtext",
+      "id": "closing_body",
+      "label": "Closing body",
+      "default": "<p>Your finished piece is carefully packed and delivered ready to hang, keep and become part of your home.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "Explore the collections"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Chapter",
+      "settings": [
+        { "type": "text", "id": "kicker", "label": "Kicker" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Choose your design" },
+        { "type": "richtext", "id": "body", "label": "Body" },
+        {
+          "type": "checkbox",
+          "id": "show_image",
+          "label": "Show image / placeholder",
+          "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Optional. Shows a placeholder until an image is selected."
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image position",
+          "options": [
+            { "value": "right", "label": "Right" },
+            { "value": "left", "label": "Left" }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "select",
+          "id": "tone",
+          "label": "Tone",
+          "options": [
+            { "value": "light", "label": "Light" },
+            { "value": "dark", "label": "Dark" }
+          ],
+          "default": "light"
+        }
+      ]
+    },
+    {
+      "type": "pullquote",
+      "name": "Pull quote",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "We’ve made the process simple from the beginning."
+        },
+        { "type": "text", "id": "attribution", "label": "Attribution" }
+      ]
+    },
+    {
+      "type": "callout",
+      "name": "Callout",
+      "settings": [
+        { "type": "text", "id": "kicker", "label": "Kicker", "default": "Step 03" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "We make it" },
+        { "type": "richtext", "id": "body", "label": "Body" },
+        { "type": "text", "id": "card_label", "label": "Card label", "default": "Step 03" },
+        { "type": "text", "id": "card_title", "label": "Card title", "default": "We make it" },
+        { "type": "text", "id": "card_note", "label": "Card note", "default": "Hand finished in our workshop." }
+      ]
+    },
+    {
+      "type": "steps",
+      "name": "Steps",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Four simple steps" },
+        { "type": "richtext", "id": "intro", "label": "Intro" },
+        { "type": "textarea", "id": "s1", "label": "Step 1" },
+        { "type": "textarea", "id": "s2", "label": "Step 2" },
+        { "type": "textarea", "id": "s3", "label": "Step 3" },
+        { "type": "textarea", "id": "s4", "label": "Step 4" },
+        { "type": "richtext", "id": "closing", "label": "Closing" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our process"
+    }
+  ]
+}
+{% endschema %}

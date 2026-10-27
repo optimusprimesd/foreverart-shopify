@@ -1,0 +1,46 @@
+{%- assign field = field | default: nil -%}
+{%- if field != nil -%}
+
+{%- assign field_key = field.key | default: 'orientation' -%}
+{%- assign field_label = field.label | default: 'Orientation' -%}
+{%- assign property_name = field.property_name | default: 'Orientation' -%}
+{%- assign options_raw = field.options | default: 'Portrait,Landscape' -%}
+{%- assign option_list = options_raw | split: ',' -%}
+{%- assign heading_id = field_key | append: '-heading' -%}
+{%- assign field_charge_cents = 0 -%}
+{%- if field.additional_charge != blank -%}
+  {%- assign field_charge_cents = field.additional_charge | times: 100 | round -%}
+{%- endif -%}
+
+<div class="mt-2">
+  <p class="product-page__label mb-0 text-lg font-bold text-[#141414] mb-2 mt-6" id="{{ heading_id }}">{{ field_label }}</p>
+  <div
+    class="flex flex-wrap gap-4 mb-4"
+    role="radiogroup"
+    aria-labelledby="{{ heading_id }}"
+    {% if field_charge_cents > 0 %}data-additional-charge-cents="{{ field_charge_cents }}" data-additional-charge-type="radio"{% endif %}
+  >
+    {%- for option in option_list -%}
+      {%- assign option_label = option | strip -%}
+      {%- if option_label != blank -%}
+        {%- assign option_id = field_key | append: '-' | append: option_label | handle -%}
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input
+            type="radio"
+            name="properties[{{ property_name }}]"
+            id="{{ option_id }}"
+            value="{{ option_label }}"
+            class="peer sr-only"
+            {% if field.required and forloop.first %}required{% endif %}
+          >
+          <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-gray-300 transition-colors peer-checked:border-[#141414] peer-checked:[&_.orientation-radio-dot]:opacity-100 peer-focus-visible:ring-2 peer-focus-visible:ring-[#141414] peer-focus-visible:ring-offset-2">
+            <span class="orientation-radio-dot h-3 w-3 rounded-full bg-[#141414] opacity-0 transition-opacity" aria-hidden="true"></span>
+          </span>
+          <span class="text-lg font-medium select-none">{{ option_label }}</span>
+        </label>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  {% render 'product-form-field-info', info_label: field.info_label, additional_charge: field.additional_charge %}
+</div>
+{%- endif -%}

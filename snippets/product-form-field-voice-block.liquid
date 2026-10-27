@@ -1,0 +1,32 @@
+{%- assign field = field | default: nil -%}
+{%- if field == nil -%}{%- break -%}{%- endif -%}
+
+{%- assign audio_id = field.audio_id | default: 'wizard-step1-wedding-voice-2' -%}
+{%- assign canvas_id = field.canvas_id | default: 'wizard-step3-sound-waves-canvas' -%}
+{%- assign audio_asset = field.audio_asset | default: 'wedding-poster.m4a' -%}
+{%- assign audio_src = field.audio_src | default: audio_asset | asset_url -%}
+
+<div class="product-page__voice-block flex w-full flex-col gap-3 mb-4">
+  <div class="product-page__voice-player w-full min-w-0 flex flex-col gap-2">
+    <div class="product-page__voice-wave hidden w-full overflow-hidden rounded-md flex justify-center items-center">
+      <canvas
+        style="width:250px; margin:0 auto;"
+        id="{{ canvas_id }}"
+        class="block w-full max-w-lg"
+        data-voice-audio-id="{{ audio_id }}"
+        aria-hidden="true"
+      ></canvas>
+    </div>
+    <audio
+      id="{{ audio_id }}"
+      class="product-page__voice-audio block h-10 w-full min-w-0"
+      style="display:none;"
+      controls
+      preload="metadata"
+      src="{{ audio_src }}"
+      aria-label="Audio guide for this step"
+    >
+      <a href="{{ audio_src }}" class="text-sm text-[#555] underline underline-offset-2 hover:text-black">Download audio (M4A)</a>
+    </audio>
+  </div>
+</div>

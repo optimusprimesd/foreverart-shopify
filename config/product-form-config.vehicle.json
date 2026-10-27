@@ -1,0 +1,315 @@
+{
+  "heading": "Customize Your Vehicle Sign",
+  "steps": [
+    {
+      "number": 1,
+      "title": "1. The Vehicle",
+      "nav_label": "Vehicle",
+      "fields": [
+        {
+          "key": "vehicle_type",
+          "type": "radio",
+          "enabled": true,
+          "label": "Vehicle Type",
+          "property_name": "Vehicle Type",
+          "options": "Motor vehicle,Motorcycle",
+          "required": true
+        },
+        {
+          "key": "registration_plate",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Registration Plate",
+          "placeholder": "Registration Plate",
+          "required": true,
+          "wrap_class": "mb-4"
+        },
+        {
+          "key": "make",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Make",
+          "placeholder": "Make",
+          "required": true,
+          "wrap_class": "mb-4"
+        },
+        {
+          "key": "model",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Model",
+          "placeholder": "Model",
+          "required": true,
+          "wrap_class": "mb-4"
+        },
+        {
+          "key": "year_of_manufacture",
+          "type": "year",
+          "enabled": true,
+          "property_name": "Year of Manufacture",
+          "placeholder": "Year of Manufacture",
+          "required": true,
+          "wrap_class": "mb-4"
+        },
+        {
+          "key": "colour",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Colour",
+          "placeholder": "Colour",
+          "required": true,
+          "wrap_class": "mb-4"
+        },
+        {
+          "key": "body_type",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Body Type",
+          "placeholder": "Body Type",
+          "required": false,
+          "wrap_class": "mb-4"
+        },
+        {
+          "key": "vin",
+          "type": "text",
+          "enabled": true,
+          "property_name": "VIN",
+          "placeholder": "VIN",
+          "required": false,
+          "wrap_class": "mb-4",
+          "show_help": true,
+          "help_title": "VIN",
+          "help_body": "Vehicle identification number"
+        },
+        {
+          "key": "engine",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Engine",
+          "placeholder": "Engine",
+          "required": false,
+          "wrap_class": "mb-4",
+          "show_help": true,
+          "help_title": "Engine",
+          "help_body": "Suggested size / cylinders, capacity, model"
+        },
+        {
+          "key": "transmission",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Transmission",
+          "placeholder": "Transmission",
+          "required": false,
+          "wrap_class": "mb-4",
+          "show_help": true,
+          "help_title": "Transmission",
+          "help_body": "Suggested number of gears, manual / automatic"
+        },
+        {
+          "key": "power",
+          "type": "input_group",
+          "enabled": true,
+          "label": "Power",
+          "wrap_class": "mb-4",
+          "inputs": [
+            {
+              "key": "power_value",
+              "type": "text",
+              "property_name": "Power",
+              "placeholder": "Power",
+              "required": false
+            },
+            {
+              "key": "power_unit",
+              "type": "select",
+              "property_name": "Power Unit",
+              "placeholder": "Unit",
+              "options": "Kilowatts (KW),Horsepower (HP)",
+              "required": false
+            }
+          ]
+        },
+        {
+          "key": "country_of_manufacture",
+          "type": "select",
+          "enabled": true,
+          "property_name": "Country of Manufacture",
+          "placeholder": "Country of Manufacture",
+          "options_source": "countries",
+          "show_input_on_selection": true,
+          "show_selection_values": "Other",
+          "selection_input_type": "text",
+          "selection_input_key": "country_of_manufacture_other",
+          "selection_input_property_name": "Country of Manufacture (Other)",
+          "selection_input_placeholder": "Enter country",
+          "selection_input_required": true,
+          "required": false,
+          "wrap_class": "mb-4"
+        },
+        {
+          "key": "date_purchased",
+          "type": "select",
+          "enabled": true,
+          "property_name": "Date Purchased Type",
+          "placeholder": "Date Purchased",
+          "required": false,
+          "wrap_class": "mb-4",
+          "options": "Exact date purchased,Year purchased,CIRCA year purchased,No Record",
+          "option_modes": "date,year,circa_year,no_record",
+          "show_input_on_selection": true,
+          "selection_input_type": "property_date",
+          "selection_input_required": false,
+          "date_properties": {
+            "date": "Date Purchased",
+            "year": "Year Purchased",
+            "circa_year": "CIRCA Year Purchased"
+          }
+        },
+        {
+          "key": "speedo_at_purchase",
+          "type": "select",
+          "enabled": true,
+          "property_name": "Speedo at Purchase Unit",
+          "placeholder": "Speedo at Purchase",
+          "required": false,
+          "wrap_class": "mb-4",
+          "options": "Kilometers,Miles,No record",
+          "show_input_on_selection": true,
+          "selection_input_type": "text",
+          "selection_input_property_name": "Speedo at Purchase",
+          "selection_input_placeholder": "Odometer reading",
+          "hide_selection_values": "No record"
+        },
+        {
+          "key": "purchase_price",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Purchase Price",
+          "placeholder": "Purchase Price",
+          "required": false,
+          "wrap_class": "mb-4"
+        },
+        {
+          "key": "date_sold",
+          "type": "select",
+          "enabled": true,
+          "property_name": "Date Sold Type",
+          "placeholder": "Date Sold",
+          "required": false,
+          "wrap_class": "mb-4",
+          "options": "Exact date sold,Year sold,CIRCA year sold,Current,No Record",
+          "option_modes": "date,year,circa_year,date,no_record",
+          "show_input_on_selection": true,
+          "selection_input_type": "property_date",
+          "selection_input_required": false,
+          "date_properties": {
+            "date": "Date Sold",
+            "year": "Year Sold",
+            "circa_year": "CIRCA Year Sold"
+          }
+        },
+        {
+          "key": "speedo_at_sale",
+          "type": "select",
+          "enabled": true,
+          "property_name": "Speedo at Sale Unit",
+          "placeholder": "Speedo at Sale",
+          "required": false,
+          "wrap_class": "mb-4",
+          "options": "Kilometers,Miles,Current,No record",
+          "show_input_on_selection": true,
+          "selection_input_type": "text",
+          "selection_input_property_name": "Speedo at Sale",
+          "selection_input_placeholder": "Odometer reading",
+          "hide_selection_values": "No record,Current"
+        },
+        {
+          "key": "sale_price",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Sale Price",
+          "placeholder": "Sale Price",
+          "required": false,
+          "wrap_class": "mb-4",
+          "show_help": true,
+          "help_title": "Sale Price",
+          "help_body": "Type \"current\" if vehicle still owned"
+        },
+        {
+          "key": "garaged_address",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Garaged Address",
+          "placeholder": "Garaged Address",
+          "required": false,
+          "wrap_class": "mb-4",
+          "show_voice": true,
+          "voice_src": "garaged-address-voiceover.m4a"
+        },
+        {
+          "key": "owners_notes",
+          "type": "textarea",
+          "enabled": true,
+          "property_name": "Owner's Notes",
+          "placeholder": "Owner's Notes",
+          "rows": 3,
+          "required": false,
+          "wrap_class": "mb-4",
+          "show_help": true,
+          "help_title": "Owner's Notes",
+          "help_body": "Maximum 200 characters",
+          "validation": {
+            "max_length": 200
+          }
+        },
+        {
+          "key": "vehicle_nickname",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Vehicle Nickname",
+          "placeholder": "Vehicle Nickname",
+          "required": false,
+          "wrap_class": "mb-4"
+        },
+        {
+          "key": "owners_name",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Owner's Name",
+          "placeholder": "Owner's Name",
+          "required": false,
+          "wrap_class": "mb-4",
+          "show_help": true,
+          "help_title": "Owner's Name",
+          "help_body": "Include more than one name if it was a team effort"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "2. The Signature",
+      "nav_label": "Signature",
+      "fields": [
+        {
+          "key": "signature",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Story Inscription",
+          "placeholder": "Story Inscription",
+          "required": true,
+          "wrap_class": "mb-4",
+          "additional_charge": 20,
+          "info_label": "Optional extra.Additional charge applies ($20.00)",
+          "validation": {
+            "max_length": 12
+          },
+          "show_help": true,
+          "help_title": "Story Inscription",
+          "help_body": "Maximum of 12 characters including spaces. Alphanumeric only (no special characters). Uppercase only.",
+          "show_voice": true,
+          "voice_src": "vehicle-signature-voiceover.m4a"
+        }
+      ]
+    }
+  ]
+}

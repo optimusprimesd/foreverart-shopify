@@ -1,0 +1,127 @@
+{%- comment -%}
+  Resolves colour option labels to name, code, hex, and display text.
+  Hex is parsed from the value string or resolved from product option swatches
+  (Text Colour / Background Colour, or a specific option_name when passed).
+  Supports "SAGE - #B5AA59", "OLIVE - olive", "#B5AA59", or "Sage".
+  Outputs: label | code | hex | display
+{%- endcomment -%}
+{%- assign color_name = color_name | default: '' -%}
+{%- assign product = product | default: nil -%}
+{%- assign output = output | default: 'hex' -%}
+{%- assign option_name = option_name | default: '' -%}
+{%- assign color_label = color_name | strip -%}
+{%- assign color_key = color_label | downcase -%}
+{%- assign color_display_name = color_label -%}
+{%- assign color_code = '' -%}
+{%- assign color_hex = '' -%}
+{%- assign lookup_key = color_key -%}
+
+{%- if color_label contains ' - #' -%}
+  {%- assign color_label_parts = color_label | split: ' - #' -%}
+  {%- assign color_display_name = color_label_parts[0] | strip -%}
+  {%- assign color_code = '#' | append: color_label_parts[1] | strip -%}
+  {%- assign color_hex = color_code -%}
+  {%- assign lookup_key = color_display_name | downcase -%}
+{%- elsif color_label contains ' - ' -%}
+  {%- assign color_label_parts = color_label | split: ' - ' -%}
+  {%- assign color_display_name = color_label_parts[0] | strip -%}
+  {%- assign color_code = color_label_parts[1] | strip -%}
+  {%- if color_code contains '#' -%}
+    {%- assign color_hex = color_code -%}
+  {%- else -%}
+    {%- assign lookup_key = color_code | downcase -%}
+  {%- endif -%}
+{%- elsif color_label contains '#' -%}
+  {%- assign color_hex_parts = color_label | split: '#' -%}
+  {%- assign color_code = '#' | append: color_hex_parts[1] | strip -%}
+  {%- assign color_hex = color_code -%}
+  {%- if color_hex_parts[0] != blank -%}
+    {%- assign color_display_name = color_hex_parts[0] | strip -%}
+    {%- assign lookup_key = color_display_name | downcase -%}
+  {%- else -%}
+    {%- assign color_display_name = color_code -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if color_code == '' -%}
+  {%- assign color_code = lookup_key -%}
+{%- endif -%}
+{%- assign color_display_key = color_display_name | downcase -%}
+
+{%- if color_hex == '' and product != nil -%}
+  {%- for option in product.options_with_values -%}
+    {%- assign option_name_down = option.name | downcase -%}
+    {%- assign use_option = false -%}
+    {%- if option_name != blank -%}
+      {%- assign wanted_name = option_name | downcase -%}
+      {%- if option_name_down == wanted_name -%}
+        {%- assign use_option = true -%}
+      {%- endif -%}
+    {%- elsif option.name == 'Text Colour' or option.name == 'Text Color' or option.name == 'Background Colour' or option.name == 'Background Color' or option_name_down == 'background' or option_name_down contains 'background colour' or option_name_down contains 'background color' or option_name_down contains 'text colour' or option_name_down contains 'text color' -%}
+      {%- assign use_option = true -%}
+    {%- endif -%}
+
+    {%- if use_option -%}
+      {%- for value in option.values -%}
+        {%- assign option_value_name = value.name | default: value | strip -%}
+        {%- assign option_value_key = option_value_name | downcase -%}
+        {%- assign option_label = option_value_name -%}
+        {%- if option_value_name contains ' - ' -%}
+          {%- assign option_parts = option_value_name | split: ' - ' -%}
+          {%- assign option_label = option_parts[0] | strip -%}
+        {%- endif -%}
+        {%- assign option_label_key = option_label | downcase -%}
+        {%- assign is_match = false -%}
+        {%- if option_value_name == color_label -%}
+          {%- assign is_match = true -%}
+        {%- elsif option_label_key == lookup_key -%}
+          {%- assign is_match = true -%}
+        {%- elsif color_display_name != blank and option_label_key == color_display_key -%}
+          {%- assign is_match = true -%}
+        {%- elsif lookup_key != blank and option_value_key contains lookup_key -%}
+          {%- assign is_match = true -%}
+        {%- endif -%}
+        {%- if is_match -%}
+          {%- if value.swatch.color -%}
+            {%- capture resolved_swatch -%}{{ value.swatch.color }}{%- endcapture -%}
+            {%- assign resolved_swatch = resolved_swatch | strip -%}
+            {%- if resolved_swatch != blank -%}
+              {%- assign color_hex = resolved_swatch -%}
+            {%- endif -%}
+          {%- endif -%}
+          {%- if color_hex == '' and option_value_name contains ' - #' -%}
+            {%- assign hex_parts = option_value_name | split: ' - #' -%}
+            {%- assign color_hex = '#' | append: hex_parts[1] | strip -%}
+          {%- elsif color_hex == '' and option_value_name contains '#' -%}
+            {%- assign hex_parts = option_value_name | split: '#' -%}
+            {%- assign color_hex = '#' | append: hex_parts[1] | strip -%}
+          {%- endif -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+    {%- if color_hex != blank -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- if color_hex == '' -%}
+  {%- if color_code contains '#' -%}
+    {%- assign color_hex = color_code -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if output == 'label' -%}
+  {{- color_display_name -}}
+{%- elsif output == 'code' -%}
+  {{- color_code -}}
+{%- elsif output == 'display' -%}
+  {%- if color_hex != blank -%}
+    {{- color_display_name }} - {{ color_hex -}}
+  {%- else -%}
+    {{- color_display_name -}}
+  {%- endif -%}
+{%- else -%}
+  {{- color_hex -}}
+{%- endif -%}

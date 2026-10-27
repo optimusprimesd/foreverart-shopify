@@ -1,0 +1,102 @@
+{
+  "heading": "Customize Your Quote Poster",
+  "steps": [
+    {
+      "number": 1,
+      "title": "1. The Design",
+      "nav_label": "Design",
+      "fields": [
+        {
+          "key": "font",
+          "type": "select",
+          "enabled": true,
+          "property_name": "Font",
+          "placeholder": "Font",
+          "required": true,
+          "wrap_class": "mb-4",
+          "options": "Typewriter,Vintage typewriter,Handwritten,Handwritten script"
+        },
+        {
+          "key": "background_effect",
+          "type": "select",
+          "enabled": true,
+          "property_name": "Background Effect",
+          "placeholder": "Background Effect",
+          "required": true,
+          "wrap_class": "mb-4",
+          "options": "Pure white,Crinkled paper,Weathered paper"
+        },
+        {
+          "key": "size_and_orientation",
+          "type": "size_and_orientation",
+          "enabled": true,
+          "property_name": "Size and Orientation",
+          "placeholder": "Size and Orientation",
+          "required": true,
+          "wrap_class": "mb-4"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "2. The Quote",
+      "nav_label": "Quote",
+      "fields": [
+        {
+          "key": "quote",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Quote",
+          "placeholder": "Quote",
+          "required": true,
+          "wrap_class": "mb-4",
+          "show_help": true,
+          "help_title": "Quote",
+          "help_body": "Include all punctuation as required",
+          "show_voice": true,
+          "voice_src": "quote-voiceover.m4a"
+        },
+        {
+          "key": "quote_attribute",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Quote Attribute",
+          "placeholder": "Quote Attribute",
+          "required": false,
+          "wrap_class": "mb-4",
+          "show_help": true,
+          "help_title": "Quote attribute",
+          "help_body": "Include all punctuation as required. (featured in bottom right corner of the poster)",
+          "show_voice": true,
+          "voice_src": "quote-attribute-voiceover.m4a"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "3. The Signature",
+      "nav_label": "Signature",
+      "fields": [
+        {
+          "key": "signature",
+          "type": "text",
+          "enabled": true,
+          "property_name": "Story Inscription",
+          "placeholder": "Story Inscription",
+          "required": true,
+          "wrap_class": "mb-4",
+          "additional_charge": 20,
+          "info_label": "Optional extra.Additional charge applies ($20.00)",
+          "validation": {
+            "max_length": 12
+          },
+          "show_help": true,
+          "help_title": "Story Inscription",
+          "help_body": "Maximum of 12 characters including spaces. Alphanumeric only (no special characters). Uppercase only.",
+          "show_voice": true,
+          "voice_src": "vehicle-signature-voiceover.m4a"
+        }
+      ]
+    }
+  ]
+}

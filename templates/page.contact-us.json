@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "contact_us": {
+      "type": "contact-us",
+      "settings": {
+        "hero_eyebrow": "Contact",
+        "hero_heading": "Connect with Our Canvas",
+        "hero_lede": "At Forever Art, we believe that every conversation is a fresh brushstroke on the canvas of our journey. Whether you have a query, a story to share, or simply want to connect with the world of art, we’re here to listen and respond.",
+        "details_heading": "Contact Details",
+        "address": "PO Box 421 Aspley QLD 4034",
+        "phone": "0407 729 026",
+        "email": "create@foreverart.com.au",
+        "facebook_url": "https://www.facebook.com/foreverartau",
+        "facebook_handle": "foreverartau",
+        "instagram_url": "https://www.instagram.com/foreverartau",
+        "instagram_handle": "foreverartau",
+        "form_heading": "Send Us A Message",
+        "send_to_email": "andrew@foreverart.com.au",
+        "form_intro": "<p>Your thoughts and feedback enrich our artistic landscape. Use the form below to send us a message, and we’ll get back to you at the earliest.</p>",
+        "submit_label": "Send Us A Message",
+        "privacy_note": "Your privacy matters to us. Rest assured, any personal information shared will be kept confidential and used solely for correspondence purposes.",
+        "success_message": "Thanks for your message. We’ll get back to you soon.",
+        "show_map": true,
+        "map_query": "PO Box 421, Aspley QLD 4034, Australia",
+        "map_embed_url": ""
+      }
+    }
+  },
+  "order": ["contact_us"]
+}

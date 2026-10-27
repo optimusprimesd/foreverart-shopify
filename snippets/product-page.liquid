@@ -1,0 +1,594 @@
+
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  comment
+    Always show the base variant price in Liquid. Customization (+$20 etc.) is
+    added client-side only after a charged field is filled.
+  endcomment
+  assign product_price = current_variant.price | money
+  assign collection_link = product.collections.first
+  assign render_part = render_part | default: 'full'
+  assign gallery_mode = gallery_mode | default: 'default'
+  assign is_gift_card_gallery = false
+  if gallery_mode == 'gift_card'
+    assign is_gift_card_gallery = true
+  endif
+  assign show_admin_tools = false
+
+  if request.design_mode
+    assign show_admin_tools = true
+  elsif customer and settings.admin_customer_tag != blank
+    if customer.tags contains settings.admin_customer_tag
+      assign show_admin_tools = true
+    endif
+  endif
+
+  assign form_builder_page = pages['generate-product-form']
+  assign shipping_value = current_variant.metafields.custom.shipping | default: product.metafields.custom.shipping | default: 'Free Shipping'
+  assign gift_card_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media
+
+  comment
+    Collection scripted video for gallery — last carousel slide.
+    Prefer main collection handles in a fixed order when a product is in several collections.
+  endcomment
+  assign collection_gallery_video = blank
+  assign collection_gallery_video_label = blank
+  assign collection_video_order = 'wedding-collection,kids-collection,music-collection,property-collection,quote-collection,vehicle-collection' | split: ','
+  for ordered_handle in collection_video_order
+    for collection in product.collections
+      assign handle_lc = collection.handle | downcase
+      if handle_lc == ordered_handle
+        case ordered_handle
+          when 'wedding-collection'
+            assign collection_gallery_video = 'FA_Wedding Collection_ Scripted_1-1.mp4'
+            assign collection_gallery_video_label = 'Wedding Collection'
+          when 'kids-collection'
+            assign collection_gallery_video = 'FA_Kids Collection _Scripted_1-1.mp4'
+            assign collection_gallery_video_label = 'Kids Collection'
+          when 'music-collection'
+            assign collection_gallery_video = 'FA_Music Collection_Scripted_1-1.mp4'
+            assign collection_gallery_video_label = 'Music Collection'
+          when 'property-collection'
+            assign collection_gallery_video = 'FA_Property Collection_Scripted_1-1.mp4'
+            assign collection_gallery_video_label = 'Property Collection'
+          when 'quote-collection'
+            assign collection_gallery_video = 'FA_Quote Collection_Scripted_1-1.mp4'
+            assign collection_gallery_video_label = 'Quote Collection'
+          when 'vehicle-collection'
+            assign collection_gallery_video = 'FA_Vehicle Collection_Scripted_1-1.mp4'
+            assign collection_gallery_video_label = 'Vehicle Collection'
+        endcase
+        break
+      endif
+    endfor
+    if collection_gallery_video != blank
+      break
+    endif
+  endfor
+
+  if collection_gallery_video == blank
+    for collection in product.collections
+      assign handle_lc = collection.handle | downcase
+      assign title_lc = collection.title | downcase
+      if handle_lc contains 'wedding' or title_lc contains 'wedding'
+        assign collection_gallery_video = 'FA_Wedding Collection_ Scripted_1-1.mp4'
+        assign collection_gallery_video_label = 'Wedding Collection'
+        break
+      elsif handle_lc contains 'kids' or title_lc contains 'kids'
+        assign collection_gallery_video = 'FA_Kids Collection _Scripted_1-1.mp4'
+        assign collection_gallery_video_label = 'Kids Collection'
+        break
+      elsif handle_lc contains 'music' or title_lc contains 'music'
+        assign collection_gallery_video = 'FA_Music Collection_Scripted_1-1.mp4'
+        assign collection_gallery_video_label = 'Music Collection'
+        break
+      elsif handle_lc contains 'property' or title_lc contains 'property'
+        assign collection_gallery_video = 'FA_Property Collection_Scripted_1-1.mp4'
+        assign collection_gallery_video_label = 'Property Collection'
+        break
+      elsif handle_lc contains 'quote' or title_lc contains 'quote'
+        assign collection_gallery_video = 'FA_Quote Collection_Scripted_1-1.mp4'
+        assign collection_gallery_video_label = 'Quote Collection'
+        break
+      elsif handle_lc contains 'vehicle' or title_lc contains 'vehicle'
+        assign collection_gallery_video = 'FA_Vehicle Collection_Scripted_1-1.mp4'
+        assign collection_gallery_video_label = 'Vehicle Collection'
+        break
+      endif
+    endfor
+  endif
+-%}
+{%- capture product_info_summary_h1 -%}
+  <div class="product-page__header-row">
+    <h1 class="product-page__title">{{ product.title | escape }}</h1>
+    {%- unless is_gift_card_gallery -%}
+      <span class="product-page__badge">{{ shipping_value }}</span>
+    {%- endunless -%}
+  </div>
+  <p class="product-page__price" data-product-price-display>{{ product_price }} inc. GST</p>
+{%- endcapture -%}
+{%- capture product_info_summary_plain -%}
+  <div class="product-page__header-row">
+    <p class="product-page__title">{{ product.title | escape }}</p>
+    {%- unless is_gift_card_gallery -%}
+      <span class="product-page__badge">{{ shipping_value }}</span>
+    {%- endunless -%}
+  </div>
+  <p class="product-page__price" data-product-price-display>{{ product_price }} inc. GST</p>
+{%- endcapture -%}
+{%- unless render_part == 'after_tabs' -%}
+<div class="product-page bg-white text-[#141414]" data-header-context="light" data-product-page-intro>
+  <div class="product-page__container mx-auto max-w-screen-xl px-4 py-6 sm:px-5 md:px-6 md:py-10 lg:py-12">
+    {%- comment -%} Mobile & iPad portrait (< 1024px): breadcrumb + product summary {%- endcomment -%}
+    <div
+      class="product-page__product-info-container product-page__product-info-container--mobile"
+      data-product-page-product-info="mobile"
+    >
+      <nav
+        id="product-page-intro-breadcrumb"
+        data-product-page-intro-breadcrumb
+        class="product-page__breadcrumb text-sm"
+        aria-label="Breadcrumb"
+      >
+        <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <li>
+            <a href="{{ routes.collections_url }}" class="text-[#555] underline-offset-2 hover:text-black hover:underline">Collections</a>
+          </li>
+          <li class="text-[#999]" aria-hidden="true">/</li>
+          {%- if collection_link -%}
+          <li>
+            <a href="{{ collection_link.url }}" class="text-[#555] underline-offset-2 hover:text-black hover:underline">{{ collection_link.title | escape }}</a>
+          </li>
+          {%- endif -%}
+        </ol>
+      </nav>
+
+      <header
+        class="product-page__header product-page__header--mobile mt-3"
+        data-product-page-intro-header-mobile
+      >
+        {{ product_info_summary_h1 }}
+        {%- if product.description != blank -%}
+          <div class="product-page__description product-page__description--mobile">
+            <div class="product-page__description-body text-base text-[#333] leading-relaxed">
+              {{ product.description }}
+            </div>
+          </div>
+        {%- endif -%}
+      </header>
+    </div>
+
+    {%- comment -%} Desktop, large desktop & iPad landscape (>= 1024px): page breadcrumb {%- endcomment -%}
+    <div
+      class="product-page__product-info-container product-page__product-info-container--desktop product-page__product-info-container--pagehead"
+      data-product-page-product-info="desktop-pagehead"
+    >
+      <nav
+        class="product-page__breadcrumb mb-4 text-sm md:mb-5"
+        data-product-page-intro-breadcrumb-desktop
+        aria-label="Breadcrumb"
+      >
+        <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <li>
+            <a href="{{ routes.collections_url }}" class="text-[#555] underline-offset-2 hover:text-black hover:underline">Collections</a>
+          </li>
+          <li class="text-[#999]" aria-hidden="true">/</li>
+          {%- if collection_link -%}
+          <li>
+            <a href="{{ collection_link.url }}" class="text-[#555] underline-offset-2 hover:text-black hover:underline">{{ collection_link.title | escape }}</a>
+          </li>
+          <li class="text-[#999]" aria-hidden="true">/</li>
+          {%- endif -%}
+          <li class="font-medium text-black" aria-current="page">{{ product.title | escape }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="product-page__grid-top flex flex-col gap-6 md:gap-8 lg:grid lg:grid-cols-2 lg:gap-x-0 lg:gap-y-0 xl:grid-cols-2">
+      <div
+        id="product-page-intro-gallery"
+        data-product-page-intro-gallery
+        class="product-page__gallery{% if is_gift_card_gallery %} product-page__gallery--gift-card{% endif %} order-1 min-w-0 lg:order-none lg:col-start-1 lg:row-start-1 bg-white rounded-xs p-3 sm:p-4"
+      >
+        {%- if is_gift_card_gallery -%}
+          <div class="product-page__gift-card-media" data-product-page-intro-media>
+            <div class="product-page__gift-card-frame">
+              {%- if gift_card_media != blank -%}
+                {{
+                  gift_card_media
+                  | image_url: width: 1600
+                  | image_tag:
+                    class: 'product-page__gift-card-img',
+                    loading: 'eager',
+                    sizes: '(min-width: 1024px) 50vw, 100vw',
+                    widths: '600, 800, 1000, 1200, 1400, 1600',
+                    alt: product.title | escape
+                }}
+              {%- else -%}
+                <div class="product-page__gift-card-placeholder" aria-hidden="true">
+                  <span>{{ product.title | escape }}</span>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- else -%}
+        <div class="product-page__swiper-main-wrap relative" data-product-page-intro-media>
+          <div class="swiper product-page__swiper-main">
+            <div class="swiper-wrapper">
+              {%- if product.media.size > 0 -%}
+                {%- for media in product.media -%}
+                  <div class="swiper-slide">
+                    <div class="product-page__main-slide{% if media.media_type == 'video' %} product-page__main-slide--video{% endif %}">
+                      {%- if media.media_type == 'video' -%}
+                        {{
+                          media
+                          | video_tag:
+                            class: 'product-page__main-video',
+                            image_size: '1920x',
+                            autoplay: false,
+                            loop: true,
+                            controls: false,
+                            muted: false,
+                            playsinline: true,
+                            preload: 'metadata'
+                        }}
+                      {%- else -%}
+                        {{
+                          media
+                          | image_url: width: 5760
+                          | image_tag:
+                            class: 'product-page__main-img',
+                            loading: 'lazy',
+                            sizes: '(min-width: 1920px) 5760px, (min-width: 1280px) 3840px, 2880px',
+                            widths: '2880, 3840, 5760',
+                            alt: product.title | escape
+                        }}
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              {%- elsif product.featured_media -%}
+                <div class="swiper-slide">
+                  <div class="product-page__main-slide">
+                    {{
+                      product.featured_media
+                      | image_url: width: 5760
+                      | image_tag:
+                        class: 'product-page__main-img',
+                        loading: 'eager',
+                        sizes: '(min-width: 1920px) 5760px, (min-width: 1280px) 3840px, 2880px',
+                        widths: '2880, 3840, 5760',
+                        alt: product.title | escape
+                    }}
+                  </div>
+                </div>
+              {%- else -%}
+                <div class="swiper-slide">
+                  <div class="product-page__main-slide">
+                    {{ 'product-1' | placeholder_svg_tag: 'product-page__main-img placeholder-svg' }}
+                  </div>
+                </div>
+              {%- endif -%}
+              {%- if collection_gallery_video != blank -%}
+                <div class="swiper-slide" data-collection-gallery-video>
+                  <div class="product-page__main-slide product-page__main-slide--video">
+                    <video
+                      class="product-page__main-video"
+                      loop
+                      playsinline
+                      preload="metadata"
+                      aria-label="{{ collection_gallery_video_label | default: product.title | escape }} video"
+                    >
+                      <source src="{{ collection_gallery_video | asset_url }}" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+          <button
+            type="button"
+            class="product-page__swiper-nav product-page__swiper-prev swiper-button-prev"
+            aria-label="Previous image"
+          ></button>
+          <button
+            type="button"
+            class="product-page__swiper-nav product-page__swiper-next swiper-button-next"
+            aria-label="Next image"
+          ></button>
+          <div class="product-page__zoom-controls" data-gallery-zoom-controls hidden>
+            <button type="button" class="product-page__zoom-btn" data-gallery-zoom-out aria-label="Zoom out">−</button>
+            <button type="button" class="product-page__zoom-btn" data-gallery-zoom-reset aria-label="Reset zoom">1×</button>
+            <button type="button" class="product-page__zoom-btn" data-gallery-zoom-in aria-label="Zoom in">+</button>
+          </div>
+          <button
+            type="button"
+            class="product-page__fullscreen-btn"
+            aria-label="Enter fullscreen"
+            aria-pressed="false"
+          >
+            <i class="hgi hgi-stroke hgi-rounded hgi-full-screen product-page__fullscreen-icon product-page__fullscreen-icon--enter" aria-hidden="true"></i>
+            <i class="hgi hgi-stroke hgi-rounded hgi-cancel-01 product-page__fullscreen-icon product-page__fullscreen-icon--exit" aria-hidden="true"></i>
+          </button>
+        </div>
+        {%- endif -%}
+
+        <div class="product-page__gallery-meta mt-3 flex flex-col gap-4 sm:mt-4 sm:gap-6 lg:flex-row lg:items-start lg:gap-8">
+          {%- unless is_gift_card_gallery -%}
+          <div class="product-page__thumbs-column min-w-0 w-full shrink-0 lg:w-auto" data-product-page-intro-thumbs>
+            <div class="swiper product-page__swiper-thumbs w-full max-w-full lg:max-w-none">
+              <div class="swiper-wrapper">
+                {%- if product.media.size > 0 -%}
+                  {%- for media in product.media -%}
+                    <div class="swiper-slide">
+                      <div
+                        class="product-page__thumb{% if media.media_type == 'video' %} product-page__thumb--video{% endif %}"
+                        role="button"
+                        tabindex="0"
+                        aria-label="Show {{ product.title | escape }} image {{ forloop.index }}"
+                      >
+                        {{
+                          media.preview_image
+                          | image_url: width: 240
+                          | image_tag:
+                            loading: 'lazy',
+                            widths: '120, 180, 240',
+                            sizes: '120px',
+                            alt: product.title | escape
+                        }}
+                        {%- if media.media_type == 'video' -%}
+                          <span class="product-page__thumb-play" aria-hidden="true"></span>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  {%- endfor -%}
+                {%- elsif product.featured_media -%}
+                  <div class="swiper-slide">
+                    <div class="product-page__thumb" role="button" tabindex="0" aria-label="Show {{ product.title | escape }} image 1">
+                      {{
+                        product.featured_media
+                        | image_url: width: 240
+                        | image_tag: loading: 'eager', widths: '120, 180, 240', sizes: '120px', alt: product.title | escape
+                      }}
+                    </div>
+                  </div>
+                {%- endif -%}
+                {%- if collection_gallery_video != blank -%}
+                  <div class="swiper-slide" data-collection-gallery-video-thumb>
+                    <div
+                      class="product-page__thumb product-page__thumb--video"
+                      role="button"
+                      tabindex="0"
+                      aria-label="Show {{ collection_gallery_video_label | default: product.title | escape }} video"
+                    >
+                      {%- if product.featured_media != blank -%}
+                        {{
+                          product.featured_media
+                          | image_url: width: 240
+                          | image_tag:
+                            loading: 'lazy',
+                            widths: '120, 180, 240',
+                            sizes: '120px',
+                            alt: collection_gallery_video_label | default: product.title | escape
+                        }}
+                      {%- else -%}
+                        <span class="product-page__thumb-fallback" aria-hidden="true">Video</span>
+                      {%- endif -%}
+                      <span class="product-page__thumb-play" aria-hidden="true"></span>
+                    </div>
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+          {%- endunless -%}
+</div>
+      {%- endunless -%}
+      {%- unless render_part == 'before_tabs' -%}
+    
+      </div>
+
+      <div
+        id="product-page-intro-sidebar"
+        data-product-page-intro-sidebar
+        class="product-page__sidebar order-2 min-w-0 lg:order-none lg:col-start-2 lg:row-start-1 bg-white rounded-xs p-3 sm:p-4 lg:pl-4"
+      >
+        {%- comment -%} Desktop, large desktop & iPad landscape (>= 1024px): sidebar product summary {%- endcomment -%}
+        <div
+          class="product-page__product-info-container product-page__product-info-container--desktop product-page__product-info-container--sidebar"
+          data-product-page-product-info="desktop-sidebar"
+        >
+          <header class="product-page__header product-page__header--desktop mb-4" data-product-page-intro-header-desktop>
+            {{ product_info_summary_plain }}
+          </header>
+          <hr class="my-4 border-t border-[#e8e8e8] md:my-6" />
+        </div>
+
+        <div class="mt-4 mb-4">
+        {% if product.description %}
+          <div class="product-page__description product-page__description--sidebar mb-6">
+            <div class="product-page__description-body text-base text-[#333] leading-relaxed">
+              {{ product.description }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    
+      <div class="product-page__wizard-difference">
+        {%- unless is_gift_card_gallery -%}
+          {%- if product_difference_html != blank -%}
+            {{ product_difference_html }}
+          {%- else -%}
+            {% render 'product-forever-art-difference', product: product %}
+          {%- endif -%}
+        {%- endunless -%}
+      </div>
+        {% comment %} Wizard start {% endcomment %}
+
+        {%- if show_admin_tools and form_builder_page != blank -%}
+          <div class="product-page__admin-tools mb-4 rounded-xs border border-dashed border-[#d4d4d4] bg-[#fafafa] px-3 py-2.5 text-sm">
+            <span class="font-medium text-[#666]">Admin</span>
+            <a
+              href="{{ form_builder_page.url }}"
+              class="ml-2 font-medium text-[#0f766e] underline underline-offset-2 hover:text-black"
+            >
+              Form config builder
+            </a>
+            <span class="mt-1 block text-xs text-[#888]">
+              Build or edit JSON for <code class="text-[11px]">custom.product_form_configuration</code>, then paste on this product.
+            </span>
+          </div>
+        {%- endif -%}
+
+        {%- form 'product', product, id: 'product-form', class: 'product-form', data-money-format: shop.money_format -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-price-cents="{{ current_variant.price }}">
+          {%- liquid
+            assign fee_product = settings.customization_fee_product
+            if fee_product == blank
+              assign fee_product = all_products['customization-charge']
+            endif
+            if fee_product == blank
+              assign fee_product = all_products['customization-fee']
+            endif
+            assign fee_variant_id = blank
+            assign fee_unit_price_cents = 0
+            if fee_product != blank
+              assign fee_variant = fee_product.selected_or_first_available_variant
+              assign fee_variant_id = fee_variant.id
+              assign fee_unit_price_cents = fee_variant.price
+            endif
+          -%}
+          {%- if fee_variant_id != blank -%}
+            <input
+              type="hidden"
+              name="customization_fee_variant_id"
+              value="{{ fee_variant_id }}"
+              data-customization-fee-variant-id
+              data-customization-fee-unit-cents="{{ fee_unit_price_cents }}"
+            >
+          {%- endif -%}
+
+          <div class="product-page__wizard-layout">
+            <div class="product-page__wizard-main min-w-0">
+              {% render 'product-form-wizard',
+                product: product,
+                form: form,
+                product_price: product_price,
+                shipping_highlights_html: product_shipping_highlights_html,
+                hide_wizard_heading: is_gift_card_gallery,
+                lock_quantity: is_gift_card_gallery,
+                show_gift_card_send_to: is_gift_card_gallery
+              %}
+            </div>
+          </div>
+        {%- endform -%}
+
+      
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="product-party-names-info-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="product-party-names-info-modal-title"
+    aria-hidden="true"
+    class="product-page__info-modal fixed inset-0 z-[9999] hidden flex h-full w-full flex-col overflow-hidden bg-white"
+  >
+    <div class="flex shrink-0 items-center justify-between gap-3 border-b border-[#e8e8e8] px-4 py-4 md:px-6">
+      <h2 id="product-party-names-info-modal-title" class="product-page__info-modal-title text-lg font-semibold text-[#141414] md:text-xl">Why include your bridal party names</h2>
+      <button
+        type="button"
+        class="inline-flex shrink-0 rounded p-2 text-[#141414] transition hover:bg-[#f5f5f5] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#141414]"
+        data-modal-hide="product-party-names-info-modal"
+        aria-label="Close"
+      >
+        <i class="hgi hgi-stroke hgi-rounded hgi-cancel-01 text-[1.35rem] leading-none" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="product-page__info-modal-body min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-5 md:px-8 md:py-8">
+      <div class="mx-auto max-w-3xl space-y-8">
+
+        <section class="product-page__info-modal-section">
+          <h3 class="mb-2 text-lg font-bold uppercase tracking-[0.06em] text-[#141414]">Why include your bridal party names</h3>
+
+
+          <div class="product-page__voice-block flex w-full flex-col gap-3">
+            <p class="product-page__label product-page__voice-intro mb-0 w-full min-w-0 leading-snug">
+            Why include your wedding party names on your wedding poster?
+            </p>
+            <div class="product-page__voice-player w-full min-w-0">
+              <audio
+                class="product-page__voice-audio block h-10 w-full min-w-0"
+                controls
+                preload="metadata"
+                src="{{ 'wedding-poster.m4a' | asset_url }}"
+                aria-label="Audio: why include wedding party names on your poster"
+              >
+                <a href="{{ 'wedding-poster.m4a' | asset_url }}" class="text-sm text-[#555] underline underline-offset-2 hover:text-black">Download audio (M4A)</a>
+              </audio>
+            </div>
+          </div>
+
+          <p class="text-sm leading-relaxed text-[#333] md:text-[0.9375rem] mt-4">
+            It’s not common—so that’s your first reason (it’s different!). But more than that, these are the people you chose to stand by your side. They’ve helped plan, kept your secrets, fixed problems, and some will even co-sign your marriage certificate. Including their names is a thoughtful way to honour them on your forever keepsake.
+          </p>
+          <p class="mt-3 text-sm leading-relaxed text-[#333] md:text-[0.9375rem]">
+            Use first names, or nicknames if that’s what everyone knows them by, to keep it personal. You can include your bridal party, MC, flower girl, page boy, celebrant, DJ…and of course, your fur baby!
+          </p>
+        </section>
+        <section class="product-page__info-modal-section">
+          <h3 class="mb-2 text-lg font-bold uppercase tracking-[0.06em] text-[#141414]">Colours</h3>
+          <p class="text-sm leading-relaxed text-[#333] md:text-[0.9375rem]">
+            Printed colour may differ slightly from what you see on screen, due to differences in monitor settings, printing processes, and lighting conditions.
+          </p>
+        </section>
+        <section class="product-page__info-modal-section">
+          <h3 class="mb-2 text-lg font-bold uppercase tracking-[0.06em] text-[#141414]">Note</h3>
+          <p class="text-sm leading-relaxed text-[#333] md:text-[0.9375rem]">
+            Max of 12 characters / numbers only – No special characters. If left blank we will display “FOREVER ART”
+          </p>
+        </section>
+        <section class="product-page__info-modal-section">
+          <h3 class="mb-2 text-lg font-bold uppercase tracking-[0.06em] text-[#141414]">Our promise</h3>
+          <p class="text-sm leading-relaxed text-[#333] md:text-[0.9375rem]">
+            We’re committed to giving you the best ordering experience possible. Each poster is carefully displayed in all available design layouts, showing the different ways your information can appear. Because of this, and the detailed mock-ups you receive, most customers find revisions are rarely needed.
+          </p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="product-color-info-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="product-color-info-modal-title"
+    aria-hidden="true"
+    class="product-page__info-modal fixed inset-0 z-[9999] hidden flex h-full w-full flex-col overflow-hidden bg-white"
+  >
+    <div class="flex shrink-0 items-center justify-between gap-3 border-b border-[#e8e8e8] px-4 py-4 md:px-6">
+      <h2 id="product-color-info-modal-title" class="product-page__info-modal-title text-lg font-semibold text-[#141414] md:text-xl">Colours</h2>
+      <button
+        type="button"
+        class="inline-flex shrink-0 rounded p-2 text-[#141414] transition hover:bg-[#f5f5f5] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#141414]"
+        data-modal-hide="product-color-info-modal"
+        aria-label="Close"
+      >
+        <i class="hgi hgi-stroke hgi-rounded hgi-cancel-01 text-[1.35rem] leading-none" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="product-page__info-modal-body min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-5 md:px-8 md:py-8">
+      <div class="mx-auto max-w-3xl">
+        <p class="text-sm leading-relaxed text-[#333] md:text-[0.9375rem]">
+          Printed colour may differ slightly from what you see on screen, due to differences in monitor settings, printing processes, and lighting conditions.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="clear: both;"></div>
+{%- endunless -%}

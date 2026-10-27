@@ -1,0 +1,18 @@
+api_version = "2025-01"
+
+[[extensions]]
+name = "Additional charge transform"
+handle = "additional-charge-transform"
+type = "function"
+uid = "additional-charge-transform"
+description = "Applies per-field customization charges stored in line item property _additional_charge_cents"
+
+  [[extensions.targeting]]
+  target = "purchase.cart-transform.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = "npm run build"
+  path = "dist/function.wasm"
+  watch = ["src/**/*.js"]

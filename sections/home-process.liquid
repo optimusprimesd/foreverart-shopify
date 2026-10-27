@@ -1,0 +1,297 @@
+<section
+  class="home-process home-tale relative z-10 overflow-hidden bg-black text-white"
+  data-header-context="dark"
+  aria-labelledby="home-process-heading-{{ section.id }}"
+  {{ section.shopify_attributes }}
+>
+  <div class="home-process__layout">
+    <div class="home-process__media-col">
+      <div class="home-process__media-frame">
+        <div class="swiper home-process__swiper" data-home-process-swiper>
+          <div class="swiper-wrapper">
+            {%- if section.blocks.size > 0 -%}
+              {%- for block in section.blocks -%}
+                {%- liquid
+                  assign media_type = block.settings.media_type | default: 'video'
+                  assign slide_label = block.settings.media_label | default: block.settings.video_label | default: 'Process media'
+                  assign has_image = false
+                  assign has_video = false
+                  assign has_video_fallback = false
+                  if block.settings.image != blank
+                    assign has_image = true
+                  endif
+                  if block.settings.video != blank
+                    assign has_video = true
+                  endif
+                  if block.settings.video_url != blank or block.settings.video_asset != blank
+                    assign has_video_fallback = true
+                  endif
+                  if media_type == 'image' and has_image == false and has_video
+                    assign media_type = 'video'
+                  elsif media_type == 'image' and has_image == false and has_video_fallback
+                    assign media_type = 'video'
+                  elsif media_type == 'video' and has_video == false and has_video_fallback == false and has_image
+                    assign media_type = 'image'
+                  endif
+                -%}
+                <div
+                  class="swiper-slide"
+                  data-home-process-slide-type="{{ media_type }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <div class="home-process__slide">
+                    {%- if media_type == 'image' and has_image -%}
+                      {{
+                        block.settings.image
+                        | image_url: width: 2400
+                        | image_tag:
+                          class: 'home-process__image',
+                          loading: 'lazy',
+                          widths: '600, 900, 1200, 1600, 2000, 2400',
+                          sizes: '(min-width: 1024px) 50vw, 100vw',
+                          alt: slide_label
+                      }}
+                    {%- elsif has_video -%}
+                      {{
+                        block.settings.video
+                        | video_tag:
+                          class: 'home-process__video',
+                          image_size: '2400x',
+                          autoplay: true,
+                          loop: true,
+                          muted: true,
+                          controls: false,
+                          playsinline: true,
+                          preload: 'metadata'
+                      }}
+                    {%- elsif block.settings.video_url != blank -%}
+                      <video
+                        class="home-process__video"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="metadata"
+                        aria-label="{{ slide_label | escape }}"
+                      >
+                        <source src="{{ block.settings.video_url }}" type="video/mp4">
+                      </video>
+                    {%- elsif block.settings.video_asset != blank -%}
+                      <video
+                        class="home-process__video"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="metadata"
+                        aria-label="{{ slide_label | escape }}"
+                      >
+                        <source
+                          src="{{ block.settings.video_asset | asset_url }}"
+                          type="video/mp4"
+                        >
+                      </video>
+                    {%- else -%}
+                      <div class="home-process__media-placeholder" role="img" aria-label="{{ slide_label | escape }}">
+                        <span>Add an image or video in the theme editor</span>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              <div class="swiper-slide" data-home-process-slide-type="image">
+                <div class="home-process__slide">
+                  <div class="home-process__media-placeholder" role="img" aria-label="Process media">
+                    <span>Add media slides in the theme editor</span>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+
+          <div class="home-process__play-overlay is-hidden" data-home-process-play-overlay hidden>
+            <button
+              type="button"
+              class="home-process__play"
+              data-home-process-play
+              aria-label="Play video"
+            >
+              <svg class="home-process__play-icon" width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+                <circle cx="28" cy="28" r="27" stroke="currentColor" stroke-width="1.5" />
+                <path d="M23 18.5v19l16-9.5-16-9.5z" fill="currentColor" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="swiper-pagination home-process__pagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-process__content-col">
+      <div class="home-process__content">
+        {%- if section.settings.heading != blank -%}
+          <h2 id="home-process-heading-{{ section.id }}" class="home-process__title">
+            {{ section.settings.heading | escape }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.body != blank -%}
+          <div class="home-process__body">
+            {{ section.settings.body }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+          <a href="{{ section.settings.cta_url }}" class="home-process__cta">
+            {{ section.settings.cta_label | escape }}
+            <span class="home-process__cta-arrow" aria-hidden="true">→</span>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Home process",
+  "tag": "section",
+  "class": "home-process-section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Process"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body",
+      "default": "<p>All of these things are in my DNA and it was my love of music that got the first spark of FOREVER ART going when I created my very first DREAM CONCERT poster using leftover scrap wood, random items from my shed and a domestic vinyl cutting machine I'd picked up along the way. And as they say...the rest is history.</p><p>We all have stories to tell about good times and people from the past and present. Those special memories that lingers in our thoughts. Those good vibes we want to pass on to the people around us. Laugh, remember, motivate and inspire. And most of all, we want to connect with people.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "How we work"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "media_slide",
+      "name": "Media slide",
+      "settings": [
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Media type",
+          "options": [
+            { "value": "image", "label": "Image" },
+            { "value": "video", "label": "Video" }
+          ],
+          "default": "video"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Used when Media type is Image."
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Upload or select a Shopify-hosted video (Files). Preferred for Video slides."
+        },
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "External MP4 URL",
+          "info": "Optional fallback if no Shopify video is selected."
+        },
+        {
+          "type": "text",
+          "id": "video_asset",
+          "label": "Theme asset filename",
+          "info": "Optional legacy fallback, e.g. forever-art-home-process-video.mp4 in theme assets."
+        },
+        {
+          "type": "text",
+          "id": "media_label",
+          "label": "Accessibility label",
+          "default": "Forever Art process"
+        }
+      ]
+    },
+    {
+      "type": "video_slide",
+      "name": "Video slide (legacy)",
+      "settings": [
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Media type",
+          "options": [
+            { "value": "image", "label": "Image" },
+            { "value": "video", "label": "Video" }
+          ],
+          "default": "video"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "External MP4 URL"
+        },
+        {
+          "type": "text",
+          "id": "video_asset",
+          "label": "Theme video filename",
+          "default": "forever-art-home-process-video.mp4",
+          "info": "MP4 file in the theme assets folder."
+        },
+        {
+          "type": "text",
+          "id": "video_label",
+          "label": "Accessibility label",
+          "default": "Forever Art artisan at work"
+        },
+        {
+          "type": "text",
+          "id": "media_label",
+          "label": "Accessibility label (preferred)",
+          "default": "Forever Art artisan at work"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Home process",
+      "blocks": [
+        { "type": "media_slide" },
+        { "type": "media_slide" },
+        { "type": "media_slide" }
+      ]
+    }
+  ]
+}
+{% endschema %}

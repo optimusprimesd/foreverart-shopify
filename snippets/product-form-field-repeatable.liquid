@@ -1,0 +1,69 @@
+{%- assign field = field | default: nil -%}
+{%- if field != nil -%}
+
+{%- assign field_key = field.key | default: 'repeatable' -%}
+{%- assign property_name = field.property_name | default: field_key -%}
+{%- assign placeholder_base = field.placeholder | default: field_key | capitalize -%}
+{%- assign add_label = field.add_label | default: '+ Add' -%}
+{%- assign field_max_length = '' -%}
+{%- assign field_alphanumeric_only = false -%}
+{%- if field.validation -%}
+  {%- if field.validation.max_length != blank -%}
+    {%- assign field_max_length = field.validation.max_length -%}
+  {%- endif -%}
+  {%- if field.validation.alphanumeric_only == true -%}
+    {%- assign field_alphanumeric_only = true -%}
+  {%- endif -%}
+{%- endif -%}
+
+<div class="wizard__repeatable-list flex flex-col items-start gap-2" data-repeatable-list="{{ field_key }}">
+  <div class="wizard__repeatable-row" data-repeatable-row>
+    <div class="wizard__repeatable-row-main w-full min-w-0">
+      {%- assign repeatable_placeholder = placeholder_base | append: ' 1' -%}
+      {%- assign repeatable_aria_label = 'Information about ' | append: placeholder_base | downcase -%}
+      {% render 'product-input-info',
+        product: product,
+        input_info_name: property_name,
+        input_info_placeholder: repeatable_placeholder,
+        input_info_class: field.input_class,
+        input_info_wrap_class: 'mb-0',
+        input_info_required: field.required,
+        input_info_aria_label: repeatable_aria_label,
+        input_info_show_help: field.show_help,
+        input_info_tooltip_title: field.help_title,
+        input_info_tooltip_body: field.help_body,
+        input_info_show_voice: false,
+        input_info_show_video: false,
+        input_info_max_length: field_max_length,
+        input_info_alphanumeric_only: field_alphanumeric_only,
+        input_info_label: field.info_label,
+        input_info_additional_charge: field.additional_charge
+      %}
+    </div>
+    <button
+      type="button"
+      class="wizard__repeatable-remove"
+      data-repeatable-remove
+      hidden
+      aria-label="Remove {{ placeholder_base }}"
+    >
+      <i class="hgi hgi-stroke hgi-rounded hgi-cancel-01" aria-hidden="true"></i>
+    </button>
+  </div>
+  <button
+    type="button"
+    class="ml-2 block rounded border-0 bg-[#f7f7f9] px-4 py-2 text-sm font-semibold text-[#c9a227] hover:bg-[#fffbe6]"
+    aria-label="Add {{ placeholder_base }}"
+    data-repeatable-add="{{ field_key }}"
+    data-repeatable-name="{{ property_name }}"
+    data-repeatable-placeholder="{{ placeholder_base }}"
+    data-repeatable-class="product-page__input w-full {{ field.input_class }}"
+    data-repeatable-required="{{ field.required }}"
+    {% if field.max_items != blank and field.max_items > 0 %}data-repeatable-max="{{ field.max_items }}"{% endif %}
+    id="add-{{ field_key }}-btn"
+    data-repeatable-count="1"
+  >
+    {{ add_label }}
+  </button>
+</div>
+{%- endif -%}

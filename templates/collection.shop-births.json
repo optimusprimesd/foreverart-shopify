@@ -1,0 +1,37 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "shop_category": {
+      "type": "shop-category",
+      "blocks": {
+        "src_0_kids_collection": {
+          "type": "collection_source",
+          "settings": {
+            "collection": "kids-collection"
+          }
+        }
+      },
+      "block_order": [
+        "src_0_kids_collection"
+      ],
+      "settings": {
+        "eyebrow": "Gifts & Moments",
+        "heading": "Births",
+        "intro": "<p>All Kids Collection products \u2014 preserve the earliest chapters of their story.</p>",
+        "include_current_collection": true,
+        "max_products": 48
+      }
+    }
+  },
+  "order": [
+    "shop_category"
+  ]
+}

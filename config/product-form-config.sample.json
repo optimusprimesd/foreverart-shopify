@@ -1,0 +1,261 @@
+{
+  "heading": "Customize Your Sign",
+  "steps": [
+    {
+      "number": 1,
+      "title": "1. The Design",
+      "nav_label": "",
+      "fields": [
+        {
+          "key": "text_color",
+          "type": "text_color",
+          "enabled": true,
+          "show_help": true,
+          "help_title": "Printed Colours",
+          "help_body": "Printed colour may differ slightly from what you see on screen, due to differences in monitor settings, printing processes, and lighting conditions."
+        },
+        {
+          "key": "background_color",
+          "type": "background_color",
+          "enabled": true
+        },
+        {
+          "key": "size",
+          "type": "size",
+          "enabled": true,
+          "label": "Select Size (inches)",
+          "property_name": "Size",
+          "required": true,
+          "show_help": true,
+          "help_title": "Select Size",
+          "help_body": "Choose the print size that best fits your venue and display setup.",
+          "options": "18x24,24x36,30x40"
+        },
+        {
+          "key": "orientation",
+          "type": "radio",
+          "enabled": true,
+          "label": "Orientation",
+          "property_name": "Orientation",
+          "required": true,
+          "options": "Portrait,Landscape"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "2. The People",
+      "nav_label": "",
+      "fields": [
+        {
+          "key": "bride_name",
+          "type": "text",
+          "enabled": true,
+          "property_name": "bride_name",
+          "placeholder": "Bride's Name",
+          "required": true,
+          "autocomplete": "given-name",
+          "show_help": true,
+          "help_title": "Bride's Name",
+          "help_body": "Bride — recommended first name only."
+        },
+        {
+          "key": "groom_name",
+          "type": "text",
+          "enabled": true,
+          "property_name": "groom_name",
+          "placeholder": "Groom's Name",
+          "required": true,
+          "autocomplete": "family-name",
+          "show_help": true,
+          "help_title": "Groom's Name",
+          "help_body": "Groom — recommended first name only."
+        },
+        {
+          "key": "wedding_party",
+          "type": "text",
+          "enabled": true,
+          "property_name": "wedding_party",
+          "placeholder": "Wedding Party",
+          "required": true,
+          "show_help": true,
+          "help_title": "Wedding Party",
+          "help_body": "Wedding party — recommended first names only."
+        },
+        {
+          "key": "maid_of_honor",
+          "type": "select",
+          "enabled": true,
+          "property_name": "maid_of_honor",
+          "placeholder": "Maid of Honor",
+          "required": true,
+          "options": "Maid of Honor,Matron of Honor",
+          "show_help": true,
+          "help_title": "Maid of Honor",
+          "help_body": "Maid of Honour — someone who is not married. Recommended first and last name."
+        },
+        {
+          "key": "best_man",
+          "type": "text",
+          "enabled": true,
+          "property_name": "best_man",
+          "placeholder": "Best Man",
+          "required": true,
+          "show_help": true,
+          "help_title": "Best Man",
+          "help_body": "Best Man — recommended first name only."
+        },
+        {
+          "key": "bridesmaid",
+          "type": "repeatable",
+          "enabled": true,
+          "property_name": "bridesmaid",
+          "placeholder": "Bridesmaid",
+          "required": true,
+          "input_class": "product-page__input_bridesmaid",
+          "add_label": "+ Add",
+          "show_help": true,
+          "help_title": "Bridesmaid",
+          "help_body": "Bridesmaid — recommended first name only."
+        },
+        {
+          "key": "groomsman",
+          "type": "repeatable",
+          "enabled": true,
+          "property_name": "groomsman",
+          "placeholder": "Groomsman",
+          "required": true,
+          "input_class": "product-page__input_groomsman",
+          "add_label": "+ Add",
+          "show_help": true,
+          "help_title": "Groomsman",
+          "help_body": "Groomsman — recommended first name only."
+        },
+        {
+          "key": "other",
+          "type": "text",
+          "enabled": true,
+          "property_name": "other",
+          "placeholder": "Other",
+          "required": true,
+          "show_help": true,
+          "help_title": "Other",
+          "help_body": "Other names — e.g. flower girl, page boy, celebrant, or fur baby."
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "3. The Location & Event Details",
+      "nav_label": "",
+      "fields": [
+        {
+          "key": "venue",
+          "type": "text",
+          "enabled": true,
+          "property_name": "venue",
+          "placeholder": "Venue",
+          "required": true,
+          "wrap_class": "mb-4"
+        },
+        {
+          "key": "ceremony_space",
+          "type": "text",
+          "enabled": true,
+          "property_name": "ceremony_space",
+          "placeholder": "Ceremony Space",
+          "required": true,
+          "wrap_class": "mb-4",
+          "show_help": true,
+          "help_title": "Ceremony Space",
+          "help_body": "Enter the ceremony space or location detail for your sign."
+        },
+        {
+          "key": "event_date",
+          "type": "date",
+          "enabled": true,
+          "property_name": "event_date",
+          "placeholder": "Wedding date",
+          "required": true,
+          "show_help": true,
+          "help_title": "Wedding Date",
+          "help_body": "Select your wedding date for the sign."
+        },
+        {
+          "key": "ceremony_time",
+          "type": "time",
+          "enabled": true,
+          "property_name": "ceremony_time",
+          "label": "Ceremony Time",
+          "placeholder": "Ceremony time",
+          "required": true,
+          "show_help": true,
+          "help_title": "Ceremony Time",
+          "help_body": "Enter the ceremony time for your sign."
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "4. The Message",
+      "nav_label": "",
+      "fields": [
+        {
+          "key": "message_voice",
+          "type": "voice_block",
+          "enabled": true,
+          "audio_asset": "wedding-poster.m4a",
+          "audio_id": "wizard-step1-wedding-voice-2",
+          "canvas_id": "wizard-step3-sound-waves-canvas"
+        },
+        {
+          "key": "party_names",
+          "type": "textarea",
+          "enabled": true,
+          "property_name": "party_names",
+          "placeholder": "Custom message (optional)",
+          "rows": 3,
+          "show_help": true,
+          "help_title": "Custom Message",
+          "help_body": "Add a personal message to appear on your sign. Keep it concise so it reads clearly on the finished poster."
+        },
+        {
+          "key": "special_notes",
+          "type": "textarea",
+          "enabled": true,
+          "property_name": "special_notes",
+          "placeholder": "Special Notes (Optional)",
+          "rows": 3,
+          "show_help": true,
+          "help_title": "Special Notes",
+          "help_body": "Add any special notes or requests for your order."
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "5. The Signature",
+      "nav_label": "",
+      "fields": [
+        {
+          "key": "signature",
+          "type": "text",
+          "enabled": true,
+          "property_name": "signature",
+          "placeholder": "Story Inscription",
+          "required": true,
+          "wrap_class": "mb-4",
+          "additional_charge": 20,
+          "info_label": "Optional extra. Additional charge applies. ($20.00)",
+          "validation": {
+            "max_length": 12,
+            "alphanumeric_only": true
+          },
+          "show_help": true,
+          "help_title": "Story Inscription",
+          "help_body": "Your story inscription appears on the finished sign. Max 12 characters — letters and numbers only; if left blank we display FOREVER ART."
+        }
+      ]
+    }
+  ]
+}

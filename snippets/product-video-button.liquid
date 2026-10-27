@@ -1,0 +1,14 @@
+{%- assign video_slide_index = video_slide_index | default: video_url | default: '' -%}
+{%- assign video_aria_label = video_aria_label | default: 'Play product video' -%}
+
+<button
+  type="button"
+  class="product-page__video-toggle wizard__input-info-btn inline-flex items-center justify-center rounded-full p-2"
+  style="background-color: #e3f2fd;"
+  aria-label="{{ video_aria_label }}"
+  data-video-toggle
+  {% if video_slide_index != blank %}data-video-slide-index="{{ video_slide_index }}"{% endif %}
+>
+  <i class="hgi hgi-stroke hgi-rounded hgi-play-circle-02 video-icon-play text-[1.25rem] leading-none text-[#141414]" aria-hidden="true"></i>
+  <i class="hgi hgi-stroke hgi-rounded hgi-pause video-icon-pause text-[1.25rem] leading-none text-[#141414]" aria-hidden="true" style="display:none"></i>
+</button>

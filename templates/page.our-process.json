@@ -1,0 +1,67 @@
+{
+  "sections": {
+    "our_process": {
+      "type": "our-process",
+      "blocks": {
+        "step_1": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Step 01",
+            "heading": "Choose your design",
+            "body": "<p>Explore the collections and choose the poster that best fits the story you want to preserve.</p>",
+            "show_image": true,
+            "image_position": "right",
+            "tone": "light"
+          }
+        },
+        "step_2": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Step 02",
+            "heading": "Make it yours",
+            "body": "<p>Add the names, dates, places and details that belong in your story. We’ll guide you through exactly what we need.</p>",
+            "show_image": true,
+            "image_position": "left",
+            "tone": "light"
+          }
+        },
+        "step_3": {
+          "type": "callout",
+          "settings": {
+            "kicker": "Step 03",
+            "heading": "We make it",
+            "body": "<p>Your poster is individually produced and finished by hand in our workshop using the materials and craftsmanship that define Forever Art.</p>",
+            "card_label": "Step 03",
+            "card_title": "We make it",
+            "card_note": "Hand finished in our workshop."
+          }
+        },
+        "step_4": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Step 04",
+            "heading": "Your story arrives",
+            "body": "<p>Your finished piece is carefully packed and delivered ready to hang, keep and become part of your home.</p>",
+            "tone": "light"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4"
+      ],
+      "settings": {
+        "hero_eyebrow": "Our process",
+        "hero_heading": "Creating your Forever Art piece should be as enjoyable as owning it.",
+        "hero_lede": "We’ve made the process simple from the beginning.",
+        "closing_heading": "Your story arrives.",
+        "closing_body": "<p>Your finished piece is carefully packed and delivered ready to hang, keep and become part of your home.</p>",
+        "cta_label": "Explore the collections",
+        "cta_url": "/collections"
+      }
+    }
+  },
+  "order": ["our_process"]
+}

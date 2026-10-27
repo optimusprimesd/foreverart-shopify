@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "policy_page": {
+      "type": "policy-page",
+      "blocks": {
+        "chapter_intro": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Terms",
+            "heading": "Terms & Conditions",
+            "body": "<p>These terms set out the agreement between you and Forever Art when you browse or purchase from our store. Replace this content with your full terms in the theme editor, or paste them into the Shopify page body and turn on “Show Shopify page content”.</p>",
+            "tone": "light"
+          }
+        }
+      },
+      "block_order": ["chapter_intro"],
+      "settings": {
+        "hero_eyebrow": "Legal",
+        "hero_heading": "Terms & Conditions",
+        "hero_lede": "The terms that apply when you shop with Forever Art.",
+        "show_page_content": true,
+        "closing_heading": "Need clarification?",
+        "closing_body": "<p>If anything in these terms is unclear, we’re happy to talk it through.</p>",
+        "cta_label": "Contact us",
+        "cta_url": "/pages/contact-us"
+      }
+    }
+  },
+  "order": ["policy_page"]
+}

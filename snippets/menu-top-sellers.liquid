@@ -1,0 +1,47 @@
+{%- liquid
+  assign has_products = false
+  for block in section.blocks
+    if block.settings.product != blank
+      assign has_products = true
+      break
+    endif
+  endfor
+
+  assign bg_brightness = section.settings.background_color | color_brightness
+  assign use_solid_heading = section.settings.use_text_color_for_heading
+  if use_solid_heading == false and bg_brightness > 160
+    assign use_solid_heading = true
+  endif
+-%}
+
+<aside
+  class="shop-mega__products menu-top-sellers home-top-sellers"
+  aria-label="{{ section.settings.heading | default: 'Top sellers' | escape }}"
+  style="color: {{ section.settings.text_color }}; --home-top-sellers-text: {{ section.settings.text_color }}; --home-top-sellers-bg: {{ section.settings.background_color }}; --home-collections-text: {{ section.settings.text_color }}; --home-top-sellers-heading: {{ section.settings.text_color }}; --home-top-sellers-description: {{ section.settings.text_color | color_modify: 'alpha', 0.88 }};"
+>
+  <div class="home-top-sellers__inner w-full">
+    <div class="home-top-sellers__layout">
+      {%- if has_products -%}
+        <div class="home-top-sellers__grid">
+          {%- for block in section.blocks limit: 4 -%}
+            {%- if block.settings.product != blank -%}
+              {%- assign card_product = block.settings.product -%}
+              {%- assign card_product_image = card_product.featured_image | image_url: width: 600 -%}
+              {%- assign card_product_price = card_product.price | money -%}
+              {%- assign card_product_alt = card_product.title -%}
+              <div class="home-top-sellers__item" {{ block.shopify_attributes }}>
+                {% render 'product-item',
+                  product_item_image: card_product_image,
+                  product_item_title: card_product.title,
+                  product_item_price_amount: card_product_price,
+                  product_item_href: card_product.url,
+                  product_item_alt: card_product_alt
+                %}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</aside>

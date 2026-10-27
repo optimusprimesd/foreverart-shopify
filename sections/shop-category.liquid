@@ -1,0 +1,338 @@
+{%- comment -%}
+  Shop category collection template section.
+  Pulls products from the current collection plus optional extra collections
+  and specific products — used for Gifts & Moments / Places & Property shop pages.
+{%- endcomment -%}
+
+{%- liquid
+  assign heading = section.settings.heading | default: collection.title | default: 'Shop'
+  assign eyebrow = section.settings.eyebrow
+  assign intro = section.settings.intro
+  if intro == blank and collection.description != blank
+    assign intro = collection.description
+  endif
+
+  assign include_current = true
+  if section.settings.include_current_collection == false
+    assign include_current = false
+  endif
+
+  assign max_products = section.settings.max_products | default: 48 | plus: 0
+  assign shown_ids = '|'
+  assign product_count = 0
+
+  if include_current and collection != blank
+    for product in collection.products
+      if product_count >= max_products
+        break
+      endif
+      assign id_token = '|' | append: product.id | append: '|'
+      unless shown_ids contains id_token
+        assign shown_ids = shown_ids | append: product.id | append: '|'
+        assign product_count = product_count | plus: 1
+      endunless
+    endfor
+  endif
+
+  for block in section.blocks
+    if product_count >= max_products
+      break
+    endif
+    if block.type == 'collection_source' and block.settings.collection != blank
+      assign source_collection = block.settings.collection
+      for product in source_collection.products
+        if product_count >= max_products
+          break
+        endif
+        assign id_token = '|' | append: product.id | append: '|'
+        unless shown_ids contains id_token
+          assign shown_ids = shown_ids | append: product.id | append: '|'
+          assign product_count = product_count | plus: 1
+        endunless
+      endfor
+    elsif block.type == 'product' and block.settings.product != blank
+      assign product = block.settings.product
+      assign id_token = '|' | append: product.id | append: '|'
+      unless shown_ids contains id_token
+        assign shown_ids = shown_ids | append: product.id | append: '|'
+        assign product_count = product_count | plus: 1
+      endunless
+    endif
+  endfor
+
+  assign shown_ids = '|'
+  assign rendered_count = 0
+-%}
+
+<div class="collection-page shop-category-page" data-page-intro data-header-context="light" {{ section.shopify_attributes }}>
+  <section class="collection-hero" aria-label="{{ heading | escape }}">
+    <div class="collection-hero__media" data-page-intro-media>
+      {%- if section.settings.hero_image != blank -%}
+        {%- assign hero_alt = section.settings.hero_image.alt | default: heading | escape -%}
+        {{
+          section.settings.hero_image
+          | image_url: width: 2000
+          | image_tag:
+            loading: 'eager',
+            class: 'collection-hero__image',
+            sizes: '100vw',
+            widths: '800, 1200, 1600, 2000',
+            alt: hero_alt
+        }}
+      {%- elsif collection.image != blank -%}
+        {%- assign hero_alt = collection.image.alt | default: heading | escape -%}
+        {{
+          collection.image
+          | image_url: width: 2000
+          | image_tag:
+            loading: 'eager',
+            class: 'collection-hero__image',
+            sizes: '100vw',
+            widths: '800, 1200, 1600, 2000',
+            alt: hero_alt
+        }}
+      {%- else -%}
+        <div class="collection-hero__image collection-hero__image--placeholder"></div>
+      {%- endif -%}
+    </div>
+
+    <div class="collection-hero__overlay" aria-hidden="true" data-page-intro-overlay></div>
+
+    <div class="collection-hero__content">
+      {%- if eyebrow != blank -%}
+        <p class="shop-category__eyebrow" data-page-intro-subtitle>{{ eyebrow | escape }}</p>
+      {%- endif -%}
+      <h1 class="collection-hero__title" data-page-intro-title>{{ heading | escape }}</h1>
+      {%- if intro != blank -%}
+        <div class="collection-hero__description" data-page-intro-subtitle>{{ intro }}</div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  <div class="collection-page__container">
+    <header class="collection-page__header" data-page-intro-panel>
+      <p class="collection-page__count">
+        {{ product_count }}
+        product{% if product_count != 1 %}s{% endif %}
+      </p>
+
+      {%- if product_count > 0 -%}
+        <div class="collection-filters" data-collection-filters>
+          <div class="collection-filters__row">
+            <label class="collection-filters__field">
+              <span class="collection-filters__label">Filter by name</span>
+              <input
+                class="collection-filters__input"
+                type="search"
+                placeholder="Search products…"
+                autocomplete="off"
+                data-filter-name
+              >
+            </label>
+
+            <label class="collection-filters__field">
+              <span class="collection-filters__label">Min price</span>
+              <select class="collection-filters__select" data-filter-min-price>
+                <option value="">Any</option>
+                <option value="5000">From {{ 5000 | money }}</option>
+                <option value="10000">From {{ 10000 | money }}</option>
+                <option value="15000">From {{ 15000 | money }}</option>
+                <option value="20000">From {{ 20000 | money }}</option>
+                <option value="30000">From {{ 30000 | money }}</option>
+                <option value="50000">From {{ 50000 | money }}</option>
+              </select>
+            </label>
+
+            <label class="collection-filters__field">
+              <span class="collection-filters__label">Max price</span>
+              <select class="collection-filters__select" data-filter-max-price>
+                <option value="">Any</option>
+                <option value="10000">Up to {{ 10000 | money }}</option>
+                <option value="20000">Up to {{ 20000 | money }}</option>
+                <option value="30000">Up to {{ 30000 | money }}</option>
+                <option value="50000">Up to {{ 50000 | money }}</option>
+                <option value="100000">Up to {{ 100000 | money }}</option>
+              </select>
+            </label>
+
+            <label class="collection-filters__field">
+              <span class="collection-filters__label">Sort by</span>
+              <select class="collection-filters__select" data-filter-sort>
+                <option value="featured">Featured</option>
+                <option value="price-asc">Price: low to high</option>
+                <option value="price-desc">Price: high to low</option>
+                <option value="name-asc">Name: A–Z</option>
+                <option value="name-desc">Name: Z–A</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="collection-filters__status">
+            <span class="collection-filters__results" data-filter-results-count></span>
+            <button class="collection-filters__clear" type="button" data-filter-clear>Clear</button>
+          </div>
+        </div>
+      {%- endif -%}
+    </header>
+
+    {%- if product_count > 0 -%}
+      <ul class="collection-grid" role="list">
+        {%- if include_current and collection != blank -%}
+          {%- for product in collection.products -%}
+            {%- if rendered_count >= max_products -%}{%- break -%}{%- endif -%}
+            {%- assign id_token = '|' | append: product.id | append: '|' -%}
+            {%- if shown_ids contains id_token -%}{%- continue -%}{%- endif -%}
+            {%- assign card_variant = product.selected_or_first_available_variant -%}
+            <li
+              class="collection-grid__item"
+              data-page-intro-item
+              data-product-item
+              data-product-title="{{ product.title | escape }}"
+              data-product-price="{{ card_variant.price }}"
+            >
+              {% render 'shop-category-product-card', product: product, card_variant: card_variant %}
+            </li>
+            {%- assign shown_ids = shown_ids | append: product.id | append: '|' -%}
+            {%- assign rendered_count = rendered_count | plus: 1 -%}
+          {%- endfor -%}
+        {%- endif -%}
+
+        {%- for block in section.blocks -%}
+          {%- if rendered_count >= max_products -%}{%- break -%}{%- endif -%}
+
+          {%- if block.type == 'collection_source' and block.settings.collection != blank -%}
+            {%- assign source_collection = block.settings.collection -%}
+            {%- for product in source_collection.products -%}
+              {%- if rendered_count >= max_products -%}{%- break -%}{%- endif -%}
+              {%- assign id_token = '|' | append: product.id | append: '|' -%}
+              {%- if shown_ids contains id_token -%}{%- continue -%}{%- endif -%}
+              {%- assign card_variant = product.selected_or_first_available_variant -%}
+              <li
+                class="collection-grid__item"
+                data-page-intro-item
+                data-product-item
+                data-product-title="{{ product.title | escape }}"
+                data-product-price="{{ card_variant.price }}"
+                {{ block.shopify_attributes }}
+              >
+                {% render 'shop-category-product-card', product: product, card_variant: card_variant %}
+              </li>
+              {%- assign shown_ids = shown_ids | append: product.id | append: '|' -%}
+              {%- assign rendered_count = rendered_count | plus: 1 -%}
+            {%- endfor -%}
+          {%- elsif block.type == 'product' and block.settings.product != blank -%}
+            {%- assign product = block.settings.product -%}
+            {%- assign id_token = '|' | append: product.id | append: '|' -%}
+            {%- if shown_ids contains id_token -%}{%- continue -%}{%- endif -%}
+            {%- assign card_variant = product.selected_or_first_available_variant -%}
+            <li
+              class="collection-grid__item"
+              data-page-intro-item
+              data-product-item
+              data-product-title="{{ product.title | escape }}"
+              data-product-price="{{ card_variant.price }}"
+              {{ block.shopify_attributes }}
+            >
+              {% render 'shop-category-product-card', product: product, card_variant: card_variant %}
+            </li>
+            {%- assign shown_ids = shown_ids | append: product.id | append: '|' -%}
+            {%- assign rendered_count = rendered_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <div class="collection-empty">
+        <p>No products in this shop category yet.</p>
+        {%- if request.design_mode -%}
+          <p class="shop-category__empty-hint">Add Collection source or Product blocks in this section, or add products to this collection.</p>
+        {%- endif -%}
+        <a class="collection-empty__link" href="{{ routes.all_products_collection_url }}">Browse all products</a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Shop category",
+  "tag": "section",
+  "class": "shop-category-section",
+  "max_blocks": 40,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Assign this template to a collection, then add Collection source / Product blocks. Gifts & Moments and Places & Property categories are covered by the preset templates (shop-weddings, shop-anniversaries, etc.)."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "e.g. Gifts & Moments, or Places & Property"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Defaults to the collection title."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "info": "Defaults to the collection description."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image",
+      "info": "Defaults to the collection image."
+    },
+    {
+      "type": "checkbox",
+      "id": "include_current_collection",
+      "label": "Include products from this collection",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Maximum products",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_source",
+      "name": "Collection source",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "All products from this collection are included (duplicates skipped)."
+        }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Use for curated lists (e.g. Street Signs, Places We’ve Lived)."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop category"
+    }
+  ]
+}
+{% endschema %}

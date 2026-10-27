@@ -1,0 +1,52 @@
+{%- comment -%}
+  Header profile / account control.
+
+  Uses Shopify's <shopify-account> web component so the avatar opens the
+  native account sheet (or legacy login) instead of a broken redirect to
+  shopify.com when Customer Accounts (not Classic) is enabled.
+
+  Docs: https://shopify.dev/docs/storefronts/themes/customer-engagement/account-component
+
+  Accepts:
+  - variant: 'icon' (desktop utility) | 'drawer' (mobile drawer row)
+  - account_menu: optional menu handle (default: customer-account-main-menu)
+{%- endcomment -%}
+
+{%- liquid
+  assign variant = variant | default: 'icon'
+  assign account_menu = account_menu | default: 'customer-account-main-menu'
+-%}
+
+{%- if shop.customer_accounts_enabled -%}
+  {%- if variant == 'drawer' -%}
+    <div class="site-header-drawer__account site-header-drawer__utility">
+      <shopify-account menu="{{ account_menu }}">
+        <div slot="signed-out-avatar" class="site-header__account-avatar-slot">
+          <img
+            src="{{ 'profile.svg' | asset_url }}"
+            alt=""
+            width="22"
+            height="22"
+            decoding="async"
+          >
+          <span class="site-header-drawer__account-label">Account</span>
+        </div>
+      </shopify-account>
+    </div>
+  {%- else -%}
+    <div class="site-header__account site-header__account--shopify">
+      <shopify-account menu="{{ account_menu }}">
+        <div slot="signed-out-avatar" class="site-header__account-avatar-slot site-header__account-avatar-slot--icon">
+          <img
+            src="{{ 'profile.svg' | asset_url }}"
+            alt="Account"
+            class="h-6 w-6 object-contain"
+            width="24"
+            height="24"
+            decoding="async"
+          >
+        </div>
+      </shopify-account>
+    </div>
+  {%- endif -%}
+{%- endif -%}

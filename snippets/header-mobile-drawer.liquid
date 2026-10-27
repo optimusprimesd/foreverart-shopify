@@ -1,0 +1,231 @@
+{%- comment -%}
+  Mobile / iPad portrait push drawer. Render after the site header.
+{%- endcomment -%}
+<div
+  id="site-header-drawer"
+  class="site-header-drawer"
+  data-site-header-drawer
+  aria-hidden="true"
+>
+  <div class="site-header-drawer__backdrop" data-site-header-drawer-backdrop tabindex="-1" aria-hidden="true"></div>
+  <aside
+    id="site-header-drawer-panel"
+    class="site-header-drawer__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Site menu"
+  >
+    <div class="site-header-drawer__head">
+      <p class="site-header-drawer__title">Menu</p>
+      <button
+        type="button"
+        class="site-header-drawer__close"
+        data-site-header-drawer-close
+        aria-label="Close menu"
+      >
+        <i class="hgi hgi-stroke hgi-rounded hgi-cancel-01" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="site-header-drawer__nav" aria-label="Mobile navigation">
+      <ul class="site-header-drawer__list">
+        <li class="site-header-drawer__item site-header-drawer__item--accordion">
+          <button
+            type="button"
+            class="site-header-drawer__link site-header-drawer__accordion-trigger{% if nav_shop_active %} is-active{% endif %}"
+            data-site-header-drawer-accordion
+            aria-expanded="false"
+            aria-controls="site-header-drawer-shop-panel"
+            {% if nav_shop_active %}aria-current="page"{% endif %}
+          >
+            Shop
+            <svg class="site-header-drawer__chevron" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="site-header-drawer-shop-panel" class="site-header-drawer__subpanel" hidden>
+            <div class="site-header-drawer__subgroup">
+              <p class="site-header-drawer__category">Collections</p>
+              <ul class="site-header-drawer__sublist">
+                {%- if collections.size > 0 -%}
+                  {%- assign menu_ordered_handles = 'property-collection,wedding-collection,kids-collection,music-collection,vehicle-collection,quote-collection' | split: ',' -%}
+                  {%- assign menu_ordered_titles = 'property collection,wedding collection,kids collection,music collection,vehicle collection,quote collection' | split: ',' -%}
+                  {%- assign menu_handles_shown = ',' -%}
+                  {%- for ordered_handle in menu_ordered_handles -%}
+                    {%- assign ordered_title = menu_ordered_titles[forloop.index0] -%}
+                    {%- assign matched_collection = collections[ordered_handle] -%}
+                    {%- if matched_collection == empty -%}
+                      {%- for collection in collections -%}
+                        {%- assign handle_lc = collection.handle | downcase -%}
+                        {%- assign title_lc = collection.title | downcase -%}
+                        {%- if handle_lc == ordered_handle or title_lc == ordered_title -%}
+                          {%- assign matched_collection = collection -%}
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+                    {%- if matched_collection != empty -%}
+                      {%- assign matched_handle = matched_collection.handle | downcase -%}
+                      {%- assign matched_token = ',' | append: matched_handle | append: ',' -%}
+                      {%- unless menu_handles_shown contains matched_token -%}
+                        <li>
+                          <a
+                            href="{{ matched_collection.url }}"
+                            class="site-header-drawer__sublink{% if active_collection_handle == matched_handle %} is-active{% endif %}"
+                            {% if active_collection_handle == matched_handle %}aria-current="page"{% endif %}
+                          >{{ matched_collection.title | escape }}</a>
+                        </li>
+                        {%- assign menu_handles_shown = menu_handles_shown | append: matched_handle | append: ',' -%}
+                      {%- endunless -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- for collection in collections -%}
+                    {%- assign handle_lc = collection.handle | downcase -%}
+                    {%- assign title_lc = collection.title | downcase -%}
+                    {%- if handle_lc == 'gift-card' or handle_lc == 'gift-cards' or handle_lc == 'gift-card-collection' or title_lc contains 'gift card' -%}
+                      <li>
+                        <a
+                          href="{{ collection.url }}"
+                          class="site-header-drawer__sublink{% if active_collection_handle == handle_lc %} is-active{% endif %}"
+                          {% if active_collection_handle == handle_lc %}aria-current="page"{% endif %}
+                        >{{ collection.title | escape }}</a>
+                      </li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  <li><a href="{{ routes.collections_url }}" class="site-header-drawer__sublink">All collections</a></li>
+                {%- endif -%}
+              </ul>
+            </div>
+            <div class="site-header-drawer__subgroup">
+              <p class="site-header-drawer__category">Gift &amp; Moments</p>
+              <ul class="site-header-drawer__sublist">
+                <li>
+                  <a
+                    href="/collections/shop-weddings"
+                    class="site-header-drawer__sublink{% if active_collection_handle == 'shop-weddings' %} is-active{% endif %}"
+                    {% if active_collection_handle == 'shop-weddings' %}aria-current="page"{% endif %}
+                  >Wedding</a>
+                </li>
+                <li>
+                  <a
+                    href="/collections/shop-anniversaries"
+                    class="site-header-drawer__sublink{% if active_collection_handle == 'shop-anniversaries' %} is-active{% endif %}"
+                    {% if active_collection_handle == 'shop-anniversaries' %}aria-current="page"{% endif %}
+                  >Anniversaries</a>
+                </li>
+                <li>
+                  <a
+                    href="/collections/shop-births"
+                    class="site-header-drawer__sublink{% if active_collection_handle == 'shop-births' %} is-active{% endif %}"
+                    {% if active_collection_handle == 'shop-births' %}aria-current="page"{% endif %}
+                  >Births</a>
+                </li>
+                <li>
+                  <a
+                    href="/collections/shop-birthdays"
+                    class="site-header-drawer__sublink{% if active_collection_handle == 'shop-birthdays' %} is-active{% endif %}"
+                    {% if active_collection_handle == 'shop-birthdays' %}aria-current="page"{% endif %}
+                  >Birthdays</a>
+                </li>
+                <li>
+                  <a
+                    href="/collections/shop-house-warming"
+                    class="site-header-drawer__sublink{% if active_collection_handle == 'shop-house-warming' %} is-active{% endif %}"
+                    {% if active_collection_handle == 'shop-house-warming' %}aria-current="page"{% endif %}
+                  >House Warming</a>
+                </li>
+                <li>
+                  <a
+                    href="/pages/gift-cards"
+                    class="site-header-drawer__sublink{% if nav_gift_cards_active %} is-active{% endif %}"
+                    {% if nav_gift_cards_active %}aria-current="page"{% endif %}
+                  >Gift Cards</a>
+                </li>
+              </ul>
+            </div>
+            <div class="site-header-drawer__subgroup">
+              <p class="site-header-drawer__category">Places &amp; Property</p>
+              <ul class="site-header-drawer__sublist">
+                <li>
+                  <a
+                    href="/collections/shop-settlement-gifts"
+                    class="site-header-drawer__sublink{% if active_collection_handle == 'shop-settlement-gifts' %} is-active{% endif %}"
+                    {% if active_collection_handle == 'shop-settlement-gifts' %}aria-current="page"{% endif %}
+                  >Settlement Gifts</a>
+                </li>
+                <li>
+                  <a
+                    href="/collections/shop-street-signs"
+                    class="site-header-drawer__sublink{% if active_collection_handle == 'shop-street-signs' %} is-active{% endif %}"
+                    {% if active_collection_handle == 'shop-street-signs' %}aria-current="page"{% endif %}
+                  >Street Signs</a>
+                </li>
+                <li>
+                  <a
+                    href="/collections/shop-places-weve-lived"
+                    class="site-header-drawer__sublink{% if active_collection_handle == 'shop-places-weve-lived' %} is-active{% endif %}"
+                    {% if active_collection_handle == 'shop-places-weve-lived' %}aria-current="page"{% endif %}
+                  >Places We've Lived</a>
+                </li>
+                <li>
+                  <a
+                    href="/collections/shop-quote"
+                    class="site-header-drawer__sublink{% if active_collection_handle == 'shop-quote' %} is-active{% endif %}"
+                    {% if active_collection_handle == 'shop-quote' %}aria-current="page"{% endif %}
+                  >Quote</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li class="site-header-drawer__item">
+          <a
+            href="{{ routes.collections_url }}"
+            class="site-header-drawer__link{% if nav_collections_active %} is-active{% endif %}"
+            {% if nav_collections_active %}aria-current="page"{% endif %}
+          >Collections</a>
+        </li>
+        <li class="site-header-drawer__item">
+          <a
+            href="/collections/property-collection"
+            class="site-header-drawer__link{% if nav_corporate_active %} is-active{% endif %}"
+            {% if nav_corporate_active %}aria-current="page"{% endif %}
+          >Corporate</a>
+        </li>
+        <li class="site-header-drawer__item">
+          <a
+            href="/pages/new-arrivals"
+            class="site-header-drawer__link{% if nav_new_arrivals_active %} is-active{% endif %}"
+            {% if nav_new_arrivals_active %}aria-current="page"{% endif %}
+          >New Arrivals</a>
+        </li>
+        <li class="site-header-drawer__item">
+          <a
+            href="/pages/top-sellers"
+            class="site-header-drawer__link{% if nav_top_sellers_active %} is-active{% endif %}"
+            {% if nav_top_sellers_active %}aria-current="page"{% endif %}
+          >Top Sellers</a>
+        </li>
+      </ul>
+
+      <div class="site-header-drawer__utilities">
+        {%- if show_account_icon != false -%}
+          {%- assign header_account_menu = customer_account_menu | default: 'customer-account-main-menu' -%}
+          {% render 'header-account',
+            variant: 'drawer',
+            account_menu: header_account_menu
+          %}
+        {%- endif -%}
+        <a href="{{ routes.search_url }}" class="site-header-drawer__utility" aria-label="Search">
+          <img src="{{ 'search.svg' | asset_url }}" alt="" width="22" height="22" decoding="async" />
+          <span>Search</span>
+        </a>
+        <a href="{{ routes.cart_url }}" class="site-header-drawer__utility" aria-label="Cart">
+          <img src="{{ 'cart.svg' | asset_url }}" alt="" width="22" height="22" decoding="async" />
+          <span>Cart</span>
+        </a>
+      </div>
+    </nav>
+  </aside>
+</div>

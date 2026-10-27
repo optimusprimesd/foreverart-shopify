@@ -1,0 +1,713 @@
+{%- if product == blank -%}
+  <div class="product-form-section product-form-section--empty px-4 py-8 text-sm text-[#666]">
+  </div>
+{%- else -%}
+  {%- liquid
+    assign current_variant = product.selected_or_first_available_variant
+    assign product_price = current_variant.price | money
+  -%}
+
+  {%- form 'product', product, id: 'product-form', class: 'product-form', data-money-format: shop.money_format -%}
+    <input type="hidden" name="id" value="{{ current_variant.id }}">
+    {% render 'product-form-wizard',
+      product: product,
+      product_price: product_price,
+      section: section,
+      form: form
+    %}
+  {%- endform -%}
+
+  {%- if section.settings.show_info_boxes -%}
+    <div class="mt-10 space-y-4">
+      {%- if section.settings.info_box_mint != blank -%}
+        <div class="product-page__info-box product-page__info-box--mint">
+          <div class="text-sm leading-relaxed">{{ section.settings.info_box_mint }}</div>
+        </div>
+      {%- endif -%}
+      {%- if section.settings.info_box_sky != blank -%}
+        <div class="product-page__info-box product-page__info-box--sky">
+          {{ section.settings.info_box_sky }}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endif -%}
+
+
+{% schema %}
+{
+  "name": "Product form",
+  "tag": "div",
+  "class": "product-form-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configuration source"
+    },
+    {
+      "type": "select",
+      "id": "config_source",
+      "label": "Form configuration source",
+      "options": [
+        {
+          "value": "theme_editor",
+          "label": "Theme editor (blocks below)"
+        },
+        {
+          "value": "product_metafield",
+          "label": "Product metafield"
+        },
+        {
+          "value": "default_json",
+          "label": "Theme default JSON"
+        }
+      ],
+      "default": "theme_editor",
+      "info": "Choose where field definitions are loaded from. Metafield option uses custom.product_form_configuration."
+    },
+    {
+      "type": "header",
+      "content": "Wizard"
+    },
+    {
+      "type": "text",
+      "id": "wizard_heading",
+      "label": "Wizard heading",
+      "default": "Customize Your Sign"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "Add to cart button label",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "header",
+      "content": "Info boxes"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_info_boxes",
+      "label": "Show info boxes below form",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "info_box_mint",
+      "label": "Mint info box",
+      "default": "<p>\u2705 Unlike standard printed boards, this is a true finished piece of art, crafted to be kept, not discarded.</p>"
+    },
+    {
+      "type": "html",
+      "id": "info_box_sky",
+      "label": "Sky info box (HTML list)",
+      "default": "<ul class=\"space-y-2 text-sm leading-relaxed\"><li class=\"flex gap-2\"><span aria-hidden=\"true\">\ud83d\udd50</span><span>Handmade to order; typical dispatch within 5\u20137 business days.</span></li></ul>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "wizard_step",
+      "name": "Wizard step",
+      "settings": [
+        {
+          "type": "range",
+          "id": "step_number",
+          "label": "Step number",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step title",
+          "default": "1. Step title"
+        },
+        {
+          "type": "text",
+          "id": "nav_label",
+          "label": "Step nav label",
+          "info": "Short label under step number in sticky nav."
+        }
+      ]
+    },
+    {
+      "type": "form_field",
+      "name": "Form field",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Step"
+        },
+        {
+          "type": "range",
+          "id": "step_number",
+          "label": "Wizard step",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "checkbox",
+          "id": "enabled",
+          "label": "Show this field",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Field"
+        },
+        {
+          "type": "text",
+          "id": "field_key",
+          "label": "Field key",
+          "info": "Unique id for this field (e.g. bride_name)."
+        },
+        {
+          "type": "select",
+          "id": "field_type",
+          "label": "Field type",
+          "options": [
+            {
+              "value": "text",
+              "label": "Text"
+            },
+            {
+              "value": "textarea",
+              "label": "Textarea"
+            },
+            {
+              "value": "select",
+              "label": "Select"
+            },
+            {
+              "value": "time",
+              "label": "Time"
+            },
+            {
+              "value": "date",
+              "label": "Date"
+            },
+            {
+              "value": "text_color",
+              "label": "Text colour dropdown"
+            },
+            {
+              "value": "background_color",
+              "label": "Background colour dropdown"
+            },
+            {
+              "value": "size",
+              "label": "Size select"
+            },
+            {
+              "value": "size_and_orientation",
+              "label": "Size and Orientation (from product option)"
+            },
+            {
+              "value": "radio",
+              "label": "Radio group"
+            },
+            {
+              "value": "repeatable",
+              "label": "Repeatable text"
+            },
+            {
+              "value": "voice_block",
+              "label": "Voice / audio block"
+            }
+          ],
+          "default": "text"
+        },
+        {
+          "type": "text",
+          "id": "property_name",
+          "label": "Cart property name",
+          "info": "Line item property key. Defaults to field key."
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Used for size, radio, and time fields."
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Placeholder"
+        },
+        {
+          "type": "checkbox",
+          "id": "required",
+          "label": "Required",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "autocomplete",
+          "label": "Autocomplete attribute"
+        },
+        {
+          "type": "text",
+          "id": "input_class",
+          "label": "Input CSS class"
+        },
+        {
+          "type": "text",
+          "id": "wrap_class",
+          "label": "Wrapper CSS class"
+        },
+        {
+          "type": "textarea",
+          "id": "options",
+          "label": "Options (comma-separated)",
+          "info": "For select, radio, and size fields."
+        },
+        {
+          "type": "range",
+          "id": "rows",
+          "label": "Textarea rows",
+          "min": 2,
+          "max": 10,
+          "step": 1,
+          "default": 3
+        },
+        {
+          "type": "text",
+          "id": "add_label",
+          "label": "Repeatable add button label",
+          "default": "+ Add"
+        },
+        {
+          "type": "text",
+          "id": "aria_label",
+          "label": "Accessibility label"
+        },
+        {
+          "type": "text",
+          "id": "description_key",
+          "label": "Product metafield key for help copy"
+        },
+        {
+          "type": "header",
+          "content": "Help tooltip"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_help",
+          "label": "Show help icon",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "help_title",
+          "label": "Help title"
+        },
+        {
+          "type": "textarea",
+          "id": "help_body",
+          "label": "Help description"
+        },
+        {
+          "type": "header",
+          "content": "Audio"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_voice",
+          "label": "Show audio icon",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "voice_src",
+          "label": "Audio asset filename",
+          "info": "Theme asset, e.g. wedding-poster.m4a"
+        },
+        {
+          "type": "header",
+          "content": "Video"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_video",
+          "label": "Show video icon",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "media_url",
+          "label": "Video index (eg 6)",
+          "info": "1-based product gallery slide number. Clicking the video icon jumps to this slide."
+        },
+        {
+          "type": "header",
+          "content": "Voice block"
+        },
+        {
+          "type": "text",
+          "id": "audio_asset",
+          "label": "Audio asset filename",
+          "default": "wedding-poster.m4a"
+        },
+        {
+          "type": "text",
+          "id": "audio_id",
+          "label": "Audio element ID"
+        },
+        {
+          "type": "text",
+          "id": "canvas_id",
+          "label": "Waveform canvas ID"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wedding sign form",
+      "blocks": [
+        {
+          "type": "wizard_step",
+          "settings": {
+            "step_number": 1,
+            "title": "1. The Design",
+            "nav_label": ""
+          }
+        },
+        {
+          "type": "wizard_step",
+          "settings": {
+            "step_number": 2,
+            "title": "2. The People",
+            "nav_label": ""
+          }
+        },
+        {
+          "type": "wizard_step",
+          "settings": {
+            "step_number": 3,
+            "title": "3. The Location & Event Details",
+            "nav_label": ""
+          }
+        },
+        {
+          "type": "wizard_step",
+          "settings": {
+            "step_number": 4,
+            "title": "4. The Message",
+            "nav_label": ""
+          }
+        },
+        {
+          "type": "wizard_step",
+          "settings": {
+            "step_number": 5,
+            "title": "5. The Signature",
+            "nav_label": ""
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 1,
+            "enabled": true,
+            "field_key": "text_color",
+            "field_type": "text_color",
+            "required": true,
+            "show_help": true,
+            "help_title": "Printed Colours",
+            "help_body": "Printed colour may differ slightly from what you see on screen, due to differences in monitor settings, printing processes, and lighting conditions."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 1,
+            "enabled": true,
+            "field_key": "background_color",
+            "field_type": "background_color",
+            "required": true
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 1,
+            "enabled": true,
+            "field_key": "size",
+            "field_type": "size",
+            "property_name": "Size",
+            "label": "Select Size (inches)",
+            "required": true,
+            "options": "18x24,24x36,30x40",
+            "show_help": true,
+            "help_title": "Select Size",
+            "help_body": "Choose the print size that best fits your venue and display setup."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 1,
+            "enabled": true,
+            "field_key": "orientation",
+            "field_type": "radio",
+            "property_name": "Orientation",
+            "label": "Orientation",
+            "required": true,
+            "options": "Portrait,Landscape"
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 2,
+            "enabled": true,
+            "field_key": "bride_name",
+            "field_type": "text",
+            "property_name": "bride_name",
+            "placeholder": "Bride's Name",
+            "required": true,
+            "autocomplete": "given-name",
+            "show_help": true,
+            "help_title": "Bride's Name",
+            "help_body": "Bride \u2014 recommended first name only."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 2,
+            "enabled": true,
+            "field_key": "groom_name",
+            "field_type": "text",
+            "property_name": "groom_name",
+            "placeholder": "Groom's Name",
+            "required": true,
+            "autocomplete": "family-name",
+            "show_help": true,
+            "help_title": "Groom's Name",
+            "help_body": "Groom \u2014 recommended first name only."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 2,
+            "enabled": true,
+            "field_key": "wedding_party",
+            "field_type": "text",
+            "property_name": "wedding_party",
+            "placeholder": "Wedding Party",
+            "required": true,
+            "show_help": true,
+            "help_title": "Wedding Party",
+            "help_body": "Wedding party \u2014 recommended first names only."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 2,
+            "enabled": true,
+            "field_key": "maid_of_honor",
+            "field_type": "select",
+            "property_name": "maid_of_honor",
+            "placeholder": "Maid of Honor",
+            "required": true,
+            "options": "Maid of Honor,Matron of Honor",
+            "show_help": true,
+            "help_title": "Maid of Honor",
+            "help_body": "Maid of Honour \u2014 someone who is not married. Recommended first and last name."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 2,
+            "enabled": true,
+            "field_key": "best_man",
+            "field_type": "text",
+            "property_name": "best_man",
+            "placeholder": "Best Man",
+            "required": true,
+            "show_help": true,
+            "help_title": "Best Man",
+            "help_body": "Best Man \u2014 recommended first name only."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 2,
+            "enabled": true,
+            "field_key": "bridesmaid",
+            "field_type": "repeatable",
+            "property_name": "bridesmaid",
+            "placeholder": "Bridesmaid",
+            "required": true,
+            "input_class": "product-page__input_bridesmaid",
+            "show_help": true,
+            "help_title": "Bridesmaid",
+            "help_body": "Bridesmaid \u2014 recommended first name only.",
+            "add_label": "+ Add"
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 2,
+            "enabled": true,
+            "field_key": "groomsman",
+            "field_type": "repeatable",
+            "property_name": "groomsman",
+            "placeholder": "Groomsman",
+            "required": true,
+            "input_class": "product-page__input_groomsman",
+            "show_help": true,
+            "help_title": "Groomsman",
+            "help_body": "Groomsman \u2014 recommended first name only.",
+            "add_label": "+ Add"
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 2,
+            "enabled": true,
+            "field_key": "other",
+            "field_type": "text",
+            "property_name": "other",
+            "placeholder": "Other",
+            "required": true,
+            "show_help": true,
+            "help_title": "Other",
+            "help_body": "Other names \u2014 e.g. flower girl, page boy, celebrant, or fur baby."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 3,
+            "enabled": true,
+            "field_key": "venue",
+            "field_type": "text",
+            "property_name": "venue",
+            "placeholder": "Venue",
+            "required": true,
+            "wrap_class": "mb-4"
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 3,
+            "enabled": true,
+            "field_key": "ceremony_space",
+            "field_type": "text",
+            "property_name": "ceremony_space",
+            "placeholder": "Ceremony Space",
+            "required": true,
+            "wrap_class": "mb-4",
+            "show_help": true,
+            "help_title": "Ceremony Space",
+            "help_body": "Enter the ceremony space or location detail for your sign."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 3,
+            "enabled": true,
+            "field_key": "event_date",
+            "field_type": "date",
+            "property_name": "event_date",
+            "placeholder": "Wedding date",
+            "required": true,
+            "show_help": true,
+            "help_title": "Wedding Date",
+            "help_body": "Select your wedding date for the sign."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 3,
+            "enabled": true,
+            "field_key": "ceremony_time",
+            "field_type": "time",
+            "property_name": "ceremony_time",
+            "placeholder": "Ceremony time",
+            "label": "Ceremony Time",
+            "required": true,
+            "show_help": true,
+            "help_title": "Ceremony Time",
+            "help_body": "Enter the ceremony time for your sign."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 4,
+            "enabled": true,
+            "field_key": "message_voice",
+            "field_type": "voice_block",
+            "audio_asset": "wedding-poster.m4a",
+            "audio_id": "wizard-step1-wedding-voice-2",
+            "canvas_id": "wizard-step3-sound-waves-canvas"
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 4,
+            "enabled": true,
+            "field_key": "party_names",
+            "field_type": "textarea",
+            "property_name": "party_names",
+            "placeholder": "Custom message (optional)",
+            "rows": 3,
+            "show_help": true,
+            "help_title": "Custom Message",
+            "help_body": "Add a personal message to appear on your sign. Keep it concise so it reads clearly on the finished poster."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 4,
+            "enabled": true,
+            "field_key": "special_notes",
+            "field_type": "textarea",
+            "property_name": "special_notes",
+            "placeholder": "Special Notes (Optional)",
+            "rows": 3,
+            "show_help": true,
+            "help_title": "Special Notes",
+            "help_body": "Add any special notes or requests for your order."
+          }
+        },
+        {
+          "type": "form_field",
+          "settings": {
+            "step_number": 5,
+            "enabled": true,
+            "field_key": "signature",
+            "field_type": "text",
+            "property_name": "signature",
+            "placeholder": "Story Inscription",
+            "required": true,
+            "wrap_class": "mb-4",
+            "show_help": true,
+            "help_title": "Story Inscription",
+            "help_body": "Your story inscription appears on the finished sign. Max 12 characters \u2014 numbers only; if left blank we display FOREVER ART."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

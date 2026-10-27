@@ -1,0 +1,5 @@
+# Source files — compiled output lives in assets/ (e.g. app.css)
+scss/
+
+# Local Dropbox upload proxy (not part of the Shopify theme)
+dropbox-upload/

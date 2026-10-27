@@ -1,0 +1,69 @@
+{%- if section.settings.show_banner -%}
+  {% render 'product-shipping-highlights', section: section %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Shipping highlights",
+  "tag": "div",
+  "class": "product-shipping-highlights-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_banner",
+      "label": "Show shipping highlights",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "highlight",
+      "name": "Highlight",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Hugeicons class",
+          "default": "hgi-delivery-truck-01",
+          "info": "Icon name only, e.g. hgi-flash. Theme adds hgi hgi-stroke hgi-rounded automatically."
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Highlight text",
+          "info": "Short line shown beside the icon."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shipping highlights",
+      "blocks": [
+        {
+          "type": "highlight",
+          "settings": {
+            "icon": "hgi-delivery-truck-01",
+            "text": "Free standard shipping Australia-wide"
+          }
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "icon": "hgi-flash",
+            "text": "Express shipping available at checkout"
+          }
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "icon": "hgi-image-01",
+            "text": "Ready to display on arrival"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

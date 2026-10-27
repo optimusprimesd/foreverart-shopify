@@ -1,0 +1,113 @@
+{%- assign field = field | default: nil -%}
+{%- assign product = product | default: nil -%}
+{%- if field != nil and product != nil -%}
+
+{%- assign field_key = field.key | default: 'text_color' -%}
+{%- assign field_label = field.label | default: 'Text Color' -%}
+{%- assign show_help = field.show_help | default: false -%}
+{%- assign show_voice_enabled = false -%}
+{%- if field.show_voice == true or field.show_voice == 'true' -%}
+  {%- assign show_voice_enabled = true -%}
+{%- endif -%}
+{%- assign help_title = field.help_title | default: 'Printed Colours' -%}
+{%- assign help_body = field.help_body | default: '' -%}
+{%- assign tooltip_id = 'text-color-help-tooltip' -%}
+{%- assign field_charge_cents = 0 -%}
+{%- if field.additional_charge != blank -%}
+  {%- assign field_charge_cents = field.additional_charge | times: 100 | round -%}
+{%- endif -%}
+
+<div class="wizard__select-field w-full">
+  <div class="wizard__select-field-box">
+    <div class="wizard__select-field-header flex w-full flex-wrap items-center justify-between gap-2">
+      <p class="product-page__label mb-0 min-w-0 flex-1 text-base font-bold text-[#141414]">
+        {{ field_label }}
+        <span class="product-page__color-name ml-1 inline-block rounded bg-black px-2 py-0.5 text-xs font-medium text-white" data-text-color-label style="display:none;"></span>
+      </p>
+      {% render 'product-field-header-actions',
+        product: product,
+        field_key: field_key,
+        tooltip_id: tooltip_id,
+        tooltip_aria_label: 'Information about printed colours',
+        show_help: show_help,
+        tooltip_title: help_title,
+        tooltip_body: help_body,
+        show_voice: show_voice_enabled,
+        show_video: field.show_video,
+        media_url: field.media_url,
+        voice_src: field.voice_src
+      %}
+    </div>
+    <div class="product-page__color-dropdown" data-text-color-dropdown>
+      <input type="hidden" name="properties[Text color]" value="" data-text-color-input aria-required="true"{% if field_charge_cents > 0 %} data-additional-charge-cents="{{ field_charge_cents }}"{% endif %} />
+      <button
+        type="button"
+        id="text-color-trigger"
+        class="product-page__color-dropdown-trigger product-page__input"
+        data-text-color-trigger
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        aria-controls="text-color-listbox"
+        aria-label="Text colour"
+        aria-required="true"
+      >
+        <span class="product-page__color-dropdown-swatch" data-text-color-swatch aria-hidden="true"></span>
+        <span class="product-page__color-dropdown-value" data-text-color-value>Select a text colour</span>
+        <i class="product-page__color-dropdown-chevron hgi hgi-stroke hgi-rounded hgi-arrow-down-01" aria-hidden="true"></i>
+      </button>
+      <ul
+        id="text-color-listbox"
+        class="product-page__color-dropdown-menu"
+        role="listbox"
+        aria-labelledby="text-color-trigger"
+        hidden
+        data-text-color-menu
+      >
+        {%- for option in product.options_with_values -%}
+          {%- if option.name == 'Text Colour' or option.name == 'Text Color' -%}
+            {%- for value in option.values -%}
+              {%- assign color = value.name | default: value | strip -%}
+              {%- unless color == '' -%}
+                {%- capture color_hex -%}
+                  {%- render 'product-color-hex', color_name: color, product: product, output: 'hex' -%}
+                {%- endcapture -%}
+                {%- capture color_display_name -%}
+                  {%- render 'product-color-hex', color_name: color, product: product, output: 'label' -%}
+                {%- endcapture -%}
+                {%- capture color_code -%}
+                  {%- render 'product-color-hex', color_name: color, product: product, output: 'code' -%}
+                {%- endcapture -%}
+                {%- capture color_display -%}
+                  {%- render 'product-color-hex', color_name: color, product: product, output: 'display' -%}
+                {%- endcapture -%}
+                {%- assign color_hex = color_hex | strip -%}
+                {%- assign color_display_name = color_display_name | strip -%}
+                {%- assign color_code = color_code | strip -%}
+                {%- assign color_display = color_display | strip -%}
+                <li role="presentation">
+                  <button
+                    type="button"
+                    class="product-page__color-dropdown-option"
+                    role="option"
+                    data-text-color-option
+                    data-value="{{ color_display_name | downcase | handle }}"
+                    data-color-name="{{ color_display_name }}"
+                    data-color-code="{{ color_code }}"
+                    data-color-display="{{ color_display }}"
+                    data-hex="{{ color_hex }}"
+                    aria-selected="false"
+                  >
+                    <span class="product-page__color-dropdown-option-dot" style="background-color: {{ color_hex }}" aria-hidden="true"></span>
+                    {{ color_display }}
+                  </button>
+                </li>
+              {%- endunless -%}
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+  {% render 'product-form-field-info', info_label: field.info_label, additional_charge: field.additional_charge %}
+</div>
+{%- endif -%}

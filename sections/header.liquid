@@ -1,0 +1,97 @@
+{%- comment -%}
+  Global header — separate mobile and desktop templates at 1024px.
+  Profile icon uses Shopify <shopify-account> via snippets/header-account.
+{%- endcomment -%}
+
+{%- liquid
+  assign current_path = request.path | downcase
+  assign nav_collections_active = false
+  assign nav_corporate_active = false
+  assign nav_new_arrivals_active = false
+  assign nav_top_sellers_active = false
+  assign nav_shop_active = false
+  assign nav_gift_cards_active = false
+  assign active_collection_handle = ''
+
+  if request.page_type == 'collection' and collection != blank
+    assign active_collection_handle = collection.handle | downcase
+  endif
+
+  if request.page_type == 'list-collections' or current_path == '/collections' or current_path == '/collections/'
+    assign nav_collections_active = true
+  elsif active_collection_handle == 'property-collection' or current_path == '/collections/property-collection'
+    assign nav_corporate_active = true
+  elsif current_path == '/pages/new-arrivals' or page.handle == 'new-arrivals'
+    assign nav_new_arrivals_active = true
+  elsif current_path == '/pages/top-sellers' or page.handle == 'top-sellers'
+    assign nav_top_sellers_active = true
+  elsif current_path == '/pages/gift-cards' or page.handle == 'gift-cards'
+    assign nav_shop_active = true
+    assign nav_gift_cards_active = true
+  elsif request.page_type == 'collection' and active_collection_handle != blank
+    assign nav_shop_active = true
+  endif
+-%}
+
+<header
+  id="site-header"
+  class="site-header site-header-push-surface {% if template.name == 'index' %}site-header--over-hero{% else %}site-header--past-hero{% endif %} fixed top-0 left-0 right-0 z-50 h-[100px] w-full"
+>
+  {% render 'header-shell-mobile',
+    show_account_icon: section.settings.show_account_icon,
+    customer_account_menu: section.settings.customer_account_menu
+  %}
+  {% render 'header-shell-desktop',
+    show_account_icon: section.settings.show_account_icon,
+    customer_account_menu: section.settings.customer_account_menu,
+    nav_shop_active: nav_shop_active,
+    nav_collections_active: nav_collections_active,
+    nav_corporate_active: nav_corporate_active,
+    nav_new_arrivals_active: nav_new_arrivals_active,
+    nav_top_sellers_active: nav_top_sellers_active,
+    nav_gift_cards_active: nav_gift_cards_active,
+    active_collection_handle: active_collection_handle
+  %}
+</header>
+
+{% render 'header-mobile-drawer',
+  show_account_icon: section.settings.show_account_icon,
+  customer_account_menu: section.settings.customer_account_menu,
+  nav_shop_active: nav_shop_active,
+  nav_collections_active: nav_collections_active,
+  nav_corporate_active: nav_corporate_active,
+  nav_new_arrivals_active: nav_new_arrivals_active,
+  nav_top_sellers_active: nav_top_sellers_active,
+  nav_gift_cards_active: nav_gift_cards_active,
+  active_collection_handle: active_collection_handle
+%}
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Customer account"
+    },
+    {
+      "type": "paragraph",
+      "content": "Uses Shopify’s account component (shopify-account). On Customer Accounts it opens the sign-in sheet; on Classic it goes to /account/login. Do not link the icon to /account while Customer Accounts is enabled — that redirects off-site to shopify.com."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account_icon",
+      "label": "Show profile / account icon",
+      "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "customer_account_menu",
+      "label": "Customer account menu",
+      "default": "customer-account-main-menu",
+      "info": "Usually “customer-account-main-menu” (Orders, Profile)."
+    }
+  ]
+}
+{% endschema %}

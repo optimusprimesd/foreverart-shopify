@@ -1,0 +1,166 @@
+{%- comment -%}
+  Search template — product search with optional pages and articles.
+{%- endcomment -%}
+
+<div class="search-page" data-page-intro>
+  <div class="search-page__container">
+    <header class="search-page__header" data-page-intro-panel>
+      <h1 class="search-page__title" data-page-intro-title>
+        {%- if search.performed -%}
+          Search results
+        {%- else -%}
+          Search
+        {%- endif -%}
+      </h1>
+
+      {%- if search.performed and search.terms != blank -%}
+        <p class="search-page__subtitle" data-page-intro-subtitle>
+          Showing results for &ldquo;{{ search.terms | escape }}&rdquo;
+        </p>
+      {%- else -%}
+        <p class="search-page__subtitle" data-page-intro-subtitle>
+          Find products, pages, and stories across Forever Art.
+        </p>
+      {%- endif -%}
+
+      <form class="search-form" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="search-form__field">
+          <span class="search-form__label">Search</span>
+          <div class="search-form__control">
+            <input
+              class="search-form__input"
+              type="search"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="Search products, collections, pages…"
+              autocomplete="off"
+              {% unless search.performed %}autofocus{% endunless %}
+            >
+            <button class="search-form__submit" type="submit">Search</button>
+          </div>
+        </label>
+
+        <input type="hidden" name="type" value="product">
+      </form>
+
+      {%- if search.performed -%}
+        <p class="search-page__count">
+          {%- if search.results_count == 0 -%}
+            0 results
+          {%- else -%}
+            {{ search.results_count }}
+            result{% if search.results_count != 1 %}s{% endif %}
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+    </header>
+
+    {%- if search.performed -%}
+      {%- paginate search.results by 48 -%}
+        {%- if search.results.size > 0 -%}
+          <ul class="collection-grid search-page__results" role="list">
+            {%- for item in search.results -%}
+              {%- case item.object_type -%}
+                {%- when 'product' -%}
+                  {%- assign product = item -%}
+                  {%- assign card_variant = product.selected_or_first_available_variant -%}
+                  <li
+                    class="collection-grid__item"
+                    data-page-intro-item
+                    data-product-item
+                    data-product-title="{{ product.title | escape }}"
+                    data-product-price="{{ card_variant.price }}"
+                  >
+                    <article class="product-card">
+                      <a class="product-card__media" href="{{ product.url }}">
+                        {%- if product.featured_media -%}
+                          {{
+                            product.featured_media
+                            | image_url: width: 900
+                            | image_tag:
+                              loading: 'lazy',
+                              class: 'product-card__image',
+                              sizes: '(min-width: 990px) 25vw, (min-width: 740px) 33vw, 50vw',
+                              widths: '240, 360, 480, 600, 720, 900',
+                              alt: product.title | escape
+                          }}
+                        {%- else -%}
+                          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product-card__image' }}
+                        {%- endif -%}
+                      </a>
+
+                      <div class="product-card__meta">
+                        <h2 class="product-card__title">
+                          <a href="{{ product.url }}">{{ product.title | escape }}</a>
+                        </h2>
+
+                        <div class="product-card__price">
+                          <span class="product-card__price-current">{{ card_variant.price | money }}</span>
+                          {%- if card_variant.compare_at_price > card_variant.price -%}
+                            <span class="product-card__price-compare"><s>{{ card_variant.compare_at_price | money }}</s></span>
+                          {%- endif -%}
+                        </div>
+                      </div>
+                    </article>
+                  </li>
+
+                {%- when 'page' -%}
+                  <li class="collection-grid__item search-page__result search-page__result--page" data-page-intro-item>
+                    <article class="search-result-card">
+                      <p class="search-result-card__type">Page</p>
+                      <h2 class="search-result-card__title">
+                        <a href="{{ item.url }}">{{ item.title | escape }}</a>
+                      </h2>
+                      {%- if item.content != blank -%}
+                        <p class="search-result-card__excerpt">{{ item.content | strip_html | truncate: 160 }}</p>
+                      {%- endif -%}
+                    </article>
+                  </li>
+
+                {%- when 'article' -%}
+                  <li class="collection-grid__item search-page__result search-page__result--article" data-page-intro-item>
+                    <article class="search-result-card">
+                      <p class="search-result-card__type">Journal</p>
+                      <h2 class="search-result-card__title">
+                        <a href="{{ item.url }}">{{ item.title | escape }}</a>
+                      </h2>
+                      {%- if item.excerpt != blank -%}
+                        <p class="search-result-card__excerpt">{{ item.excerpt | strip_html | truncate: 160 }}</p>
+                      {%- elsif item.content != blank -%}
+                        <p class="search-result-card__excerpt">{{ item.content | strip_html | truncate: 160 }}</p>
+                      {%- endif -%}
+                    </article>
+                  </li>
+              {%- endcase -%}
+            {%- endfor -%}
+          </ul>
+
+          {%- if paginate.pages > 1 -%}
+            <nav class="search-page__pagination collection-pagination" aria-label="Search pagination">
+              {%- if paginate.previous -%}
+                <a class="collection-pagination__link" href="{{ paginate.previous.url }}">Previous</a>
+              {%- endif -%}
+
+              <span class="collection-pagination__status">
+                Page {{ paginate.current_page }} of {{ paginate.pages }}
+              </span>
+
+              {%- if paginate.next -%}
+                <a class="collection-pagination__link" href="{{ paginate.next.url }}">Next</a>
+              {%- endif -%}
+            </nav>
+          {%- endif -%}
+        {%- else -%}
+          <div class="collection-empty search-page__empty">
+            <p>No results found for &ldquo;{{ search.terms | escape }}&rdquo;.</p>
+            <a class="collection-empty__link" href="{{ routes.all_products_collection_url }}">Browse all products</a>
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <div class="search-page__prompt">
+        <p>Enter a search term above to explore the Forever Art store.</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>

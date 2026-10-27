@@ -1,0 +1,345 @@
+<div class="customer-account-section" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+{%- comment -%}
+  Customer account (classic Shopify customer accounts).
+  Sidebar navigation + panels: Dashboard, Orders, Downloads, Payment, Account details.
+  Addresses uses the Customer addresses template (customers/addresses).
+{%- endcomment -%}
+
+{%- capture account_content -%}
+  <div class="account-panels" data-account-panels>
+    {%- comment -%} Dashboard {%- endcomment -%}
+    <section class="account-panel" data-account-panel="dashboard" aria-labelledby="account-dashboard-heading">
+      <h1 id="account-dashboard-heading" class="account-shell__page-title">Dashboard</h1>
+      <p class="account-shell__page-intro">
+        Hello <strong>{{ customer.name | default: customer.first_name | escape }}</strong>
+        {%- if customer.email != blank -%}
+          <span class="account-shell__page-intro-meta">({{ customer.email | escape }})</span>
+        {%- endif -%}
+      </p>
+      <p class="account-shell__page-intro">
+        From your account dashboard you can view your
+        <a class="account-page__text-link" href="{{ routes.account_url }}#orders" data-account-tab-link="orders">recent orders</a>,
+        manage your
+        <a class="account-page__text-link" href="{{ routes.account_addresses_url }}">shipping addresses</a>,
+        and
+        <a class="account-page__text-link" href="{{ routes.account_url }}#details" data-account-tab-link="details">edit your account details</a>.
+      </p>
+
+      <div class="account-page__grid mt-6">
+        <article class="account-page__card">
+          <div class="account-page__card-head">
+            <h2 class="account-page__card-title">Profile</h2>
+            <a class="account-page__text-link" href="{{ routes.account_url }}#details" data-account-tab-link="details">View details</a>
+          </div>
+          <dl class="account-page__details">
+            <div class="account-page__detail">
+              <dt>Name</dt>
+              <dd>{{ customer.name | default: '—' | escape }}</dd>
+            </div>
+            <div class="account-page__detail">
+              <dt>Email</dt>
+              <dd>{{ customer.email | escape }}</dd>
+            </div>
+            <div class="account-page__detail">
+              <dt>Orders</dt>
+              <dd>{{ customer.orders_count }}</dd>
+            </div>
+            <div class="account-page__detail">
+              <dt>Total spent</dt>
+              <dd>{{ customer.total_spent | money }}</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="account-page__card">
+          <div class="account-page__card-head">
+            <h2 class="account-page__card-title">Default address</h2>
+            <a class="account-page__text-link" href="{{ routes.account_addresses_url }}">Manage</a>
+          </div>
+          {%- if customer.default_address -%}
+            <address class="account-page__address">
+              {{ customer.default_address | format_address }}
+            </address>
+          {%- else -%}
+            <p class="account-page__empty">No default address saved yet.</p>
+            <a class="account-page__primary-btn mt-4 inline-flex" href="{{ routes.account_addresses_url }}">Add an address</a>
+          {%- endif -%}
+        </article>
+      </div>
+
+      <article class="account-page__card account-page__card--orders mt-6">
+        <div class="account-page__card-head">
+          <h2 class="account-page__card-title">Recent orders</h2>
+          <a class="account-page__text-link" href="{{ routes.account_url }}#orders" data-account-tab-link="orders">View all</a>
+        </div>
+        {%- if customer.orders.size > 0 -%}
+          <div class="account-page__orders-wrap">
+            <table class="account-page__orders">
+              <thead>
+                <tr>
+                  <th scope="col">Order</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%- for order in customer.orders limit: 5 -%}
+                  <tr>
+                    <td><a class="account-page__text-link" href="{{ order.customer_url }}">{{ order.name }}</a></td>
+                    <td>{{ order.created_at | date: '%b %d, %Y' }}</td>
+                    <td>{{ order.fulfillment_status_label | default: order.financial_status_label }}</td>
+                    <td>{{ order.total_net_amount | money }}</td>
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+          </div>
+        {%- else -%}
+          <p class="account-page__empty">You haven’t placed any orders yet.</p>
+          <a class="account-page__primary-btn mt-4 inline-flex" href="{{ routes.all_products_collection_url }}">Start shopping</a>
+        {%- endif -%}
+      </article>
+    </section>
+
+    {%- comment -%} Orders {%- endcomment -%}
+    <section class="account-panel" data-account-panel="orders" hidden aria-labelledby="account-orders-heading">
+      <h1 id="account-orders-heading" class="account-shell__page-title">Orders</h1>
+      <p class="account-shell__page-intro">View and track your past orders.</p>
+
+      {%- if customer.orders.size > 0 -%}
+        <div class="account-page__card account-page__card--orders mt-6">
+          <div class="account-page__orders-wrap">
+            <table class="account-page__orders">
+              <thead>
+                <tr>
+                  <th scope="col">Order</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Payment</th>
+                  <th scope="col">Fulfillment</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%- for order in customer.orders -%}
+                  <tr>
+                    <td><a class="account-page__text-link" href="{{ order.customer_url }}">{{ order.name }}</a></td>
+                    <td>{{ order.created_at | date: '%b %d, %Y' }}</td>
+                    <td>{{ order.financial_status_label }}</td>
+                    <td>{{ order.fulfillment_status_label | default: 'Unfulfilled' }}</td>
+                    <td>{{ order.total_net_amount | money }}</td>
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {%- else -%}
+        <div class="account-page__card mt-6">
+          <p class="account-page__empty">No orders found.</p>
+          <a class="account-page__primary-btn mt-4 inline-flex" href="{{ routes.all_products_collection_url }}">Browse products</a>
+        </div>
+      {%- endif -%}
+    </section>
+
+    {%- comment -%} Downloads {%- endcomment -%}
+    <section class="account-panel" data-account-panel="downloads" hidden aria-labelledby="account-downloads-heading">
+      <h1 id="account-downloads-heading" class="account-shell__page-title">Downloads</h1>
+      <p class="account-shell__page-intro">Digital downloads available with your purchases will appear here.</p>
+      <div class="account-page__card mt-6">
+        <p class="account-page__empty">You have no downloads available yet.</p>
+      </div>
+    </section>
+
+    {%- comment -%} Payment methods {%- endcomment -%}
+    <section class="account-panel" data-account-panel="payment" hidden aria-labelledby="account-payment-heading">
+      <h1 id="account-payment-heading" class="account-shell__page-title">Payment methods</h1>
+      <p class="account-shell__page-intro">
+        Saved payment methods are managed securely during checkout with Shopify Payments / Shop Pay.
+      </p>
+      <div class="account-page__card mt-6">
+        <p class="account-page__empty">
+          No saved payment methods are available in classic customer accounts.
+          You can add or update payment details at checkout.
+        </p>
+        <a class="account-page__primary-btn mt-4 inline-flex" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
+      </div>
+    </section>
+
+    {%- comment -%} Account details {%- endcomment -%}
+    <section class="account-panel" data-account-panel="details" hidden aria-labelledby="account-details-heading">
+      <h1 id="account-details-heading" class="account-shell__page-title">Account details</h1>
+      <p class="account-shell__page-intro">Your profile information from Shopify customer accounts.</p>
+
+      <div class="account-page__card mt-6">
+        <form class="account-details-form" action="#" method="post" onsubmit="return false;">
+          <div class="account-page__form-grid">
+            <div class="account-page__field">
+              <label for="AccountFirstName">First name <span class="account-required">*</span></label>
+              <input id="AccountFirstName" type="text" value="{{ customer.first_name | escape }}" readonly autocomplete="given-name">
+            </div>
+            <div class="account-page__field">
+              <label for="AccountLastName">Last name <span class="account-required">*</span></label>
+              <input id="AccountLastName" type="text" value="{{ customer.last_name | escape }}" readonly autocomplete="family-name">
+            </div>
+            <div class="account-page__field account-page__field--full">
+              <label for="AccountDisplayName">Display name <span class="account-required">*</span></label>
+              <input id="AccountDisplayName" type="text" value="{{ customer.name | escape }}" readonly autocomplete="name">
+              <p class="account-field-hint">This is how your name is shown in your account.</p>
+            </div>
+            <div class="account-page__field account-page__field--full">
+              <label for="AccountEmail">Email address <span class="account-required">*</span></label>
+              <input id="AccountEmail" type="email" value="{{ customer.email | escape }}" readonly autocomplete="email">
+            </div>
+          </div>
+
+          <div class="account-details-form__section">
+            <h2 class="account-page__card-title">Password</h2>
+            <p class="account-field-hint">
+              Classic Shopify accounts don’t allow password changes on this page.
+              Use the password reset email instead.
+            </p>
+            <a class="account-page__link-btn mt-3 inline-flex" href="{{ routes.account_login_url }}#recover">
+              Send password reset email
+            </a>
+          </div>
+
+          <div class="account-details-form__section">
+            <h2 class="account-page__card-title">Communication preferences</h2>
+            <div class="account-pref-list" role="group" aria-label="Communication preferences">
+              <label class="account-pref">
+                <input type="radio" name="account_marketing" value="subscribe" disabled {% if customer.accepts_marketing %}checked{% endif %}>
+                <span>Subscribe to our newsletter</span>
+              </label>
+              <label class="account-pref">
+                <input type="radio" name="account_marketing" value="unsubscribe" disabled {% unless customer.accepts_marketing %}checked{% endunless %}>
+                <span>Unsubscribe from our newsletter</span>
+              </label>
+              <label class="account-pref">
+                <input type="radio" name="account_marketing" value="order_updates" disabled checked>
+                <span>Receive order updates</span>
+              </label>
+            </div>
+            <p class="account-field-hint mt-2">
+              Newsletter status is managed in Shopify.
+              Current status:
+              {%- if customer.accepts_marketing -%}
+                subscribed
+              {%- else -%}
+                not subscribed
+              {%- endif -%}
+              .
+            </p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+{%- endcapture -%}
+
+{% render 'account-shell', active: 'dashboard', content: account_content %}
+
+<script>
+  (function () {
+    var shell = document.querySelector("[data-account-shell]");
+    if (!shell) return;
+
+    var panelsRoot = shell.querySelector("[data-account-panels]");
+    if (!panelsRoot) return;
+
+    var panels = panelsRoot.querySelectorAll("[data-account-panel]");
+    var tabLinks = shell.querySelectorAll("[data-account-tab-link]");
+    var menuLinks = shell.querySelectorAll(".account-shell__link");
+    var validTabs = { dashboard: true, orders: true, downloads: true, payment: true, details: true };
+
+    function setActiveMenu(tab) {
+      menuLinks.forEach(function (link) {
+        var href = link.getAttribute("href") || "";
+        var isTab =
+          (tab === "dashboard" && href === {{ routes.account_url | json }}) ||
+          href.indexOf("#" + tab) !== -1;
+        var isAddresses = tab === "addresses" && href.indexOf("/addresses") !== -1;
+        link.classList.toggle("is-active", !!(isTab || isAddresses));
+        if (isTab || isAddresses) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      });
+    }
+
+    function showTab(tab, updateHash) {
+      if (!validTabs[tab]) tab = "dashboard";
+      panels.forEach(function (panel) {
+        var match = panel.getAttribute("data-account-panel") === tab;
+        panel.hidden = !match;
+      });
+      setActiveMenu(tab);
+      if (updateHash) {
+        if (tab === "dashboard") {
+          if (window.location.hash) history.replaceState(null, "", window.location.pathname + window.location.search);
+        } else {
+          history.replaceState(null, "", "#" + tab);
+        }
+      }
+    }
+
+    function tabFromHash() {
+      var hash = (window.location.hash || "").replace(/^#/, "");
+      return validTabs[hash] ? hash : "dashboard";
+    }
+
+    tabLinks.forEach(function (link) {
+      link.addEventListener("click", function (event) {
+        var tab = link.getAttribute("data-account-tab-link");
+        if (!validTabs[tab]) return;
+        event.preventDefault();
+        showTab(tab, true);
+        window.scrollTo({ top: shell.offsetTop - 20, behavior: "smooth" });
+      });
+    });
+
+    window.addEventListener("hashchange", function () {
+      showTab(tabFromHash(), false);
+    });
+
+    showTab(tabFromHash(), false);
+  })();
+</script>
+
+</div>
+
+{% schema %}
+{
+  "name": "Customer account",
+  "tag": "section",
+  "class": "section-main-customer-account",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Legacy customer account dashboard, orders, and profile panels."
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+  ]
+}
+{% endschema %}

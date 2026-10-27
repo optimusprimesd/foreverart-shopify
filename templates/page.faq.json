@@ -1,0 +1,89 @@
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "faq_freight": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is freight included?",
+            "answer": "<p>Yes. Standard freight Australia-wide is included in the price of your Forever Art piece. If you need it sooner, express freight can be selected at checkout.</p>"
+          }
+        },
+        "faq_packaging": {
+          "type": "faq_item",
+          "settings": {
+            "question": "I’m a real estate agent. Is the packaging suitable for gifting?",
+            "answer": "<p>Absolutely. You can wrap it to your heart’s content, but we don’t think it needs it.</p><p>Forever Art is handmade, and we believe the way it’s presented should feel consistent with that. Our packaging is intentionally simple and considered — less about the bling and more about what you’re giving.</p><p>For settlement gifting in particular, that’s part of the story: we chose something for you and had it made specifically to preserve your story.</p>"
+          }
+        },
+        "faq_custom_design": {
+          "type": "faq_item",
+          "settings": {
+            "question": "I have a design in mind. Can you make it for me?",
+            "answer": "<p>Well, yes and no.</p><p>For weddings, we offer a custom poster that allows you to supply your own finished design to our dimensional and file requirements.</p><p>For our other collections, we don’t make individual design changes. But we’re bloody good at listening. If you have an idea you think belongs in the Forever Art range, we’d genuinely love to hear it.</p><p>Our creative story is constantly building in the background.</p>"
+          }
+        },
+        "faq_look_like": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Will my poster look like the one shown on the website?",
+            "answer": "<p>Yes — that’s exactly why we’ve invested so much effort into our product images and mock-ups.</p><p>You’re not designing a poster from scratch. You’re choosing a finished Forever Art design and replacing the example information with your own story.</p><p>What you see is what we’ve designed. What you receive is yours.</p>"
+          }
+        },
+        "faq_handmade": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is every Forever Art piece handmade?",
+            "answer": "<p>Yes. Every piece is made to order and individually finished by hand in our workshop.</p><p>From preparing and mounting the artwork to fitting the leather border, building the frame and completing the finishing details, there’s a real pair of hands behind every piece we send.</p>"
+          }
+        },
+        "faq_timing": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long will my Forever Art take?",
+            "answer": "<p>Most Forever Art pieces are dispatched within 5–7 business days.</p><p>Wedding posters work a little differently. Because they include a proofing process before production, we recommend ordering 4–5 weeks before your wedding.</p>"
+          }
+        },
+        "faq_ready_to_hang": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Does my Forever Art arrive ready to hang?",
+            "answer": "<p>Yes. Your frame includes built-in 3M mounting strips for suitable surfaces.</p><p>We want the last part of the process to be just as easy as the first.</p>"
+          }
+        },
+        "faq_incorrect": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What happens if I enter something incorrectly?",
+            "answer": "<p>We’ve built a few opportunities into the ordering process for you to check your information.</p><p>Take a moment to check your details as you enter them. You’ll see them again at checkout, and your order confirmation will show all the information exactly as we’ve received it.</p><p>If you spot something that’s not right, use the contact link in your order confirmation within 24 hours and we’ll happily make the necessary changes.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_freight",
+        "faq_packaging",
+        "faq_custom_design",
+        "faq_look_like",
+        "faq_handmade",
+        "faq_timing",
+        "faq_ready_to_hang",
+        "faq_incorrect"
+      ],
+      "settings": {
+        "hero_eyebrow": "FAQ's",
+        "hero_heading": "Questions, answered.",
+        "hero_lede": "Everything you need to know about ordering, making and receiving your Forever Art piece.",
+        "intro_kicker": "Help",
+        "intro_heading": "Common questions",
+        "intro_body": "<p>Browse the questions below. Select any question to expand the answer.</p>",
+        "open_first": true,
+        "closing_heading": "Still have a question?",
+        "closing_body": "<p>We’re happy to help. Reach out and we’ll get back to you as soon as we can.</p>",
+        "cta_label": "Contact us",
+        "cta_url": "/pages/contact"
+      }
+    }
+  },
+  "order": ["faq"]
+}
