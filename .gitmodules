@@ -1,0 +1,3 @@
+[submodule "dropbox-upload"]
+	path = dropbox-upload
+	url = https://github.com/optimusprimesd/forever-art-dropbox-upload.git

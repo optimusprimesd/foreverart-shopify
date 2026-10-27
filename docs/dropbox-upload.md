@@ -2,6 +2,18 @@
 
 Standalone Node proxy that uploads customer files to Dropbox for the product form. **Not part of the Shopify theme** (listed in `.shopifyignore`).
 
+**Separate GitHub repo (git submodule):** [optimusprimesd/forever-art-dropbox-upload](https://github.com/optimusprimesd/forever-art-dropbox-upload.git)
+
+```bash
+# From theme repo root — pull latest proxy code
+git submodule update --init --remote dropbox-upload
+
+# Work inside the proxy repo
+cd dropbox-upload
+git checkout main
+git pull origin main
+```
+
 ## Why it exists
 
 - The storefront must never embed `DROPBOX_ACCESS_TOKEN`.
