@@ -3382,6 +3382,11 @@
   const discountMessage = form.querySelector("[data-cart-discount-message]");
   const cartRoot =
     (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || "/";
+  const moneyFormatEl = form.querySelector("[data-cart-money-format]");
+  const moneyFormat =
+    (moneyFormatEl && moneyFormatEl.getAttribute("value")) ||
+    (moneyFormatEl && moneyFormatEl.value) ||
+    "";
 
   function setDiscountMessage(text, { error = false } = {}) {
     if (!discountMessage) return;
@@ -3391,9 +3396,175 @@
     discountMessage.classList.toggle("text-gray-500", !error && !text);
   }
 
+  function escapeHtml(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, (ch) => {
+      return (
+        {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        }[ch] || ch
+      );
+    });
+  }
+
+  function formatCartMoney(cents) {
+    const amountCents = Number(cents);
+    if (!Number.isFinite(amountCents)) return "";
+    const value = (amountCents / 100).toFixed(2);
+    const amount = value;
+    const amountNoDecimals = Math.round(amountCents / 100).toString();
+    const amountWithComma = value.replace(".", ",");
+    if (!moneyFormat) return "$" + value;
+    return moneyFormat
+      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/g, amountWithComma)
+      .replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/g, amountNoDecimals)
+      .replace(/\{\{\s*amount_no_decimals\s*\}\}/g, amountNoDecimals)
+      .replace(/\{\{\s*amount\s*\}\}/g, amount);
+  }
+
+  function cartHasFeeLines(cart) {
+    return (cart.items || []).some(isFeeLine);
+  }
+
+  function lineExtraCents(item) {
+    const charge =
+      parseInt(String(lineProp(item, "_additional_charge_cents") || "0"), 10) || 0;
+    return Math.max(0, charge) * Math.max(1, item.quantity || 1);
+  }
+
+  function cartSummaryTotalCents(cart) {
+    let extra = 0;
+    if (!cartHasFeeLines(cart)) {
+      (cart.items || []).forEach((item) => {
+        if (!isFeeLine(item)) extra += lineExtraCents(item);
+      });
+    }
+    return (cart.total_price || 0) + extra;
+  }
+
+  function linePriceHtml(item) {
+    const extra = isFeeLine(item) ? 0 : lineExtraCents(item);
+    const base = item.final_line_price || 0;
+    const original = item.original_line_price || 0;
+    const display = base + extra;
+    if (extra > 0) {
+      return (
+        '<p class="text-sm font-medium text-gray-900">' +
+        escapeHtml(formatCartMoney(display)) +
+        "</p>" +
+        '<dl class="mt-2 space-y-1 text-xs text-gray-600">' +
+        '<div class="flex items-center justify-end gap-2"><dt>Previous price</dt><dd class="font-medium text-gray-800">' +
+        escapeHtml(formatCartMoney(base)) +
+        "</dd></div>" +
+        '<div class="flex items-center justify-end gap-2"><dt>Customization</dt><dd class="font-medium text-gray-800">' +
+        escapeHtml(formatCartMoney(extra)) +
+        "</dd></div>" +
+        '<div class="flex items-center justify-end gap-2 border-t border-gray-200 pt-1 text-gray-900"><dt class="font-medium">Total</dt><dd class="font-semibold">' +
+        escapeHtml(formatCartMoney(display)) +
+        "</dd></div></dl>"
+      );
+    }
+    let html = "";
+    if (original > base) {
+      html +=
+        '<p class="text-xs text-gray-500"><s>' +
+        escapeHtml(formatCartMoney(original)) +
+        "</s></p>";
+    }
+    html +=
+      '<p class="text-sm font-medium text-gray-900">' +
+      escapeHtml(formatCartMoney(display)) +
+      "</p>";
+    return html;
+  }
+
+  function refreshCartFromAjax(cart) {
+    if (!cart) return;
+
+    const subtotalEl = form.querySelector("[data-cart-subtotal]");
+    if (subtotalEl) subtotalEl.textContent = formatCartMoney(cartSummaryTotalCents(cart));
+
+    const itemsByKey = {};
+    (cart.items || []).forEach((item) => {
+      if (item && item.key) itemsByKey[item.key] = item;
+    });
+
+    form.querySelectorAll("[data-cart-line]").forEach((row) => {
+      const item = itemsByKey[row.getAttribute("data-cart-key")];
+      if (!item) return;
+      const priceEl = row.querySelector("[data-cart-line-price]");
+      if (priceEl) priceEl.innerHTML = linePriceHtml(item);
+      const discountsEl = row.querySelector("[data-cart-line-discounts]");
+      if (!discountsEl) return;
+      const discounts = item.discounts || [];
+      discountsEl.innerHTML = discounts
+        .map(
+          (discount) =>
+            "<li>" +
+            escapeHtml(discount.title || "") +
+            " (−" +
+            escapeHtml(formatCartMoney(discount.amount || 0)) +
+            ")</li>"
+        )
+        .join("");
+      discountsEl.hidden = discounts.length === 0;
+    });
+
+    const cartLevel = cart.cart_level_discount_applications || [];
+    const levelEl = form.querySelector("[data-cart-level-discounts]");
+    if (levelEl) {
+      levelEl.innerHTML = cartLevel
+        .map(
+          (app) =>
+            "<p>" +
+            escapeHtml(app.title || "") +
+            " (−" +
+            escapeHtml(formatCartMoney(app.total_allocated_amount || 0)) +
+            ")</p>"
+        )
+        .join("");
+      levelEl.hidden = cartLevel.length === 0;
+    }
+
+    const listEl = form.querySelector("[data-cart-discount-list]");
+    if (listEl) {
+      listEl.innerHTML = cartLevel
+        .map((app) => {
+          const title = escapeHtml(app.title || "");
+          const amount = escapeHtml(formatCartMoney(app.total_allocated_amount || 0));
+          return (
+            '<li class="flex flex-wrap items-center justify-between gap-2 text-xs text-emerald-800" data-cart-discount-applied>' +
+            "<span><span class=\"font-medium\">Discount applied:</span> " +
+            title +
+            " (−" +
+            amount +
+            ")</span>" +
+            '<button type="button" form="" class="inline-flex shrink-0 items-center justify-center rounded-lg border border-emerald-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-800 hover:bg-gray-50" data-cart-discount-remove aria-busy="false" aria-label="Remove discount ' +
+            title +
+            '">' +
+            '<span data-cart-discount-remove-label>Remove discount</span>' +
+            '<span data-cart-discount-remove-loading hidden>Removing…</span>' +
+            "</button></li>"
+          );
+        })
+        .join("");
+      listEl.hidden = cartLevel.length === 0;
+    }
+  }
+
   function codeLooksApplied(cart, code) {
     const needle = String(code || "").trim().toLowerCase();
     if (!needle || !cart) return false;
+
+    const discountCodes = cart.discount_codes || [];
+    if (
+      discountCodes.some((entry) => String(entry.code || "").trim().toLowerCase() === needle)
+    ) {
+      return true;
+    }
 
     const cartLevel = cart.cart_level_discount_applications || [];
     if (
@@ -3429,7 +3600,7 @@
 
     if (preferCheckout) {
       goToCheckoutWithCode(trimmed);
-      return true;
+      return "checkout";
     }
 
     try {
@@ -3450,20 +3621,21 @@
 
       const cart = await updateRes.json();
       if (codeLooksApplied(cart, trimmed)) {
+        if (discountInput) discountInput.value = "";
+        refreshCartFromAjax(cart);
         setDiscountMessage("Discount applied.");
-        window.location.reload();
-        return true;
+        return "applied";
       }
 
       // Gift card codes are not cart discounts. Send them to checkout so
       // Shopify can redeem them as payment (e.g. 37qhhh6bcqxdv3qt).
       setDiscountMessage("Opening checkout to apply your gift card…");
       goToCheckoutWithCode(trimmed);
-      return true;
+      return "checkout";
     } catch (err) {
       // Fallback: still try checkout, which accepts discount + gift card codes.
       goToCheckoutWithCode(trimmed);
-      return true;
+      return "checkout";
     }
   }
 
@@ -3482,7 +3654,10 @@
       event.preventDefault();
       event.stopPropagation();
     }
-    const button = event && event.currentTarget;
+    const button =
+      event && event.target && event.target.closest
+        ? event.target.closest("[data-cart-discount-remove]")
+        : null;
     setDiscountRemoveLoading(button, true);
     setDiscountMessage("Removing discount…");
     try {
@@ -3507,8 +3682,8 @@
         throw new Error("Discount removal returned an empty cart");
       }
 
+      refreshCartFromAjax(cart);
       setDiscountMessage("Discount removed.");
-      window.location.reload();
       return true;
     } catch (err) {
       setDiscountRemoveLoading(button, false);
@@ -3522,8 +3697,8 @@
   if (discountApply && discountInput) {
     discountApply.addEventListener("click", async () => {
       setActionLoading(discountApply, true);
-      const ok = await applyCartCode(discountInput.value);
-      if (!ok) setActionLoading(discountApply, false);
+      const result = await applyCartCode(discountInput.value);
+      if (result !== "checkout") setActionLoading(discountApply, false);
     });
 
     discountInput.addEventListener("keydown", (event) => {
@@ -3533,8 +3708,10 @@
     });
   }
 
-  form.querySelectorAll("[data-cart-discount-remove]").forEach((button) => {
-    button.addEventListener("click", removeCartDiscount);
+  form.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-cart-discount-remove]");
+    if (!button || !form.contains(button)) return;
+    removeCartDiscount(event);
   });
 
   form.addEventListener("submit", (event) => {
