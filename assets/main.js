@@ -3245,6 +3245,18 @@
     return null;
   }
 
+  function feeLineUndiscountedCents(item) {
+    const stored =
+      parseInt(String(lineProp(item, "_additional_charge_cents") || "0"), 10) || 0;
+    if (stored > 0) return stored;
+    const originalLine = parseInt(item.original_line_price, 10);
+    if (Number.isFinite(originalLine) && originalLine > 0) return originalLine;
+    const qty = Math.max(1, item.quantity || 1);
+    const originalPrice = parseInt(item.original_price, 10);
+    if (Number.isFinite(originalPrice) && originalPrice > 0) return originalPrice * qty;
+    return 0;
+  }
+
   function resolveFeeVariant() {
     const base = cartRootPath();
     const handles = ["customization-charge", "customization-fee"];
@@ -3294,7 +3306,7 @@
             if (isFeeLine(item)) {
               updates[item.key] = 0;
               hasFee = true;
-              currentFeeCents += item.final_line_price || 0;
+              currentFeeCents += feeLineUndiscountedCents(item);
               return;
             }
             const charge =
