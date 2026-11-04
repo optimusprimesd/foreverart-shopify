@@ -46,7 +46,7 @@
                   {%- endfor -%}
                 {%- endif -%}
               {%- endfor -%}
-              {%- comment -%} Products first, customization fee line(s) last. {%- endcomment -%}
+              {%- comment -%} Products first, customisation fee line(s) last. {%- endcomment -%}
               {%- for item in cart.items -%}
                 {%- liquid
                   assign is_fee_line = false
@@ -72,7 +72,7 @@
 
                   comment
                     Price chart under the product price:
-                    previous (line) → customization → total.
+                    previous (line) → customisation → total.
                     Real fee money still lives on hidden fee lines.
                   endcomment
                   assign line_base_price_cents = item.final_line_price
@@ -151,11 +151,11 @@
                             <p class="text-sm font-medium text-gray-900">{{ line_display_price_cents | money }}</p>
                             <dl class="mt-2 space-y-1 text-xs text-gray-600">
                               <div class="flex items-center justify-end gap-2">
-                                <dt>Previous price</dt>
+                                <dt>Poster Price</dt>
                                 <dd class="font-medium text-gray-800">{{ line_base_price_cents | money }}</dd>
                               </div>
                               <div class="flex items-center justify-end gap-2">
-                                <dt>Customization</dt>
+                                <dt>Customisation</dt>
                                 <dd class="font-medium text-gray-800">{{ line_extra_total_cents | money }}</dd>
                               </div>
                               <div class="flex items-center justify-end gap-2 border-t border-gray-200 pt-1 text-gray-900">
@@ -300,10 +300,10 @@
                 <span class="font-medium text-gray-900" data-cart-subtotal>{{ cart_summary_total | money }}</span>
               </div>
               {%- if cart_includes_charge_total > 0 -%}
-                <p class="text-xs text-gray-600">Includes {{ cart_includes_charge_total | money }} in customization charges.</p>
+                <p class="text-xs text-gray-600">Includes {{ cart_includes_charge_total | money }} in customisation charges.</p>
               {%- endif -%}
               {%- if cart_has_fee_lines == false and cart_additional_charge_total > 0 -%}
-                <p class="text-xs text-amber-700">Customization charges are shown here but are not in checkout yet. Remove this item and add it again so the fee line is included.</p>
+                <p class="text-xs text-amber-700">Customisation charges are shown here but are not in checkout yet. Remove this item and add it again so the fee line is included.</p>
               {%- endif -%}
 
               {%- if cart.taxes_included -%}

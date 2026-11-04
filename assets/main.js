@@ -939,12 +939,17 @@
     function setSelection(option) {
       if (!option || !hiddenInput || !valueEl || !swatchEl) return;
       const value = option.getAttribute("data-value") || "";
+      const optionValue = option.getAttribute("data-option-value") || "";
       const name = option.getAttribute("data-color-name") || "";
       const hex = option.getAttribute("data-hex") || "";
       const displayLabel =
         option.getAttribute("data-color-display") ||
         (name && hex ? name + " - " + hex : name || hex);
-      hiddenInput.value = value;
+      // Prefer Shopify option value so cart property matches the selected variant.
+      hiddenInput.value =
+        inputSel.indexOf("background-color") !== -1 && optionValue
+          ? optionValue
+          : value;
       valueEl.textContent = displayLabel;
       valueEl.classList.add("product-page__color-dropdown-value--selected");
       swatchEl.style.backgroundColor = hex;
@@ -1065,9 +1070,16 @@
     const options = root.querySelectorAll(optionSel);
     if (!options.length) return true;
     const normalized = colorValue.trim().toLowerCase();
-    return Array.from(options).some(
-      (opt) => (opt.getAttribute("data-value") || "").trim().toLowerCase() === normalized
-    );
+    return Array.from(options).some((opt) => {
+      const candidates = [
+        opt.getAttribute("data-value"),
+        opt.getAttribute("data-option-value"),
+        opt.getAttribute("data-color-name"),
+      ];
+      return candidates.some(
+        (candidate) => String(candidate || "").trim().toLowerCase() === normalized
+      );
+    });
   }
 
   const ALPHANUMERIC_VALUE_RE = /^[A-Za-z0-9 ]+$/;
@@ -1132,6 +1144,102 @@
   }
 
   initSizeAndOrientationVariantSync();
+
+  function initBackgroundColorVariantSync() {
+    const dropdown = root.querySelector("[data-background-color-dropdown]");
+    if (!dropdown || !productForm) return;
+
+    const variantsEl = root.querySelector("[data-background-color-variants]");
+    let variants = [];
+    if (variantsEl) {
+      try {
+        variants = JSON.parse(variantsEl.textContent || "[]");
+      } catch {
+        variants = [];
+      }
+    }
+    if (!variants.length) return;
+
+    const optionPosition = parseInt(dropdown.getAttribute("data-option-position") || "0", 10);
+    if (!optionPosition) return;
+    const optionKey = `option${optionPosition}`;
+    const variantIdInput = productForm.querySelector('input[name="id"]');
+    if (!variantIdInput) return;
+
+    const optionMatches = (variantValue, selectedValue) => {
+      const left = String(variantValue || "").trim().toLowerCase();
+      const right = String(selectedValue || "").trim().toLowerCase();
+      if (!left || !right) return false;
+      if (left === right) return true;
+      // Option values can be "Yellow" while UI stores a handle/"Yellow - #fff" style label.
+      const leftBase = left.split(" - ")[0].trim();
+      const rightBase = right.split(" - ")[0].trim();
+      return leftBase === rightBase || leftBase === right || left === rightBase;
+    };
+
+    const findVariant = (selectedValue) => {
+      const normalized = String(selectedValue || "").trim();
+      if (!normalized) return null;
+
+      const matches = variants.filter((v) => optionMatches(v[optionKey], normalized));
+      if (!matches.length) return null;
+
+      const currentId = String(variantIdInput.value || "");
+      const current = variants.find((v) => String(v.id) === currentId) || null;
+
+      const preservesOtherOptions = (candidate) => {
+        if (!current) return true;
+        for (let i = 1; i <= 3; i++) {
+          if (i === optionPosition) continue;
+          const key = `option${i}`;
+          const currentVal = String(current[key] || "").trim();
+          if (!currentVal) continue;
+          if (String(candidate[key] || "").trim() !== currentVal) return false;
+        }
+        return true;
+      };
+
+      return (
+        matches.find((v) => preservesOtherOptions(v) && v.available !== false) ||
+        matches.find((v) => preservesOtherOptions(v)) ||
+        matches.find((v) => v.available !== false) ||
+        matches[0] ||
+        null
+      );
+    };
+
+    const syncVariant = (selectedValue) => {
+      const value =
+        selectedValue ||
+        (root.querySelector("[data-background-color-input]") || {}).value ||
+        "";
+      const variant = findVariant(value);
+      if (!variant) return;
+      variantIdInput.value = String(variant.id);
+      if (typeof variant.price === "number") {
+        variantIdInput.setAttribute("data-variant-price-cents", String(variant.price));
+        if (productWizard) {
+          productWizard.setAttribute("data-base-variant-price-cents", String(variant.price));
+        }
+      }
+      if (window.ProductFormPricing) {
+        window.ProductFormPricing.updateProductPriceDisplay(productForm, productWizard);
+      }
+      window.dispatchEvent(
+        new CustomEvent("product-form:pricing-refresh", {
+          bubbles: true,
+          detail: { source: "background-color" },
+        })
+      );
+    };
+
+    const hiddenInput = root.querySelector("[data-background-color-input]");
+    if (hiddenInput) {
+      hiddenInput.addEventListener("change", () => syncVariant(hiddenInput.value));
+    }
+  }
+
+  initBackgroundColorVariantSync();
 
   function parseProductFormConfig() {
     const configEl = document.getElementById("product-form-config");
@@ -2076,7 +2184,7 @@
 
       if (productForm) {
         setAddToCartLoading(true);
-        addProductToCartWithCustomizationFee(productForm)
+        addProductToCartWithCustomisationFee(productForm)
           .then(function () {
             window.location.href = (window.Shopify && Shopify.routes && Shopify.routes.root
               ? Shopify.routes.root
@@ -2196,7 +2304,7 @@
       };
     }
 
-    function isCustomizationFeeLine(item) {
+    function isCustomisationFeeLine(item) {
       if (!item || !item.properties) return false;
       const props = item.properties;
       if (props._customization_fee === "1" || props._customization_fee === 1) return true;
@@ -2225,7 +2333,7 @@
      * Keep one fee line equal to $20 × each customized product line (qty-aware).
      * Prevents flat $20 for the whole cart and avoids orphan/stacked fee lines.
      */
-    function syncCustomizationFeeLines(form) {
+    function syncCustomisationFeeLines(form) {
       const endpoints = cartEndpoints();
       return resolveFeeVariantForCharge(form, 100).then(function (fee) {
         return fetch(endpoints.get, {
@@ -2241,7 +2349,7 @@
             let hasFee = false;
 
             (cart.items || []).forEach(function (item) {
-              if (isCustomizationFeeLine(item)) {
+              if (isCustomisationFeeLine(item)) {
                 updates[item.key] = 0;
                 hasFee = true;
                 return;
@@ -2275,7 +2383,7 @@
               if (!fee || !fee.id || !fee.unitCents) {
                 return Promise.reject(
                   new Error(
-                    "Customization fee product is missing. Create/publish “Customization charge” ($1.00) or set Theme settings → Customization fee product."
+                    "Customisation fee product is missing. Create/publish “Customisation charge” ($1.00) or set Theme settings → Customisation fee product."
                   )
                 );
               }
@@ -2306,7 +2414,7 @@
                   if (!res.ok) {
                     const msg =
                       (data && (data.description || data.message)) ||
-                      "Could not update customization fee.";
+                      "Could not update customisation fee.";
                     throw new Error(msg);
                   }
                   return data;
@@ -2317,7 +2425,7 @@
       });
     }
 
-    function addProductToCartWithCustomizationFee(form) {
+    function addProductToCartWithCustomisationFee(form) {
       const variantInput = form.querySelector('input[name="id"]');
       const qtyInput = form.querySelector('input[name="quantity"]');
       const chargeInput = form.querySelector("[data-additional-charge-total-input]");
@@ -2372,7 +2480,7 @@
         })
         .then(function (data) {
           // Rebuild fee as sum of every customized product ($20 each), not a flat cart fee.
-          return syncCustomizationFeeLines(form).then(function () {
+          return syncCustomisationFeeLines(form).then(function () {
             return data;
           });
         });
@@ -3210,7 +3318,7 @@
   }
 })();
 
-// Cart page — keep customization fee = $20 × customized products
+// Cart page — keep customisation fee = $20 × customized products
 (function () {
   const form = document.getElementById("CartForm");
   if (!form) return;
@@ -3286,7 +3394,7 @@
     return tryHandle(0);
   }
 
-  function syncCartCustomizationFees() {
+  function syncCartCustomisationFees() {
     const base = cartRootPath();
     return resolveFeeVariant().then(function (fee) {
       return fetch(base + "cart.js", {
@@ -3368,7 +3476,7 @@
   }
 
   // Fix flat $20 cart fee → $20 per customized product when landing on cart.
-  syncCartCustomizationFees().catch(function () {});
+  syncCartCustomisationFees().catch(function () {});
 
   function setActionLoading(el, isLoading, { disableButton = true } = {}) {
     if (!el) return;
@@ -3468,10 +3576,10 @@
         escapeHtml(formatCartMoney(display)) +
         "</p>" +
         '<dl class="mt-2 space-y-1 text-xs text-gray-600">' +
-        '<div class="flex items-center justify-end gap-2"><dt>Previous price</dt><dd class="font-medium text-gray-800">' +
+        '<div class="flex items-center justify-end gap-2"><dt>Poster Price</dt><dd class="font-medium text-gray-800">' +
         escapeHtml(formatCartMoney(base)) +
         "</dd></div>" +
-        '<div class="flex items-center justify-end gap-2"><dt>Customization</dt><dd class="font-medium text-gray-800">' +
+        '<div class="flex items-center justify-end gap-2"><dt>Customisation</dt><dd class="font-medium text-gray-800">' +
         escapeHtml(formatCartMoney(extra)) +
         "</dd></div>" +
         '<div class="flex items-center justify-end gap-2 border-t border-gray-200 pt-1 text-gray-900"><dt class="font-medium">Total</dt><dd class="font-semibold">' +

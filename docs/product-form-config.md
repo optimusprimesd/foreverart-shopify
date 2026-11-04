@@ -1,6 +1,6 @@
 # Product form config (`custom.product_form_configuration`)
 
-The product customization wizard reads JSON from the product metafield **`custom.product_form_configuration`**. When that metafield is empty, the theme loads the default from [`config/product-form-config.sample.json`](../config/product-form-config.sample.json) (synced to `snippets/product-form-config-sample.liquid` for Liquid rendering).
+The product customisation wizard reads JSON from the product metafield **`custom.product_form_configuration`**. When that metafield is empty, the theme loads the default from [`config/product-form-config.sample.json`](../config/product-form-config.sample.json) (synced to `snippets/product-form-config-sample.liquid` for Liquid rendering).
 
 A copy-paste sample lives at [`config/product-form-config.sample.json`](../config/product-form-config.sample.json).
 

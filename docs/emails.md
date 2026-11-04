@@ -15,7 +15,7 @@ Shopify does **not** load this folder from the theme on `theme push`. Notificati
 
 **Admin → Settings → Notifications → [email] → Edit code**
 
-These files are a repo backup / staging area so Forever Art can version customizations before pasting into Admin.
+These files are a repo backup / staging area so Forever Art can version customisations before pasting into Admin.
 
 ## Related
 

@@ -7,10 +7,10 @@ Shopify **templates** — which sections/markup render for each URL type.
 | Pattern | Examples | Role |
 |---------|----------|------|
 | `index.liquid` | Home | Landing; layout also mounts `home-group` |
-| `product.liquid` | Default PDP | Customization wizard product page |
+| `product.liquid` | Default PDP | Customisation wizard product page |
 | `product.gift-card-product.liquid` | Gift card PDP | Alternate product template |
 | `collection*.liquid` / `.json` | Collections + shop-* JSON templates | Category / occasion collections |
-| `cart.liquid` | Cart | Line items, customization fee display, checkout |
+| `cart.liquid` | Cart | Line items, customisation fee display, checkout |
 | `page*.json` / `.liquid` | Static & builder pages | About, FAQ, policies, contact, generate-product-form, etc. |
 | `customers/*` | Account flows | Login, register, order, addresses (with matching `main-*` sections) |
 | `gift_card.liquid` | Gift card landing | Customer gift card view |

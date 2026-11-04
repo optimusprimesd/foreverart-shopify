@@ -24,4 +24,4 @@ Use this extension only if you explicitly want Cart Transform price overrides in
 
 - Product form `additional_charge` fields — [product-form-config.md](./product-form-config.md)
 - Hidden property `properties[_additional_charge_cents]` on add to cart
-- Theme setting for customization fee product under Theme settings
+- Theme setting for customisation fee product under Theme settings

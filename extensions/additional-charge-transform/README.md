@@ -7,7 +7,7 @@ This Shopify Function reads the hidden line item property `_additional_charge_ce
 Cart Transform price overrides require Plus. For every store, configure a real fee product instead:
 
 1. In Shopify Admin, use (or create) product handle **`customization-charge`** priced at **$1.00**, inventory policy **Continue selling when out of stock**.
-2. Optional: Theme editor → **Theme settings** → **Customization charges** → select that product (handle fallback works without this).
+2. Optional: Theme editor → **Theme settings** → **Customisation charges** → select that product (handle fallback works without this).
 3. When a customer fills a paid custom field (e.g. $20), add-to-cart also adds the fee product with quantity = charge dollars (`20 × $1.00 = $20.00`).
 4. That amount is a real cart line, so **checkout and payment include it**.
 

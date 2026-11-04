@@ -236,7 +236,7 @@
       },
       {
         "type": "header",
-        "content": "Customization charges"
+        "content": "Customisation charges"
       },
       {
         "type": "paragraph",
@@ -245,7 +245,7 @@
       {
         "type": "product",
         "id": "customization_fee_product",
-        "label": "Customization fee product",
+        "label": "Customisation fee product",
         "info": "Optional if handle customization-charge exists. Prefer $20.00 + Default Title variant so checkout shows title only with quantity 1 per customized product."
       },
       {

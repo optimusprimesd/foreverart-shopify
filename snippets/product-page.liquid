@@ -3,7 +3,7 @@
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
   comment
-    Always show the base variant price in Liquid. Customization (+$20 etc.) is
+    Always show the base variant price in Liquid. Customisation (+$20 etc.) is
     added client-side only after a charged field is filled.
   endcomment
   assign product_price = current_variant.price | money

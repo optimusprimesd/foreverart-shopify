@@ -69,7 +69,7 @@
 
   function calculateAdditionalChargeCents(scope) {
     var root = scope || document;
-    // Flat customization fee: use the highest single field charge (typically $20),
+    // Flat customisation fee: use the highest single field charge (typically $20),
     // never stack multiple $20 fields into $40+.
     var maxCharge = 0;
     var seenRadioGroups = new Set();
@@ -129,7 +129,7 @@
 
     var moneyFormat = form.getAttribute("data-money-format") || "";
     var baseCents = getBasePriceCents(form, wizard);
-    // Charge only when a customization field that has additional_charge is filled.
+    // Charge only when a customisation field that has additional_charge is filled.
     var additionalCents = calculateAdditionalChargeCents(form);
     var unitTotalCents = baseCents + additionalCents;
     var quantity = getProductQuantity(form);

@@ -1,12 +1,12 @@
 # `config/`
 
-Theme settings and reference JSON for the product customization form.
+Theme settings and reference JSON for the product customisation form.
 
 ## Theme settings (Shopify)
 
 | File | Role |
 |------|------|
-| `settings_schema.json` | Defines Theme editor controls (branding, Dropbox upload, customization fee product, etc.) |
+| `settings_schema.json` | Defines Theme editor controls (branding, Dropbox upload, customisation fee product, etc.) |
 | `settings_data.json` | Current saved values for those settings (published theme config) |
 
 Important Forever Art settings groups include Dropbox proxy URL / folder and customization-charge product selection. Values are read in Liquid as `settings.*` (e.g. in `layout/theme.liquid` for Dropbox config JSON).
